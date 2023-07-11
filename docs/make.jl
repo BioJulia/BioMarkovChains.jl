@@ -1,15 +1,15 @@
 using Documenter
 using BioMarkovChains
-using DocThemeIndigo
+# using DocThemeIndigo
 
-indigo = DocThemeIndigo.install(Configurations)
+# indigo = DocThemeIndigo.install(Configurations)
 
 makedocs(;
     modules = [BioMarkovChains],
     format = Documenter.HTML(
         prettyurls = !("local" in ARGS),
         canonical="https://camilogarciabotero.github.io/BioMarkovChains.jl",
-        assets=String[indigo],
+        # assets=String[indigo],
     ),
     pages = [
         "Home" => "index.md",
