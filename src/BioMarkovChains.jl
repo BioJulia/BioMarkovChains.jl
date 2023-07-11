@@ -21,7 +21,7 @@ include("utils.jl")
 export dinucleotides, hasprematurestop
 
 include("transitions.jl")
-export transition_count_matrix, transition_probability_matrix, transition_model
+export transition_count_matrix, transition_probability_matrix, transition_model, sequenceprobability
 
 include("models.jl")
 export ECOLICDS, ECOLINOCDS
@@ -29,7 +29,7 @@ export ECOLICDS, ECOLINOCDS
 include("perronfrobenius.jl")
 export perronfrobenius, generatednaseq
 
-# include("extended.jl")
+include("extended.jl")
 
 @setup_workload begin
     # Putting some things in `@setup_workload` instead of `@compile_workload` can reduce the size of the

@@ -55,15 +55,15 @@ sequence = randdnaseq(10^3)
 orfdna = getorfdna(sequence, min_len=75)[1]
 ```
 
-If we translate it, we get a 39aa sequence:
+If we translate it, we get a 69aa sequence:
 
 ```julia
 translate(orfdna)
 ```
 
 ```
-39aa Amino Acid Sequence:
-MHCHLQRLTSYRLTPLPVRKVRRQGIWHRKSCVCRRGK*
+69aa Amino Acid Sequence:
+MSCGETTVSPILSRRTAFIRTLLGYRFRSNLPTKAERSRFGFSLPQFISTPNDRQNGNGGCGCGLENR*
 ```
 
 Now supposing I do want to see how transitions are occurring in this ORF sequence, the I can use the `transition_model` method and tune it to 2nd-order Markov chain:
@@ -75,12 +75,12 @@ transition_model(orfdna, 2)
 ```
 TransitionModel:
   - Transition Probability Matrix (Size: 4 × 4):
-    0.246	0.277	0.212	0.266
-    0.244	0.274	0.208	0.274
-    0.248	0.279	0.205	0.268
-    0.214	0.286	0.197	0.303
+    0.278	0.272	0.228	0.222
+    0.276	0.273	0.231	0.22
+    0.286	0.269	0.242	0.204
+    0.266	0.275	0.236	0.224
   - Initials (Size: 1 × 4):
-    0.237	0.279	0.205	0.279
+    0.277	0.272	0.233	0.218
   - order: 2
 ```
 
@@ -102,14 +102,14 @@ TransitionModel:
   - order: 1
 ```
 
-What is then the probability of the previous random Lambda phage DNA sequence, given this model?
+What is then the probability of the previous random Lambda phage DNA sequence given this model?
 
 ```julia
 sequenceprobability(orfdna, ECOLICDS)
 ```
 
 ```
-1.6727204374520648e-230
+1.9478492511798446e-125
 ```
 
 This is of course not very informative, but we can later use different criteria to then classify new ORFs. For a more detailed explanation see the [docs](https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/biomarkovchains/)
