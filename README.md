@@ -51,6 +51,8 @@ An important step bedford developing several of the gene finding algorithms, con
 Let find one ORF in a random `LongDNA` :
 
 ```julia
+using BioSequences, GeneFinder
+
 sequence = randdnaseq(10^3)
 orfdna = getorfdna(sequence, min_len=75)[1]
 ```
