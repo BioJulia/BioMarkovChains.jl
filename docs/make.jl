@@ -8,14 +8,16 @@ makedocs(;
     modules = [BioMarkovChains],
     format = Documenter.HTML(
         prettyurls = !("local" in ARGS),
-        canonical="https://Camilo García.github.io/BioMarkovChains.jl",
+        canonical="https://camilogarciabotero.github.io/BioMarkovChains.jl",
         assets=String[indigo],
     ),
     pages = [
         "Home" => "index.md",
+        "Towards Markov Chains" => "biomarkovchains.md",
+        "API" => "api.md"
     ],
-    repo = "https://github.com/Camilo García/BioMarkovChains.jl",
+    repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl",
     sitename = "BioMarkovChains.jl",
 )
 
-deploydocs(; repo = "https://github.com/Camilo García/BioMarkovChains.jl")
+deploydocs(; repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl")
