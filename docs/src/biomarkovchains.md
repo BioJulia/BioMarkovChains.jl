@@ -16,12 +16,6 @@ transition). This is also considered more specifically as a Discrete
 Markov chain (Axelson-Fisk 2015). The complete set of transitions and
 states of a DNA sequence of alphabet ``\mathscr{A}``.
 
-<!-- ```@raw html
-<center>
-  <img src="assets/nucleotide-markov-chain.png" height="150" alt="DNA as a Markov chain">
-</center>
-``` -->
-
 More formally a Markov chain is a random process where each state is a
 random variable ``X_{t}`` where ``t \in T`` is a discrete time in a finite
 sequence ``T`` and the probability to jump from one state into another is

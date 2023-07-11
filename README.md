@@ -46,7 +46,7 @@ pkg> add BioMarkovChains
 
 ## Creating transition models out of DNA sequences
 
-An important step bedford developing several of the gene finding algorithms, consist of having a Markov chain representation of the DNA. To do so, we implement a the `transition_model` method that will capture the initials and transition probabilities of a DNA sequence (`LongSequence`) and will create a dedicated object storing relevant information of a DNA Markov chain. Here an example:
+An important step before developing several gene finding algorithms consist of having a Markov chain representation of the DNA. To do so, we implemented the `transition_model` method that will capture the initials and transition probabilities of a DNA sequence (`LongSequence`) and will create a dedicated object storing relevant information of a DNA Markov chain. Here an example:
 
 Let find one ORF in a random `LongDNA` :
 
@@ -114,7 +114,7 @@ sequenceprobability(orfdna, ECOLICDS)
 1.9478492511798446e-125
 ```
 
-This is of course not very informative, but we can later use different criteria to then classify new ORFs. For a more detailed explanation see the [docs](https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/biomarkovchains/)
+This is off course not very informative, but we can later use different criteria to then classify new ORFs. For a more detailed explanation see the [docs](https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/biomarkovchains/)
 
 ## License
 
