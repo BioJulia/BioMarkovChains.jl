@@ -41,9 +41,10 @@ Dict{LongSequence{DNAAlphabet{4}}, Int64} with 16 entries:
 ```
 """
 function dinucleotides(sequence::LongNucOrView{4}; extended_alphabet::Bool = false)
-    A = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
-    dinucleotides = vec([LongSequence{DNAAlphabet{4}}([n1, n2]) for n1 in A, n2 in A])
-
+    dinucleotides = extended_alphabet ? EXTENDED_DINUCLEOTIDES : DINUCLEOTIDES
+    # alphabetsymbols = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
+    # dinucleotides = vec([LongSequence{DNAAlphabet{4}}([n1, n2]) for n1 in alphabetsymbols, n2 in alphabetsymbols])
+    
     # counts = zeros(Int64, length(dinucleotides))
     counts = Array{Int64,1}(undef, 64)
     for (index, pair) in enumerate(dinucleotides)
