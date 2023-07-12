@@ -43,7 +43,7 @@ function Base.show(io::IO, model::TransitionModel)
     println(io, "TransitionModel:")
 
     # Print the size of the transition probability matrix
-    tpm_size = "  - Transition Probability Matrix (Size: $(size(model.tpm, 1)) × $(size(model.tpm, 2))):"
+    tpm_size = "  - Transition Probability Matrix -> Matrix{Float64}($(size(model.tpm, 1)) × $(size(model.tpm, 2))):"
     println(io, tpm_size)
     for row in 1:size(model.tpm, 1)
         print(io, "    ")
@@ -55,7 +55,7 @@ function Base.show(io::IO, model::TransitionModel)
     end
 
     # Print the size of the initials matrix
-    initials_size = "  - Initials (Size: $(size(model.initials, 1)) × $(size(model.initials, 2))):"
+    initials_size = "  - Initial Probabilities -> Vector{Float64}($(size(model.initials, 1)) × $(size(model.initials, 2))):"
     println(io, initials_size)
     for row in 1:size(model.initials, 1)
         print(io, "    ")
@@ -67,7 +67,7 @@ function Base.show(io::IO, model::TransitionModel)
     end
 
     # Print the value of 'n'
-    order = "  - order: $(model.n)"
+    order = "  - Markov Chain Order:$(model.n)"
     println(io, order)
 end
 

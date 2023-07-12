@@ -6,7 +6,7 @@ const ECOLICDS = begin
         0.178 0.217 0.338 0.267
     ]
 
-    initials = [0.245 0.243 0.273 0.239]
+    initials = [0.245, 0.243, 0.273, 0.239]
 
     transition_model(tpm, initials)
 end
@@ -19,7 +19,7 @@ const ECOLINOCDS = begin
         0.207 0.219 0.259 0.314
     ]
     
-    initials = [0.262 0.239 0.240 0.259]
+    initials = [0.262, 0.239, 0.240, 0.259]
     
     transition_model(tpm, initials)
 end

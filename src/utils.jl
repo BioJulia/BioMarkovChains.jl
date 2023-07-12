@@ -46,8 +46,8 @@ function dinucleotides(sequence::LongNucOrView{4}; extended_alphabet::Bool = fal
     # dinucleotides = vec([LongSequence{DNAAlphabet{4}}([n1, n2]) for n1 in alphabetsymbols, n2 in alphabetsymbols])
     
     # counts = zeros(Int64, length(dinucleotides))
-    counts = Array{Int64,1}(undef, 64)
-    for (index, pair) in enumerate(dinucleotides)
+    counts = Array{Int64,1}(undef, length(dinucleotides))
+    @inbounds for (index, pair) in enumerate(dinucleotides)
         count = 0
         for i in 1:length(sequence)-1
             if sequence[i] == pair[1] && sequence[i+1] == pair[2]

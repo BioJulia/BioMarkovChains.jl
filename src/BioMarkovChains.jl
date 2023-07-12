@@ -1,7 +1,12 @@
 module BioMarkovChains
 
 using BioSequences:
+    ACGT,
     DNA,
+    DNA_A,
+    DNA_C,
+    DNA_G,
+    DNA_T,
     DNAAlphabet,
     NucleicAcidAlphabet,
     LongSequence,
@@ -21,7 +26,7 @@ include("utils.jl")
 export dinucleotides, hasprematurestop
 
 include("transitions.jl")
-export transition_count_matrix, transition_probability_matrix, transition_model, sequenceprobability
+export transition_count_matrix, transition_probability_matrix, transition_model, initial_distribution, sequenceprobability
 
 include("models.jl")
 export ECOLICDS, ECOLINOCDS

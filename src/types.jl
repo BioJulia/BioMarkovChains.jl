@@ -100,6 +100,6 @@ The `TransitionModel` struct represents a transition model used in a sequence an
 """
 struct TransitionModel
     tpm::Matrix{Float64}
-    initials::Matrix{Float64}
+    initials::Vector{Float64}
     n::Int64
 end
