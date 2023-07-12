@@ -32,7 +32,6 @@ T  2 0 0 0
     sequence::LongNucOrView{4};
     extended_alphabet::Bool = false
 )
-
     transitions = dinucleotides(sequence; extended_alphabet)
     alphabetsymbols = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
     tcm = TransitionCountMatrix(alphabetsymbols)
@@ -159,7 +158,7 @@ function transition_model(sequence::LongNucOrView{4}, n::Int64=1)
     TransitionModel(tpm, initials, n)
 end
 
-function transition_model(tpm::Matrix{Float64}, initials::Matrix{Float64}, n::Int64=1)
+function transition_model(tpm::Matrix{Float64}, initials::Vector{Float64}, n::Int64=1)
     TransitionModel(tpm, initials, n)
 end
 
