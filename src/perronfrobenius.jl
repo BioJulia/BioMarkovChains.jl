@@ -6,7 +6,7 @@ function perronfrobenius(sequence::LongNucOrView{4}, n::Int64=1)
     return copy(pf)
 end
 
-function generatednaseq(pf::Matrix{Float64}, steps::Int64; extended_alphabet::Bool = false)
+function generatedna(pf::Matrix{Float64}, steps::Int64; extended_alphabet::Bool = false)
     newseq = LongDNA{4}()
     # pf = transpose(tpm) # The Perron-Frobenius matrix
     trajectory = generate(pf, steps)

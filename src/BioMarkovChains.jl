@@ -32,7 +32,7 @@ include("models.jl")
 export ECOLICDS, ECOLINOCDS
 
 include("perronfrobenius.jl")
-export perronfrobenius, generatednaseq
+export perronfrobenius, generatedna
 
 include("extended.jl")
 
