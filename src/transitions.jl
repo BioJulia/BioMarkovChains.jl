@@ -28,22 +28,18 @@ T  2 0 0 0
 
 ```
  """
-function transition_count_matrix(
+ function transition_count_matrix(
     sequence::LongNucOrView{4};
     extended_alphabet::Bool = false
 )
 
     transitions = dinucleotides(sequence; extended_alphabet)
-
-    A::Array = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
-
-    tcm = TransitionCountMatrix(A)
+    alphabetsymbols = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
+    tcm = TransitionCountMatrix(alphabetsymbols)
     
     for (dinucleotide, count) in transitions
-        nucleotide1 = dinucleotide[1]
-        nucleotide2 = dinucleotide[2]
-        i = tcm.order[nucleotide1]
-        j = tcm.order[nucleotide2]
+        nucleotide1, nucleotide2 = dinucleotide
+        i, j = tcm.order[nucleotide1], tcm.order[nucleotide2]
         tcm.counts[i, j] = count
     end
 
@@ -108,10 +104,11 @@ end
 end
 
 function initial_distribution(sequence::LongNucOrView{4}) ## π̂ estimates of the initial probabilies
-    initials = Vector{Float64}()
+    # initials = Array{Float64}(undef, 1, 4)
+    initials = Array{Float64, 1}(undef, 1)
     counts = transition_count_matrix(sequence).counts
     initials = sum(counts, dims = 1) ./ sum(counts)
-    return initials
+    return vec(initials)
 end
 
 """
@@ -225,37 +222,12 @@ function sequenceprobability(
     sequence::LongNucOrView{4},
     model::TransitionModel
 )
-
-    nucleotideindexes = Dict(DNA_A => 1, DNA_C => 2, DNA_G => 3, DNA_T => 4)
-
-    dinueclotideindexes = Dict(
-        LongDNA{4}("AA") => [1, 1],
-        LongDNA{4}("AC") => [1, 2],
-        LongDNA{4}("AG") => [1, 3],
-        LongDNA{4}("AT") => [1, 4],
-        LongDNA{4}("CA") => [2, 1],
-        LongDNA{4}("CC") => [2, 2],
-        LongDNA{4}("CG") => [2, 3],
-        LongDNA{4}("CT") => [2, 4],
-        LongDNA{4}("GA") => [3, 1],
-        LongDNA{4}("GC") => [3, 2],
-        LongDNA{4}("GG") => [3, 3],
-        LongDNA{4}("GT") => [3, 4],
-        LongDNA{4}("TA") => [4, 1],
-        LongDNA{4}("TC") => [4, 2],
-        LongDNA{4}("TG") => [4, 3],
-        LongDNA{4}("TT") => [4, 4],
-    )
-
-    init = model.initials[nucleotideindexes[sequence[1]]]
+    init = model.initials[NUCLEICINDEXES[sequence[1]]]
 
     probability = init
 
     for t in 1:length(sequence)-1
-
-        pair = LongDNA{4}([sequence[t], sequence[t+1]])
-        i, j = dinueclotideindexes[pair]
-
+        i, j = DINUCLEICINDEXES[@view sequence[t:t+1]]
         probability *= model.tpm[i, j]
     end
     return probability
