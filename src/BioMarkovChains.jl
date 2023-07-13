@@ -15,6 +15,7 @@ using BioSequences:
     alphabet,
     @biore_str
 
+using Iterators: product
 using MarkovChainHammer.Trajectory: generate
 using PrecompileTools: @setup_workload, @compile_workload
 using TestItems: @testitem
