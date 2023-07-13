@@ -19,6 +19,8 @@ using Iterators: product
 using MarkovChainHammer.Trajectory: generate
 using PrecompileTools: @setup_workload, @compile_workload
 using TestItems: @testitem
+# using Kmers: Kmers, Kmer, kmertype
+using StatsBase: countmap
 
 include("types.jl")
 export TransitionCountMatrix, TransitionProbabilityMatrix, TransitionModel
