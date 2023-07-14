@@ -15,11 +15,9 @@ using BioSequences:
     alphabet,
     @biore_str
 
-using Iterators: product
 using MarkovChainHammer.Trajectory: generate
 using PrecompileTools: @setup_workload, @compile_workload
 using TestItems: @testitem
-# using Kmers: Kmers, Kmer, kmertype
 using StatsBase: countmap
 
 include("types.jl")
@@ -48,6 +46,8 @@ include("extended.jl")
         # all calls in this block will be precompiled, regardless of whether
         # they belong to your package or not (on Julia 1.8 and higher)
         dinucleotides(seq)
+        transition_count_matrix(seq)
+        transition_probability_matrix(seq)
         sequenceprobability(seq, ECOLICDS)
         transition_model(seq)
         perronfrobenius(seq)
