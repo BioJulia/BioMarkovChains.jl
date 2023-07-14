@@ -32,10 +32,10 @@ T  2 0 0 0
     sequence::LongNucOrView{4};
     extended_alphabet::Bool = false
 )
-    transitions = dinucleotides(sequence; extended_alphabet)
+    transitions = dinucleotides(sequence)
     alphabetsymbols = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
     tcm = TransitionCountMatrix(alphabetsymbols)
-    
+
     for (dinucleotide, count) in transitions
         nucleotide1, nucleotide2 = dinucleotide
         i, j = tcm.order[nucleotide1], tcm.order[nucleotide2]

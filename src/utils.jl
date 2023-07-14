@@ -6,12 +6,8 @@ Compute the transition counts of each dinucleotide in a given DNA sequence.
 # Arguments
 - `sequence::LongSequence{DNAAlphabet{4}}`: a `LongSequence{DNAAlphabet{4}}` object representing the DNA sequence.
 
-# Keywords
-
-- `extended_alphabet::Bool=false`: If true will pass the extended alphabet of DNA to search
-
 # Returns
-A dictionary with keys being `LongSequence{DNAAlphabet{4}}` objects representing
+A dictionary with keys being `Dict{Tuple{DNA, DNA}, Int64}` objects representing
 the dinucleotides, and values being the number of occurrences of each dinucleotide
 in the sequence.
 
@@ -20,49 +16,16 @@ in the sequence.
 seq = dna"AGCTAGCTAGCT"
 
 dinucleotides(seq)
-
-Dict{LongSequence{DNAAlphabet{4}}, Int64} with 16 entries:
-  GG => 0
-  TC => 0
-  GC => 3
-  CG => 0
-  CC => 0
-  AG => 3
-  TT => 0
-  AC => 0
-  TA => 2
-  GT => 0
-  GA => 0
-  CT => 3
-  CA => 0
-  AT => 0
-  AA => 0
-  TG => 0
+Dict{Tuple{DNA, DNA}, Int64} with 4 entries:
+  (DNA_C, DNA_T) => 3
+  (DNA_G, DNA_C) => 3
+  (DNA_T, DNA_A) => 2
+  (DNA_A, DNA_G) => 3
 ```
 """
-function dinucleotides(sequence::LongNucOrView{4}; extended_alphabet::Bool = false)
-    dinucleotides = extended_alphabet ? EXTENDED_DINUCLEOTIDES : DINUCLEOTIDES
-    # alphabetsymbols = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
-    # dinucleotides = vec([LongSequence{DNAAlphabet{4}}([n1, n2]) for n1 in alphabetsymbols, n2 in alphabetsymbols])
-    
-    # counts = zeros(Int64, length(dinucleotides))
-    counts = Array{Int64,1}(undef, length(dinucleotides))
-    @inbounds for (index, pair) in enumerate(dinucleotides)
-        count = 0
-        for i in 1:length(sequence)-1
-            if sequence[i] == pair[1] && sequence[i+1] == pair[2]
-                count += 1
-            end
-        end
-        counts[index] = count
-    end
-
-    pairsdict = Dict{LongSequence{DNAAlphabet{4}},Int64}()
-    for (index, pair) in enumerate(dinucleotides)
-        pairsdict[pair] = counts[index]
-    end
-
-    return pairsdict
+function dinucleotides(sequence::LongNucOrView{4})
+    b = @view sequence[begin+1:end]
+    dinucleotides = countmap(zip(sequence, b))
 end
 
 """

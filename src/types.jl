@@ -1,4 +1,6 @@
 
+abstract type BioMarkovChain end
+
 const LongNucOrView{N} = Union{LongSequence{<:NucleicAcidAlphabet{N}},LongSubSeq{<:NucleicAcidAlphabet{N}}}
 
 const NUCLEICINDEXES = Dict(DNA_A => 1, DNA_C => 2, DNA_G => 3, DNA_T => 4)
@@ -22,8 +24,21 @@ const DINUCLEICINDEXES = Dict(
     LongDNA{4}("TT") => [4, 4],
 )
 
-const DINUCLEOTIDES = vec([LongSequence{DNAAlphabet{4}}([i, j]) for i in ACGT, j in ACGT])
-const EXTENDED_DINUCLEOTIDES = vec([LongSequence{DNAAlphabet{4}}([i, j]) for i in alphabet(DNA), j in alphabet(DNA)])
+# const DINUCLEOTIDES = vec([LongSequence{DNAAlphabet{2}}([i, j]) for i in ACGT, j in ACGT])
+
+# const DINUCLEOTIDES = let
+#     x = [LongSequence{DNAAlphabet{2}}([i, j]) for i in ACGT, j in ACGT]
+#     # x = [string(i, j) for i in ACGT, j in ACGT]
+#     Dict(x .=> 0)
+# end
+# const DINUCLEOTIDES = vec([LongSequence{DNAAlphabet{2}}([i, j]) for i in ACGT, j in ACGT])
+# const DINUCLEOTIDES_DICT = Dict(BioMarkovChains.DINUCLEOTIDES .=> 0)
+
+#const EXTENDED_DINUCLEOTIDES = vec([LongSequence{DNAAlphabet{4}}([i, j]) for i in alphabet(DNA), j in alphabet(DNA)])
+#const EXTENDED_DINUCLEOTIDES_DICT = Dict(BioMarkovChains.EXTENDED_DINUCLEOTIDES .=> 0)
+
+# const DINUCLEOTIDES = Dict((i, j) => 0 for (i, j) in Iterators.product(ACGT, ACGT))
+# const EXTENDED_DINUCLEOTIDES = Dict((i, j) => 0 for (i, j) in Iterators.product(alphabet(DNA), alphabet(DNA)))
 
 """
 TransitionCountMatrix(alphabet::Vector{DNA})
@@ -98,8 +113,8 @@ The `TransitionModel` struct represents a transition model used in a sequence an
 - `TransitionModel(sequence::LongSequence{DNAAlphabet{4}})`: Constructs a `TransitionModel` object based on a given DNA sequence. The transition probability matrix is calculated using `transition_probability_matrix(sequence).probabilities`, and the initial distribution probabilities are calculated using `initial_distribution(sequence)`.
 
 """
-struct TransitionModel
-    tpm::Matrix{Float64}
+struct TransitionModel <: BioMarkovChain
+    tpm::Matrix{Float64} # The probabilities of the TransitionProbabilityMatrix struct
     initials::Vector{Float64}
-    n::Int64
+    n::Int64 # The order of the Markov chain
 end
