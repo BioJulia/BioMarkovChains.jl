@@ -1,7 +1,7 @@
 name = "BioMarkovChains"
 uuid = "f861b655-cb5f-42ce-b66a-341b542d4f2c"
 authors = ["Camilo García<ca.garcia2@uniandes.edu.co>"]
-version = "0.1.2"
+version = "0.1.1"
 
 [deps]
 BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
