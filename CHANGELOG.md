@@ -8,4 +8,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [0.1.0]
 
+- This version has some clean ups and a new faster version of dinucleotides counts thanks to @gdalle. See [here the discussion](https://discourse.julialang.org/t/optimizing-dinucleotides-count-in-a-dna-sequence-type-longdna/101583/4?u=camilogarciabotero)
+## [0.1.0]
+
 - First release of `BioMarkovChains`
