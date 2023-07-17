@@ -1,7 +1,7 @@
 """
-    dinucleotides(sequence::LongNucOrView{4})
+    transitions(sequence::LongSequence)
 
-Compute the transition counts of each dinucleotide in a given DNA sequence.
+Compute the transition counts of each pair in a given biological sequence sequence.
 
 # Arguments
 - `sequence::LongSequence{DNAAlphabet{4}}`: a `LongSequence{DNAAlphabet{4}}` object representing the DNA sequence.
@@ -23,9 +23,9 @@ Dict{Tuple{DNA, DNA}, Int64} with 4 entries:
   (DNA_A, DNA_G) => 3
 ```
 """
-function dinucleotides(sequence::LongNucOrView{4})
+function transitions(sequence::LongSequence)
     b = @view sequence[begin+1:end]
-    dinucleotides = countmap(zip(sequence, b))
+    return countmap(zip(sequence, b))
 end
 
 """

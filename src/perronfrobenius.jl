@@ -1,7 +1,7 @@
 ### MarkdovChainHammer.jl ###
 
 function perronfrobenius(sequence::LongNucOrView{4}, n::Int64=1)
-    tpm = transition_probability_matrix(sequence, n).probabilities
+    tpm = transition_probability_matrix(sequence, n)
     pf = transpose(tpm)
     return copy(pf)
 end

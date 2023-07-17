@@ -1,43 +1,5 @@
 import Base: show
 
-function Base.show(io::IO, tcm::TransitionCountMatrix)
-    nucleotides = sort(collect(keys(tcm.order)))
-
-    # Print type
-    println(io, "TCM{$(typeof(tcm.order)), $(typeof(tcm.counts)):")
-
-    # Print header
-    max_digits = maximum([length(string(maximum(tcm.counts[:, i]))) for i in 1:size(tcm.counts, 2)])
-    header_str = "   " * join([rpad(n, max_digits+1) for n in nucleotides], "")
-    println(io, header_str)
-
-    # Print rows
-    for (i, nucleotide1) in enumerate(nucleotides)
-        row = tcm.counts[i, :]
-        row_str = join([rpad(string(x), max_digits+1) for x in row], "")
-        println(io, "$nucleotide1  $row_str")
-    end
-end
-
-function Base.show(io::IO, tpm::TransitionProbabilityMatrix)
-    nucleotides = sort(collect(keys(tpm.order)))
-
-    # Print type
-    println(io, "TPM{$(typeof(tpm.order)), $(typeof(tpm.probabilities)):")
-
-    # Print header
-    max_digits = maximum([length(string(maximum(round.(tpm.probabilities[:, i], digits = 3)))) for i in 1:size(tpm.probabilities, 2)])
-    header_str = "   " * join([rpad(n, max_digits+1) for n in nucleotides], "")
-    println(io, header_str)
-
-    # Print rows
-    for (i, nucleotide1) in enumerate(nucleotides)
-        row = round.(tpm.probabilities[i, :], digits = 3)
-        row_str = join([rpad(string(x), max_digits+1) for x in row], "")
-        println(io, "$nucleotide1  $row_str")
-    end
-end
-
 function Base.show(io::IO, model::TransitionModel)
     # Print the type name
     println(io, "TransitionModel:")
