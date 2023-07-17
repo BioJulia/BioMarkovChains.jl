@@ -88,6 +88,20 @@ function transition_probability_matrix(
     return freqs^(n)
 end
 
+function transition_probability_matrix(
+    sequence::LongAA,
+    n::Int64 = 1;
+)
+    tcm = transition_count_matrix(sequence)
+    rowsums = sum(tcm, dims = 2)
+    freqs = tcm ./ rowsums
+
+    freqs[isinf.(freqs)] .= 0.0
+    freqs[isnan.(freqs)] .= 0.0
+
+    return freqs^(n)
+end
+
 @testitem "tpm" begin
     using BioSequences, BioMarkovChains
     seq = dna"CCTCCCGGACCCTGGGCTCGGGAC"
