@@ -1,6 +1,5 @@
 using Test
 using BioMarkovChains
 
-@testset "BioMarkovChains.jl" begin
-    @test 1 == 1
-end # BioMarkovChains.jl tests
+using TestItemRunner: @run_package_tests
+@run_package_tests
