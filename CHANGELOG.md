@@ -6,6 +6,10 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.0.10...main)
 
+## [0.3.0]
+
+- Refactoring the `TransitionModel` to a `BioMarkovChain` construct and better interface
+
 ## [0.2.0]
 
 - Exapanding the alphabets to RNA and AA to its Markov chains.
