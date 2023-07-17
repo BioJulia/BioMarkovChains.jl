@@ -1,4 +1,4 @@
-abstract type BioMarkovChain end
+abstract type AbstractBioMarkovChain end
 
 const LongNucOrView{N} = Union{LongSequence{<:NucleicAcidAlphabet{N}},LongSubSeq{<:NucleicAcidAlphabet{N}}}
 
@@ -26,22 +26,58 @@ const DINUCLEICINDEXES = Dict(
 const AA20 = (AA_A, AA_R, AA_N, AA_D, AA_C, AA_Q, AA_E, AA_G, AA_H, AA_I, AA_L, AA_K, AA_M, AA_F, AA_P, AA_S, AA_T, AA_W, AA_Y, AA_V)
 
 """
-    struct TransitionModel
+    struct BioMarkovChain{M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: AbstractBioMarkovChain
 
-The `TransitionModel` struct represents a transition model used in a sequence analysis. It consists of a transition probability matrix (TransitionProbabilityMatrix) and initial distribution probabilities.
+A BioMarkovChain represents a Markov chain used in biological sequence analysis. It contains a transition probability matrix (tpm) and an initial distribution of probabilities (inits) and also the order of the Markov chain.
 
 # Fields
-
-- `TransitionProbabilityMatrix::Matrix{Float64}`: The transition probability matrix, a matrix of type Float64 representing the probabilities of transitioning from one state to another.
-- `initials::Matrix{Float64}`: The initial distribution probabilities, a matrix of type Float64 representing the probabilities of starting in each state.
-- `n`: is the order of the transition model, or in other words the order of the resulted Markov chain.
+- `tpm::M`: The transition probability matrix.
+- `inits::I`: The initial distribution of probabilities.
+- `n::N`: The order of the Markov chain.
 
 # Constructors
+- `BioMarkovChain(tpm::M, inits::I, n::N=1) where {M<:AbstractMatrix, I<:AbstractVector, N<:Integer}`: Constructs a BioMarkovChain object with the provided transition probability matrix, initial distribution, and order.
+- `BioMarkovChain(sequence::LongNucOrView{4}, n::Int64=1)`: Constructs a BioMarkovChain object based on the DNA sequence and transition order.
 
-- `TransitionModel(tpm::Matrix{Float64}, initials::Matrix{Float64}; n::Int64=1)`: Constructs a `TransitionModel` object with the provided transition probability matrix and initial distribution probabilities.
+# Example
+```
+sequence = LongDNA{4}("ACTACATCTA")
+
+model = BioMarkovChain(sequence, 2)
+BioMarkovChain:
+  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
+    0.444    0.111	0.0	  0.444
+    0.444    0.444	0.0	  0.111
+    0.0      0.0	0.0	  0.0
+    0.111    0.444	0.0	  0.444
+  - Initial Probabilities -> Vector{Float64}(4 × 1):
+    0.333
+    0.333
+    0.0
+    0.333
+  - Markov Chain Order:2
+```
 """
-struct TransitionModel <: BioMarkovChain
-    tpm::Matrix{Float64} # The probabilities of the TransitionProbabilityMatrix struct
-    initials::Vector{Float64} # the initials distribution of probabilities
-    n::Int64 # The order of the Markov chain
+struct BioMarkovChain{M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: AbstractBioMarkovChain
+    tpm::M # The probabilities of the TransitionProbabilityMatrix struct
+    inits::I # the initials distribution of probabilities
+    n::N # The order of the Markov chain
+    function BioMarkovChain(tpm::M, inits::I, n::N=1) where {M<:AbstractMatrix, I<:AbstractVector, N<:Integer}
+        bmc = new{M,I,N}(tpm, inits, n)
+        return bmc
+    end
+
+    function BioMarkovChain(sequence::LongNucOrView{4}, n::Int64=1)
+        tpm = transition_probability_matrix(sequence, n)
+        inits = initials(sequence)
+        bmc = new{Matrix{Float64},Vector{Float64},Int64}(tpm, inits, n)
+        return bmc
+    end
 end
+
+"""
+    BMC
+
+Alias for the type `BioMarkovChain`.
+"""
+const BMC = BioMarkovChain
