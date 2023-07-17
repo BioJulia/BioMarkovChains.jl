@@ -73,6 +73,13 @@ struct BioMarkovChain{M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: Abstr
         bmc = new{Matrix{Float64},Vector{Float64},Int64}(tpm, inits, n)
         return bmc
     end
+
+    function BioMarkovChain(sequence::LongAA, n::Int64=1)
+      tpm = transition_probability_matrix(sequence, n)
+      inits = initials(sequence)
+      bmc = new{Matrix{Float64},Vector{Float64},Int64}(tpm, inits, n)
+      return bmc
+  end
 end
 
 """
