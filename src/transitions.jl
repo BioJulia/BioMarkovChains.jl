@@ -11,7 +11,7 @@ Compute the transition count matrix (TCM) of a given DNA sequence.
 - `extended_alphabet::Bool=false`: If true will pass the extended alphabet of DNA to search
 
 # Returns
-A `TransitionCountMatrix` object representing the transition count matrix of the sequence.
+A `Matrix` object representing the transition count matrix of the sequence.
 
 # Example
 ```
@@ -19,7 +19,7 @@ seq = LongDNA{4}("AGCTAGCTAGCT")
 
 tcm = transition_count_matrix(seq)
 
-GeneFinder.TransitionCountMatrix{Dict{DNA, Int64}, Matrix{Int64}:
+4x4 Matrix{Int64}:
    A C G T
 A  0 0 3 0
 C  0 0 0 3
@@ -28,23 +28,20 @@ T  2 0 0 0
 
 ```
  """
- function transition_count_matrix(
-    sequence::LongNucOrView{4};
-    extended_alphabet::Bool = false
-)
-    transitions = dinucleotides(sequence)
-    alphabetsymbols = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
-    tcm = TransitionCountMatrix(alphabetsymbols)
-
-    for (dinucleotide, count) in transitions
-        nucleotide1, nucleotide2 = dinucleotide
-        i, j = tcm.order[nucleotide1], tcm.order[nucleotide2]
-        tcm.counts[i, j] = count
-    end
-
-    return tcm
+function transition_count_matrix(sequence::LongNucOrView{4}) # remain to test
+    alphabetsymb = eltype(sequence) == DNA ? ACGT : ACGU
+    matrix = [(i,j) for i in alphabetsymb, j in alphabetsymb]
+    trans = transitions(sequence)
+    default = 0
+    return reshape([get(trans, t, default) for t in matrix], size(matrix))
 end
 
+function transition_count_matrix(sequence::LongAA)
+    matrix = [(i,j) for i in AA20, j in AA20]
+    trans = transitions(sequence)
+    default = 0
+    return reshape([get(trans, t, default) for t in matrix], size(matrix))
+end
 
 @doc raw"""
     transition_probability_matrix(sequence::LongSequence{DNAAlphabet{4}})
@@ -63,7 +60,7 @@ a_{ij} = P(X_t = j \mid X_{t-1} = i) = \frac{{P(X_{t-1} = i, X_t = j)}}{{P(X_{t-
 - `extended_alphabet::Bool=false`: If true will pass the extended alphabet of DNA to search
 
 # Returns
-A `TPM` object representing the transition probability matrix of the sequence.
+A `Matrix` object representing the transition probability matrix of the sequence.
 
 # Example
 ```
@@ -71,7 +68,7 @@ seq = dna"AGCTAGCTAGCT"
 
 tpm = transition_probability_matrix(seq)
 
-GeneFinder.TransitionProbabilityMatrix{Dict{DNA, Int64}, Matrix{Float64}:
+4x4 Matrix{Float64}:
    A   C   G   T
 A  0.0 0.0 1.0 0.0
 C  0.0 0.0 0.0 1.0
@@ -82,32 +79,31 @@ T  1.0 0.0 0.0 0.0
 function transition_probability_matrix(
     sequence::LongNucOrView{4},
     n::Int64 = 1;
-    extended_alphabet::Bool = false
 )
-    tcm = transition_count_matrix(sequence; extended_alphabet)
-    rowsums = sum(tcm.counts, dims = 2)
-    freqs = tcm.counts ./ rowsums
+    tcm = transition_count_matrix(sequence)
+    rowsums = sum(tcm, dims = 2)
+    freqs = tcm ./ rowsums
 
     freqs[isinf.(freqs)] .= 0.0
     freqs[isnan.(freqs)] .= 0.0
 
-    return TransitionProbabilityMatrix(tcm.order, freqs^(n))
+    return freqs^(n)
 end
 
 @testitem "tpm" begin
-    using BioSequences, GeneFinder
+    using BioSequences, BioMarkovChains
     seq = dna"CCTCCCGGACCCTGGGCTCGGGAC"
     tpm = transition_probability_matrix(seq)
 
-    @test round.(tpm.probabilities, digits = 3) == [0.0 1.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.25 0.125 0.625 0.0; 0.0 0.667 0.333 0.0]
+    @test round.(tpm, digits = 3) == [0.0 1.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.25 0.125 0.625 0.0; 0.0 0.667 0.333 0.0]
 end
 
-function initial_distribution(sequence::LongNucOrView{4}) ## π̂ estimates of the initial probabilies
+function initials(sequence::LongSequence) ## π̂ estimates of the initial probabilies
     # initials = Array{Float64}(undef, 1, 4)
-    initials = Array{Float64, 1}(undef, 1)
-    counts = transition_count_matrix(sequence).counts
-    initials = sum(counts, dims = 1) ./ sum(counts)
-    return vec(initials)
+    inits = Array{Float64, 1}(undef, 1)
+    tcm = transition_count_matrix(sequence)
+    inits = sum(tcm, dims = 1) ./ sum(tcm)
+    return vec(inits)
 end
 
 """
@@ -129,8 +125,8 @@ A `TransitionModel` object representing the transition model.
 Builds a transtition model based on the transition probability matrix and the initial distributions. It can also calculates higer orders of the model if `n` is changed.
 
 # Arguments
-- `tpm::Matrix{Float64}`: the transition probability matrix `TPM`
-- `initials::Matrix{Float64}`: the initial distributions of the model.
+- `tpm::Matrix{Float64}`: the transition probability matrix
+- `initials::Vector{Float64}`: the initial distributions of the model.
 - `n::Int64 (optional)`: The transition order (default: 1).
 
 # Returns
@@ -142,24 +138,27 @@ sequence = LongDNA{4}("ACTACATCTA")
 
 model = transition_model(sequence, 2)
 TransitionModel:
-  - Transition Probability Matrix (Size: 4 × 4):
-    0.444	0.111	0.0	0.444
-    0.444	0.444	0.0	0.111
-    0.0	0.0	0.0	0.0
-    0.111	0.444	0.0	0.444
-  - Initials (Size: 1 × 4):
-    0.333	0.333	0.0	0.333
-  - order: 2
+  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
+    0.444	0.111	0.0	  0.444
+    0.444	0.444	0.0	  0.111
+    0.0	    0.0	    0.0	  0.0
+    0.111	0.444	0.0	  0.444
+  - Initial Probabilities -> Vector{Float64}(4 × 1):
+    0.333
+    0.333
+    0.0
+    0.333
+  - Markov Chain Order:2
 ```
 """
-function transition_model(sequence::LongNucOrView{4}, n::Int64=1)
-    tpm = transition_probability_matrix(sequence, n).probabilities
-    initials = initial_distribution(sequence)
-    TransitionModel(tpm, initials, n)
+function transition_model(sequence::LongSequence, n::Int64=1)
+    tpm = transition_probability_matrix(sequence, n)
+    inits = initials(sequence)
+    TransitionModel(tpm, inits, n)
 end
 
 function transition_model(tpm::Matrix{Float64}, initials::Vector{Float64}, n::Int64=1)
-    TransitionModel(tpm, initials, n)
+    TransitionModel(tpm, inits, n)
 end
 
 @doc raw"""
@@ -193,18 +192,24 @@ tpm = transition_probability_matrix(mainseq)
 
 initials = initial_distribution(mainseq)
 
-    1×4 Matrix{Float64}:
-    0.0869565  0.434783  0.347826  0.130435
+    1×4 Vector{Float64}:
+    0.0869565  
+    0.434783
+    0.347826
+    0.130435
     
 tm = transition_model(tpm, initials)
-    - Transition Probability Matrix (Size: 4 × 4):
-    0.0	1.0	0.0	0.0
-    0.0	0.5	0.2	0.3
-    0.25	0.125	0.625	0.0
-    0.0	0.667	0.333	0.0
-    - Initials (Size: 1 × 4):
-    0.087	0.435	0.348	0.13
-    - order: 1
+- Transition Probability Matrix -> Matrix{Float64}(4 × 4):
+    0.0	  1.0	 0.0	0.0
+    0.0	  0.5	 0.2	0.3
+    0.25  0.125	 0.625	0.0
+    0.0	  0.667	 0.333	0.0
+- Initial Probabilities -> Vector{Float64}(4 × 1):
+   0.087	
+   0.435	
+   0.348	
+   0.13
+- Markov Chain Order:1
 
 newseq = LondDNA("CCTG")
 
@@ -212,12 +217,12 @@ newseq = LondDNA("CCTG")
     CCTG
 
 
-sequenceprobability(newseq, tm)
+dnaseqprobability(newseq, tm)
     
     0.0217
 ```
 """
-function sequenceprobability(
+function dnaseqprobability(
     sequence::LongNucOrView{4},
     model::TransitionModel
 )
@@ -232,6 +237,7 @@ function sequenceprobability(
     return probability
 end
 
+# findfirst(i -> i == (AA_T, AA_R), aamatrix)
 
 @doc raw"""
     iscoding(
@@ -253,7 +259,7 @@ S(X) = \log \left( \frac{{P_C(X_1=i_1, \ldots, X_T=i_T)}}{{P_N(X_1=i_1, \ldots, 
 - `sequence::LongSequence{DNAAlphabet{4}}`: The DNA sequence to be evaluated.
 - `codingmodel::TransitionModel`: The transition model for coding regions.
 - `noncodingmodel::TransitionModel`: The transition model for non-coding regions.
-- `η::Float64 = 1e-5`: The threshold value for the log-odds ratio (default: 1e-5).
+- `η::Float64 = 1e-5`: The threshold value (eta) for the log-odds ratio (default: 1e-5).
 
 # Returns
 - `true` if the sequence is likely to be coding.
@@ -278,8 +284,8 @@ function iscoding(
     noncodingmodel::TransitionModel,
     η::Float64 = 1e-5
 )
-    pcoding = sequenceprobability(sequence, codingmodel)
-    pnoncoding = sequenceprobability(sequence, noncodingmodel)
+    pcoding = dnaseqprobability(sequence, codingmodel)
+    pnoncoding = dnaseqprobability(sequence, noncodingmodel)
 
     logodds = log(pcoding / pnoncoding)
 
