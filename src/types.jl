@@ -1,4 +1,3 @@
-
 abstract type BioMarkovChain end
 
 const LongNucOrView{N} = Union{LongSequence{<:NucleicAcidAlphabet{N}},LongSubSeq{<:NucleicAcidAlphabet{N}}}
@@ -24,77 +23,7 @@ const DINUCLEICINDEXES = Dict(
     LongDNA{4}("TT") => [4, 4],
 )
 
-# const DINUCLEOTIDES = vec([LongSequence{DNAAlphabet{2}}([i, j]) for i in ACGT, j in ACGT])
-
-# const DINUCLEOTIDES = let
-#     x = [LongSequence{DNAAlphabet{2}}([i, j]) for i in ACGT, j in ACGT]
-#     # x = [string(i, j) for i in ACGT, j in ACGT]
-#     Dict(x .=> 0)
-# end
-# const DINUCLEOTIDES = vec([LongSequence{DNAAlphabet{2}}([i, j]) for i in ACGT, j in ACGT])
-# const DINUCLEOTIDES_DICT = Dict(BioMarkovChains.DINUCLEOTIDES .=> 0)
-
-#const EXTENDED_DINUCLEOTIDES = vec([LongSequence{DNAAlphabet{4}}([i, j]) for i in alphabet(DNA), j in alphabet(DNA)])
-#const EXTENDED_DINUCLEOTIDES_DICT = Dict(BioMarkovChains.EXTENDED_DINUCLEOTIDES .=> 0)
-
-# const DINUCLEOTIDES = Dict((i, j) => 0 for (i, j) in Iterators.product(ACGT, ACGT))
-# const EXTENDED_DINUCLEOTIDES = Dict((i, j) => 0 for (i, j) in Iterators.product(alphabet(DNA), alphabet(DNA)))
-
-"""
-TransitionCountMatrix(alphabet::Vector{DNA})
-
-A data structure for storing a DNA Transition Count Matrix (TCM). The TCM is a square matrix where each row and column corresponds to a nucleotide in the given `alphabet`. The value at position (i, j) in the matrix represents the number of times that nucleotide i is immediately followed by nucleotide j in a DNA sequence. 
-
-Fields:
-- `order::Dict{DNA, Int64}`: A dictionary that maps each nucleotide in the `alphabet` to its corresponding index in the matrix.
-- `counts::Matrix{Int64}`: The actual matrix of counts.
-
-Internal function:
-- `TransitionCountMatrix(alphabet::Vector{DNA})`: Constructs a new `TCM` object with the given `alphabet`. This function initializes the `order` field by creating a dictionary that maps each nucleotide in the `alphabet` to its corresponding index in the matrix. It also initializes the `counts` field to a matrix of zeros with dimensions `len x len`, where `len` is the length of the `alphabet`.
-
-Example usage:
-```julia
-alphabet = [DNA_A, DNA_C, DNA_G, DNA_T]
-dtcm = TCM(alphabet)
-```
-"""
-struct TransitionCountMatrix
-    order::Dict{DNA,Int64}
-    counts::Matrix{Int64}
-
-    function TransitionCountMatrix(alphabet::Vector{DNA})
-
-        len = length(alphabet)
-
-        order = Dict{DNA,Int}()
-        for (i, nucleotide) in enumerate(sort(alphabet))
-            order[nucleotide] = i
-        end
-        counts = zeros(Int64, len, len)
-        new(order, counts)
-    end
-end
-
-
-"""
-    TransitionProbabilityMatrix(alphabet::Vector{DNA})
-
-A data structure for storing a DNA Transition Probability Matrix (TransitionProbabilityMatrix). The TransitionProbabilityMatrix is a square matrix where each row and column corresponds to a nucleotide in the given `alphabet`. The value at position (i, j) in the matrix represents the probability of transitioning from nucleotide i to nucleotide j in a DNA sequence. 
-
-Fields:
-- `order::Dict{DNA, Int64}`: A dictionary that maps each nucleotide in the `alphabet` to its corresponding index in the matrix.
-- `probabilities::Matrix{Float64}`: The actual matrix of probabilities.
-
-Example usage:
-```julia
-alphabet = [DNA_A, DNA_C, DNA_G, DNA_T]
-dTransitionProbabilityMatrix = TransitionProbabilityMatrix(alphabet)
-```
-"""
-struct TransitionProbabilityMatrix
-    order::Dict{DNA,Int64}
-    probabilities::Matrix{Float64}
-end
+const AA20 = (AA_A, AA_R, AA_N, AA_D, AA_C, AA_Q, AA_E, AA_G, AA_H, AA_I, AA_L, AA_K, AA_M, AA_F, AA_P, AA_S, AA_T, AA_W, AA_Y, AA_V)
 
 """
     struct TransitionModel
@@ -109,12 +38,10 @@ The `TransitionModel` struct represents a transition model used in a sequence an
 
 # Constructors
 
-- `TransitionModel(TransitionProbabilityMatrix::Matrix{Float64}, initials::Matrix{Float64})`: Constructs a `TransitionModel` object with the provided transition probability matrix `TransitionProbabilityMatrix` and initial distribution probabilities `initials`.
-- `TransitionModel(sequence::LongSequence{DNAAlphabet{4}})`: Constructs a `TransitionModel` object based on a given DNA sequence. The transition probability matrix is calculated using `transition_probability_matrix(sequence).probabilities`, and the initial distribution probabilities are calculated using `initial_distribution(sequence)`.
-
+- `TransitionModel(tpm::Matrix{Float64}, initials::Matrix{Float64}; n::Int64=1)`: Constructs a `TransitionModel` object with the provided transition probability matrix and initial distribution probabilities.
 """
 struct TransitionModel <: BioMarkovChain
     tpm::Matrix{Float64} # The probabilities of the TransitionProbabilityMatrix struct
-    initials::Vector{Float64}
+    initials::Vector{Float64} # the initials distribution of probabilities
     n::Int64 # The order of the Markov chain
 end
