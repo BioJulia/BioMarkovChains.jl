@@ -1,6 +1,6 @@
 <p align="center">
   <img src="docs/src/assets/logo.svg" height="150"><br/>
-  <i>DNA as Markov chains</i><br/><br/>
+  <i>Representing biological sequences as Markov chains</i><br/><br/>
   <a href="https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/">
     <img src="https://img.shields.io/badge/documentation-online-blue.svg?logo=Julia&logoColor=white">
   </a>
@@ -22,7 +22,7 @@
 
 # BioMarkovChains
 
-> A Julia package to represent DNA as Markov chains
+> A Julia package to represent biological sequences as Markov chains
 
 ## Installation
 
