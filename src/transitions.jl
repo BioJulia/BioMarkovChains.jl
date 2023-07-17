@@ -28,19 +28,17 @@ T  2 0 0 0
 
 ```
  """
-function transition_count_matrix(sequence::LongNucOrView{4}) # remain to test
+function transition_count_matrix(sequence::LongNucOrView{4})
     alphabetsymb = eltype(sequence) == DNA ? ACGT : ACGU
     matrix = [(i,j) for i in alphabetsymb, j in alphabetsymb]
     trans = transitions(sequence)
-    default = 0
-    return reshape([get(trans, t, default) for t in matrix], size(matrix))
+    return reshape([get(trans, t, 0) for t in matrix], size(matrix))
 end
 
 function transition_count_matrix(sequence::LongAA)
     matrix = [(i,j) for i in AA20, j in AA20]
     trans = transitions(sequence)
-    default = 0
-    return reshape([get(trans, t, default) for t in matrix], size(matrix))
+    return reshape([get(trans, t, 0) for t in matrix], size(matrix))
 end
 
 @doc raw"""
