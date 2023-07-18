@@ -1,8 +1,8 @@
-import Base: show
+import Base: show, length
 
-function Base.show(io::IO, model::TransitionModel)
+function Base.show(io::IO, model::BioMarkovChain)
     # Print the type name
-    println(io, "TransitionModel:")
+    println(io, "BioMarkovChain:")
 
     # Print the size of the transition probability matrix
     tpm_size = "  - Transition Probability Matrix -> Matrix{Float64}($(size(model.tpm, 1)) × $(size(model.tpm, 2))):"
@@ -17,12 +17,12 @@ function Base.show(io::IO, model::TransitionModel)
     end
 
     # Print the size of the initials matrix
-    initials_size = "  - Initial Probabilities -> Vector{Float64}($(size(model.initials, 1)) × $(size(model.initials, 2))):"
+    initials_size = "  - Initial Probabilities -> Vector{Float64}($(size(model.inits, 1)) × $(size(model.inits, 2))):"
     println(io, initials_size)
-    for row in 1:size(model.initials, 1)
+    for row in 1:size(model.inits, 1)
         print(io, "    ")
-        for col in 1:size(model.initials, 2)
-            print(io, round(model.initials[row, col], digits=3))
+        for col in 1:size(model.inits, 2)
+            print(io, round(model.inits[row, col], digits=3))
             print(io, "\t")
         end
         println(io)
@@ -33,4 +33,4 @@ function Base.show(io::IO, model::TransitionModel)
     println(io, order)
 end
 
-Base.length(::TransitionModel) = 1
+Base.length(bmc::BioMarkovChain) = length(bmc.inits)

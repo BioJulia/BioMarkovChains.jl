@@ -96,7 +96,7 @@ using BioSequences, GeneFinder
 sequence = dna"CCTCCCGGACCCTGGGCTCGGGAC"
 
 tpm = transition_probability_matrix(sequence)
-initials = initial_distribution(sequence)
+initials = initials(sequence)
 
 println(tpm)
 println(initials)
@@ -116,18 +116,21 @@ obtain the transition probabilities and the initial distribution and
 build a transition model:
 
 ``` julia
-transition_model(sequence)
+BioMarkovModel(sequence)
 ```
 
-    TransitionModel:
-      - Transition Probability Matrix (Size: 4 × 4):
-        0.0 1.0 0.0 0.0 
-        0.0 0.5 0.2 0.3 
-        0.25    0.125   0.625   0.0 
-        0.0 0.667   0.333   0.0 
-      - Initials (Size: 1 × 4):
-        0.087   0.435   0.348   0.13    
-      - order: 1
+    BioMarkovChain:
+      - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
+        0.0	1.0	0.0	0.0
+        0.0	0.5	0.2	0.3
+        0.25	0.125	0.625	0.0
+        0.0	0.667	0.333	0.0
+      - Initial Probabilities -> Vector{Float64}(4 × 1):
+        0.087
+        0.435
+        0.348
+        0.13
+      - Markov Chain Order:1
 
 Note that, sometimes the dinucleotides transition do not harbor
 important biological meaning, whereas trinucleotides or codons are, in
@@ -139,18 +142,21 @@ A very nice nice property of the transition probability matrix is that
 the *n-step transition probability matrix* ``\mathscr{M}^{n} = (\mathscr{m}_{ij}(n))``, that is the *n*th power of ``\mathscr{M}`` represents ``i \rightarrow j`` transitions in *n* steps. We can also have higher order transition models as:
 
 ``` julia
-transition_model(sequence, 2)
+BioMarkovModel(sequence, 2)
 ```
 
-    TransitionModel:
-      - Transition Probability Matrix (Size: 4 × 4):
-        0.0 0.5 0.2 0.3 
-        0.05    0.475   0.325   0.15    
-        0.156   0.391   0.416   0.038   
-        0.083   0.375   0.342   0.2 
-      - Initials (Size: 1 × 4):
-        0.087   0.435   0.348   0.13    
-      - order: 2
+    BioMarkovChain:
+      - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
+        0.0	0.5	0.2	0.3
+        0.05	0.475	0.325	0.15
+        0.156	0.391	0.416	0.038
+        0.083	0.375	0.342	0.2
+      - Initial Probabilities -> Vector{Float64}(4 × 1):
+        0.087
+        0.435
+        0.348
+        0.13
+      - Markov Chain Order:2
 
 ## The *log-odds ratio* decision rule
 
@@ -179,7 +185,7 @@ coding based on these decision we use the predicate `iscoding` with the
 `ECOLICDS` and `ECOLINOCDS` models:
 
 ``` julia
-randseq = getcds(randdnaseq(99))[1] # this will retrieved a random coding ORF
+randseq = getorfdna(randdnaseq(99))[1] # this will retrieved a random coding ORF
 
 iscoding(randseq, ECOLICDS, ECOLINOCDS)
 ```

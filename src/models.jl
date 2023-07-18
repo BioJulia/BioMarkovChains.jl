@@ -8,7 +8,7 @@ const ECOLICDS = begin
 
     inits = [0.245, 0.243, 0.273, 0.239]
 
-    transition_model(tpm, inits)
+    BMC(tpm, inits)
 end
 
 const ECOLINOCDS = begin
@@ -21,5 +21,5 @@ const ECOLINOCDS = begin
     
     inits = [0.262, 0.239, 0.240, 0.259]
     
-    transition_model(tpm, inits)
+    BMC(tpm, inits)
 end

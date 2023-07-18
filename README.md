@@ -1,6 +1,6 @@
 <p align="center">
   <img src="docs/src/assets/logo.svg" height="150"><br/>
-  <i>DNA as Markov chains</i><br/><br/>
+  <i>Representing biological sequences as Markov chains</i><br/><br/>
   <a href="https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/">
     <img src="https://img.shields.io/badge/documentation-online-blue.svg?logo=Julia&logoColor=white">
   </a>
@@ -22,7 +22,7 @@
 
 # BioMarkovChains
 
-> A Julia package to represent DNA as Markov chains
+> A Julia package to represent biological sequences as Markov chains
 
 ## Installation
 
@@ -69,19 +69,22 @@ MSCGETTVSPILSRRTAFIRTLLGYRFRSNLPTKAERSRFGFSLPQFISTPNDRQNGNGGCGCGLENR*
 Now supposing I do want to see how transitions are occurring in this ORF sequence, the I can use the `transition_model` method and tune it to 2nd-order Markov chain:
 
 ```julia
-transition_model(orfdna, 2)
+BioMarkovModel(orfdna, 2)
 ```
 
 ```
-TransitionModel:
-  - Transition Probability Matrix (Size: 4 × 4):
+BioMarkovModel:
+  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
     0.278	0.272	0.228	0.222
     0.276	0.273	0.231	0.22
     0.286	0.269	0.242	0.204
     0.266	0.275	0.236	0.224
-  - Initials (Size: 1 × 4):
-    0.277	0.272	0.233	0.218
-  - order: 2
+  - Initial Probabilities -> Vector{Float64}(4 × 1):
+    0.277	
+    0.272
+    0.233
+    0.218
+  - Markov Chain Order:1
 ```
 
 This is  useful to later create HMMs and calculate sequence probability based on a given model, for instance we now have the *E. coli* CDS and No-CDS transition models implemented:
@@ -91,21 +94,24 @@ ECOLICDS
 ```
 
 ```
-TransitionModel:
-  - Transition Probability Matrix (Size: 4 × 4):
+BioMarkovChain:
+  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
     0.31	0.224	0.199	0.268
     0.251	0.215	0.313	0.221
     0.236	0.308	0.249	0.207
     0.178	0.217	0.338	0.267
-  - Initials (Size: 1 × 4):
-    0.245	0.243	0.273	0.239
-  - order: 1
+  - Initial Probabilities -> Vector{Float64}(4 × 1):
+    0.245
+    0.243
+    0.273
+    0.239
+  - Markov Chain Order:1
 ```
 
 What is then the probability of the previous random Lambda phage DNA sequence given this model?
 
 ```julia
-sequenceprobability(orfdna, ECOLICDS)
+dnaseqprobability(orfdna, ECOLICDS)
 ```
 
 ```

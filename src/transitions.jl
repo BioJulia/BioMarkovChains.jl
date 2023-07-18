@@ -88,6 +88,20 @@ function transition_probability_matrix(
     return freqs^(n)
 end
 
+function transition_probability_matrix(
+    sequence::LongAA,
+    n::Int64 = 1;
+)
+    tcm = transition_count_matrix(sequence)
+    rowsums = sum(tcm, dims = 2)
+    freqs = tcm ./ rowsums
+
+    freqs[isinf.(freqs)] .= 0.0
+    freqs[isnan.(freqs)] .= 0.0
+
+    return freqs^(n)
+end
+
 @testitem "tpm" begin
     using BioSequences, BioMarkovChains
     seq = dna"CCTCCCGGACCCTGGGCTCGGGAC"
@@ -104,60 +118,7 @@ function initials(sequence::LongSequence) ## π̂ estimates of the initial proba
     return vec(inits)
 end
 
-"""
-    transition_model(sequence::LongNucOrView{4}, n::Int64=1)
-
-Constructs a transition model based on the given DNA sequence and transition order.
-
-# Arguments
-- `sequence::LongNucOrView{4}`: A DNA sequence represented as a `LongNucOrView{4}` object.
-- `n::Int64 (optional)`: The transition order (default: 1).
-
-# Returns
-A `TransitionModel` object representing the transition model.
-
----
-
-    transition_model(tpm::Matrix{Float64}, initials::Matrix{Float64}, n::Int64=1)
-
-Builds a transtition model based on the transition probability matrix and the initial distributions. It can also calculates higer orders of the model if `n` is changed.
-
-# Arguments
-- `tpm::Matrix{Float64}`: the transition probability matrix
-- `initials::Vector{Float64}`: the initial distributions of the model.
-- `n::Int64 (optional)`: The transition order (default: 1).
-
-# Returns
-A `TransitionProbabilityMatrix` object representing the transition probability matrix.
-
-# Example
-```
-sequence = LongDNA{4}("ACTACATCTA")
-
-model = transition_model(sequence, 2)
-TransitionModel:
-  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
-    0.444	0.111	0.0	  0.444
-    0.444	0.444	0.0	  0.111
-    0.0	    0.0	    0.0	  0.0
-    0.111	0.444	0.0	  0.444
-  - Initial Probabilities -> Vector{Float64}(4 × 1):
-    0.333
-    0.333
-    0.0
-    0.333
-  - Markov Chain Order:2
-```
-"""
-function transition_model(sequence::LongSequence, n::Int64=1)
-    tpm = transition_probability_matrix(sequence, n)
-    inits = initials(sequence)
-    TransitionModel(tpm, inits, n)
-end
-
-function transition_model(tpm::Matrix{Float64}, initials::Vector{Float64}, n::Int64=1)
-    TransitionModel(tpm, inits, n)
-end
+initials(bmc::BioMarkovChain) = bmc.inits
 
 @doc raw"""
     sequenceprobability(sequence::LongNucOrView{4}, tpm::Matrix{Float64}, initials=Vector{Float64})
@@ -170,7 +131,7 @@ P(X_1 = i_1, \ldots, X_T = i_T) = \pi_{i_1}^{T-1} \prod_{t=1}^{T-1} a_{i_t, i_{t
 
 # Arguments
 - `sequence::LongNucOrView{4}`: The input sequence of nucleotides.
-- `tm::TransitionModel` is the actual data structure composed of a `tpm::Matrix{Float64}` the transition probability matrix and `initials=Vector{Float64}` the initial state probabilities.
+- `tm::BioMarkovChain` is the actual data structure composed of a `tpm::Matrix{Float64}` the transition probability matrix and `initials=Vector{Float64}` the initial state probabilities.
 
 # Returns
 - `probability::Float64`: The probability of the input sequence.
@@ -222,9 +183,9 @@ dnaseqprobability(newseq, tm)
 """
 function dnaseqprobability(
     sequence::LongNucOrView{4},
-    model::TransitionModel
+    model::BioMarkovChain
 )
-    init = model.initials[NUCLEICINDEXES[sequence[1]]]
+    init = model.inits[NUCLEICINDEXES[sequence[1]]]
 
     probability = init
 
@@ -235,13 +196,15 @@ function dnaseqprobability(
     return probability
 end
 
+transition_probability_matrix(bmc::BioMarkovChain) = bmc.tpm
+
 # findfirst(i -> i == (AA_T, AA_R), aamatrix)
 
 @doc raw"""
     iscoding(
         sequence::LongSequence{DNAAlphabet{4}}, 
-        codingmodel::TransitionModel, 
-        noncodingmodel::TransitionModel,
+        codingmodel::BioMarkovChain, 
+        noncodingmodel::BioMarkovChain,
         η::Float64 = 1e-5
         )
 
@@ -255,8 +218,8 @@ S(X) = \log \left( \frac{{P_C(X_1=i_1, \ldots, X_T=i_T)}}{{P_N(X_1=i_1, \ldots, 
 
 # Arguments
 - `sequence::LongSequence{DNAAlphabet{4}}`: The DNA sequence to be evaluated.
-- `codingmodel::TransitionModel`: The transition model for coding regions.
-- `noncodingmodel::TransitionModel`: The transition model for non-coding regions.
+- `codingmodel::BioMarkovChain`: The transition model for coding regions.
+- `noncodingmodel::BioMarkovChain`: The transition model for non-coding regions.
 - `η::Float64 = 1e-5`: The threshold value (eta) for the log-odds ratio (default: 1e-5).
 
 # Returns
@@ -271,15 +234,15 @@ S(X) = \log \left( \frac{{P_C(X_1=i_1, \ldots, X_T=i_T)}}{{P_N(X_1=i_1, \ldots, 
 
 ```
 sequence = LondDNA("ATGGCATCTAG")
-codingmodel = TransitionModel()
-noncodingmodel = TransitionModel()
+codingmodel = BioMarkovChain()
+noncodingmodel = BioMarkovChain()
 iscoding(sequence, codingmodel, noncodingmodel)  # Returns: true
 ```
 """
 function iscoding(
     sequence::LongNucOrView{4},
-    codingmodel::TransitionModel,
-    noncodingmodel::TransitionModel,
+    codingmodel::BioMarkovChain,
+    noncodingmodel::BioMarkovChain,
     η::Float64 = 1e-5
 )
     pcoding = dnaseqprobability(sequence, codingmodel)

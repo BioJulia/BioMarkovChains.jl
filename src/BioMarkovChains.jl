@@ -34,13 +34,13 @@ using TestItems: @testitem
 using StatsBase: countmap
 
 include("types.jl")
-export TransitionModel
+export BioMarkovChain, BMC
 
 include("utils.jl")
 export transitions, hasprematurestop
 
 include("transitions.jl")
-export initials, transition_count_matrix, transition_probability_matrix, transition_model, dnaseqprobability
+export initials, transition_count_matrix, transition_probability_matrix, dnaseqprobability
 
 include("models.jl")
 export ECOLICDS, ECOLINOCDS
@@ -62,7 +62,7 @@ include("extended.jl")
         transition_count_matrix(seq)
         transition_probability_matrix(seq)
         dnaseqprobability(seq, ECOLICDS)
-        transition_model(seq)
+        BioMarkovChain(seq)
         perronfrobenius(seq)
     end
 end
