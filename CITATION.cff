@@ -9,7 +9,7 @@ version: 0.0.2
 type: software
 date-released: 2022-12-13
 url: "https://github.com/camilogarciabotero/BioMarkovChains.jl"
-# doi: 10.5281/zenodo.6468280
+doi: 10.5281/zenodo.8157635
 preferred-citation:
   type: software
   authors:
@@ -20,4 +20,4 @@ preferred-citation:
   version: 0.0.3
   date-released: 2022-12-13
   url: "https://github.com/camilogarciabotero/BioMarkovChains.jl"
-  # doi: 10.5281/zenodo.6468280
+  doi: 10.5281/zenodo.8157635
