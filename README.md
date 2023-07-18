@@ -6,8 +6,8 @@
   </a>
   <a href="https://github.com/camilogarciabotero/BioMarkovChains.jl/releases/latest"> 
   <img src="https://img.shields.io/github/release/camilogarciabotero/BioMarkovChains.jl.svg">
-    <!-- <a href="https://doi.org/10.5281/zenodo.7519184"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.7519184.svg" alt="DOI"></a>
-  </a> -->
+    <a href="https://doi.org/10.5281/zenodo.7519184"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.7519184.svg" alt="DOI"></a>
+  </a>
    <a href="https://github.com/camilogarciabotero/BioMarkovChains.jl/actions/workflows/CI.yml">
     <img src="https://github.com/camilogarciabotero/BioMarkovChains.jl/actions/workflows/CI.yml/badge.svg">
   <a href="https://github.com/camilogarciabotero/BioMarkovChains.jl/blob/main/LICENSE">
