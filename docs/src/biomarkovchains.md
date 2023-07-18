@@ -113,10 +113,10 @@ println(initials)
 
 More conveniently, we can now use the `transition_model` method and
 obtain the transition probabilities and the initial distribution and
-build a transition model:
+build a transition model (`BioMarkovChain`):
 
 ``` julia
-BioMarkovModel(sequence)
+BioMarkovChain(sequence)
 ```
 
     BioMarkovChain:
@@ -142,7 +142,7 @@ A very nice nice property of the transition probability matrix is that
 the *n-step transition probability matrix* ``\mathscr{M}^{n} = (\mathscr{m}_{ij}(n))``, that is the *n*th power of ``\mathscr{M}`` represents ``i \rightarrow j`` transitions in *n* steps. We can also have higher order transition models as:
 
 ``` julia
-BioMarkovModel(sequence, 2)
+BioMarkovChain(sequence, 2)
 ```
 
     BioMarkovChain:
