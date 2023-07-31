@@ -24,7 +24,7 @@ Dict{Tuple{DNA, DNA}, Int64} with 4 entries:
 ```
 """
 function transitions(sequence::LongSequence)
-    b = @view sequence[begin+1:end]
+    b = @view sequence[2:end]
     return countmap(zip(sequence, b))
 end
 
