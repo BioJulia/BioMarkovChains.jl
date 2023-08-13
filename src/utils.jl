@@ -23,7 +23,7 @@ Dict{Tuple{DNA, DNA}, Int64} with 4 entries:
   (DNA_A, DNA_G) => 3
 ```
 """
-function transitions(sequence::LongSequence)
+function transitions(sequence::LongNucOrView{4})
     b = @view sequence[2:end]
     return countmap(zip(sequence, b))
 end
@@ -65,14 +65,14 @@ end
 
 function randbmc(A::DataType, n::Int64=1)
 
-    if A == DNA
+    if A == DNA || A == RNA
         tpm = rand(4,4)
         inits = rand(4)
     elseif A == AminoAcid
         tpm = rand(20,20)
         inits = rand(20)
     else
-        error("Alphabet must be of the DNA or AminoAcid DataType")
+        error("Alphabet must be of the DNA, RNA or AminoAcid DataType")
     end
 
     BMC(tpm, inits, n)
