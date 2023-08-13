@@ -19,12 +19,11 @@ seq = LongDNA{4}("AGCTAGCTAGCT")
 
 tcm = transition_count_matrix(seq)
 
-4x4 Matrix{Int64}:
-   A C G T
-A  0 0 3 0
-C  0 0 0 3
-G  0 3 0 0
-T  2 0 0 0
+4×4 Matrix{Int64}:
+ 0  0  3  0
+ 0  0  0  3
+ 0  3  0  0
+ 2  0  0  0
 
 ```
  """
@@ -43,16 +42,43 @@ function transition_count_matrix(sequence::LongAA)
 end
 
 @doc raw"""
-    transition_probability_matrix(sequence::LongSequence{DNAAlphabet{4}})
+    transition_probability_matrix(sequence::LongSequence{DNAAlphabet{4}}, n::Int64=1)
 
-Compute the transition probability matrix (TPM) of a given DNA sequence. Formally it construct `` \hat{A}`` where: 
+Compute the transition probability matrix (TPM) of a given DNA sequence. Formally it construct `` \hat{\mathscr{M}}`` where: 
 ```math
-a_{ij} = P(X_t = j \mid X_{t-1} = i) = \frac{{P(X_{t-1} = i, X_t = j)}}{{P(X_{t-1} = i)}}
+\mathscr{m}_{ij} = P(X_t = j \mid X_{t-1} = i) = \frac{{P(X_{t-1} = i, X_t = j)}}{{P(X_{t-1} = i)}}
+```
+
+The transition matrices of DNA and Amino-Acids are arranged sorted and in row-wise matrices:
+
+First the DNA matrix:
+
+```math
+$$
+\[
+\mathscr{M}_{DNA} = \begin{bmatrix}
+_{AA} & _{AC} & _{AG} & _{AT} \\
+_{CA} & _{CC} & _{CG} & _{CT} \\
+_{GA} & _{GC} & _{GG} & _{GT} \\
+_{TA} & _{TC} & _{TG} & _{TT} \\
+\end{bmatrix}
+```
+
+And then, the Aminoacids:
+
+```math
+\mathscr{M}_{AminoAcids} = \begin{bmatrix}
+_{AA} & _{AC} & _{AD} & \dots & _{AW} \\
+_{CA} & _{CC} & _{CD} & \dots & _{CW} \\
+_{DA} & _{DC} & _{DD} & \dots & _{DW} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+_{WA} & _{WC} & _{WD} & \dots & _{WW} \\
+\end{bmatrix}
 ```
 
 # Arguments
 - `sequence::LongNucOrView{4}`: a `LongNucOrView{4}` object representing the DNA sequence.
-- `n::Int64=1`: The order of the Markov model. That is the `` \hat{A}^{n}``
+- `n::Int64=1`: The order of the Markov model. That is the `` \hat{M}^{n}``
 
 # Keywords
 
@@ -67,12 +93,11 @@ seq = dna"AGCTAGCTAGCT"
 
 tpm = transition_probability_matrix(seq)
 
-4x4 Matrix{Float64}:
-   A   C   G   T
-A  0.0 0.0 1.0 0.0
-C  0.0 0.0 0.0 1.0
-G  0.0 1.0 0.0 0.0
-T  1.0 0.0 0.0 0.0
+4×4 Matrix{Float64}:
+ 0.0  0.0  1.0  0.0
+ 0.0  0.0  0.0  1.0
+ 0.0  1.0  0.0  0.0
+ 1.0  0.0  0.0  0.0
 ```
 """
 function transition_probability_matrix(
@@ -102,6 +127,8 @@ function transition_probability_matrix(
 
     return freqs^(n)
 end
+
+transition_probability_matrix(bmc::BioMarkovChain) = bmc.tpm
 
 @testitem "tpm" begin
     using BioSequences, BioMarkovChains
@@ -141,43 +168,30 @@ P(X_1 = i_1, \ldots, X_T = i_T) = \pi_{i_1}^{T-1} \prod_{t=1}^{T-1} a_{i_t, i_{t
 
 ```
 mainseq = LongDNA{4}("CCTCCCGGACCCTGGGCTCGGGAC")
+   
+bmc = BioMarkovChain(mainseq)
 
-tpm = transition_probability_matrix(mainseq)
-    
-    4×4 Matrix{Float64}:
-    0.0   1.0    0.0    0.0
-    0.0   0.5    0.2    0.3
-    0.25  0.125  0.625  0.0
-    0.0   0.667  0.333  0.0
+BioMarkovChain with DNA Alphabet:
+  - Transition Probability Matrix --> Matrix{Float64}(4 × 4):
+   0.0     1.0     0.0     0.0
+   0.0     0.5     0.2     0.3
+   0.25    0.125   0.625   0.0
+   0.0     0.6667  0.3333  0.0
+  - Initial Probabilities -> Vector{Float64}(4 × 1):
+   0.087
+   0.4348
+   0.3478
+   0.1304
+  - Markov Chain Order -> Int64:
+   1
 
-initials = initial_distribution(mainseq)
-
-    1×4 Vector{Float64}:
-    0.0869565  
-    0.434783
-    0.347826
-    0.130435
-    
-tm = transition_model(tpm, initials)
-- Transition Probability Matrix -> Matrix{Float64}(4 × 4):
-    0.0	  1.0	 0.0	0.0
-    0.0	  0.5	 0.2	0.3
-    0.25  0.125	 0.625	0.0
-    0.0	  0.667	 0.333	0.0
-- Initial Probabilities -> Vector{Float64}(4 × 1):
-   0.087	
-   0.435	
-   0.348	
-   0.13
-- Markov Chain Order:1
-
-newseq = LondDNA("CCTG")
+newseq = LongDNA{4}("CCTG")
 
     4nt DNA Sequence:
     CCTG
 
 
-dnaseqprobability(newseq, tm)
+dnaseqprobability(newseq, bmc)
     
     0.0217
 ```
@@ -196,8 +210,6 @@ function dnaseqprobability(
     end
     return probability
 end
-
-transition_probability_matrix(bmc::BioMarkovChain) = bmc.tpm
 
 # findfirst(i -> i == (AA_T, AA_R), aamatrix)
 
