@@ -44,7 +44,7 @@ pkg> add BioMarkovChains
 
 ## Creating Markov chain out of DNA sequences
 
-An important step before developing several gene finding algorithms consist of having a Markov chain representation of the DNA. To do so, we implemented the `transition_model` method that will capture the initials and transition probabilities of a DNA sequence (`LongSequence`) and will create a dedicated object storing relevant information of a DNA Markov chain. Here an example:
+An important step before developing several gene finding algorithms consist of having a Markov chain representation of the DNA. To do so, we implemented the `BioMarkovChain` method that will capture the initials and transition probabilities of a DNA sequence (`LongSequence`) and will create a dedicated object storing relevant information of a DNA Markov chain. Here an example:
 
 Let find one ORF in a random `LongDNA` :
 
@@ -66,7 +66,7 @@ translate(orfdna)
 MSCGETTVSPILSRRTAFIRTLLGYRFRSNLPTKAERSRFGFSLPQFISTPNDRQNGNGGCGCGLENR*
 ```
 
-Now supposing I do want to see how transitions are occurring in this ORF sequence, the I can use the `transition_model` method and tune it to 2nd-order Markov chain:
+Now supposing I do want to see how transitions are occurring in this ORF sequence, the I can use the `BioMarkovChain` method and tune it to 2nd-order Markov chain:
 
 ```julia
 BioMarkovChain(orfdna, 2)
@@ -89,7 +89,7 @@ BioMarkovChain with DNA Alphabet:
 
 ```
 
-This is  useful to later create HMMs and calculate sequence probability based on a given model, for instance we now have the *E. coli* CDS and No-CDS transition models implemented:
+This is  useful to later create HMMs and calculate sequence probability based on a given model, for instance we now have the *E. coli* CDS and No-CDS transition models or Markov chain implemented:
 
 ```julia
 ECOLICDS
