@@ -84,11 +84,11 @@ initial probabilities ``\widehat{\pi} = (0.08,0.43,0.34,0.13)``. Both set of
 probabilities composed a *transition model* that can be used to predict
 the probability of any DNA sequence using equation (2).
 
-## Transition models with BioSequences
+## Biological Markov Chains using BioSequences
 
 We can now calculate a transition probability matrix from a `LongDNA`
 sequence using the `transition_probability_matrix` and
-`initial_distribution` methods for a given `LongDNA` sequence:
+`initials` methods for a given `LongDNA` sequence:
 
 ``` julia
 using BioSequences, GeneFinder
@@ -102,14 +102,17 @@ println(tpm)
 println(initials)
 ```
 
-    TPM{Dict{DNA, Int64}, Matrix{Float64}:
-       A     C     G     T     
-    A  0.0   1.0   0.0   0.0   
-    C  0.0   0.5   0.2   0.3   
-    G  0.25  0.125 0.625 0.0   
-    T  0.0   0.667 0.333 0.0   
+    4×4 Matrix{Float64}:
+     0.0   1.0       0.0       0.0
+     0.0   0.5       0.2       0.3
+     0.25  0.125     0.625     0.0
+     0.0   0.666667  0.333333  0.0
 
-    [0.08695652173913043 0.43478260869565216 0.34782608695652173 0.13043478260869565]
+    4-element Vector{Float64}:
+     0.08695652173913043
+     0.43478260869565216
+     0.34782608695652173
+     0.13043478260869565
 
 More conveniently, we can now use the `transition_model` method and
 obtain the transition probabilities and the initial distribution and
@@ -119,18 +122,19 @@ build a transition model (`BioMarkovChain`):
 BioMarkovChain(sequence)
 ```
 
-    BioMarkovChain:
-      - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
-        0.0	1.0	0.0	0.0
-        0.0	0.5	0.2	0.3
-        0.25	0.125	0.625	0.0
-        0.0	0.667	0.333	0.0
+    BioMarkovChain with DNA Alphabet:
+      - Transition Probability Matrix --> Matrix{Float64}(4 × 4):
+       0.0     1.0     0.0     0.0
+       0.0     0.5     0.2     0.3
+       0.25    0.125   0.625   0.0
+       0.0     0.6667  0.3333  0.0
       - Initial Probabilities -> Vector{Float64}(4 × 1):
-        0.087
-        0.435
-        0.348
-        0.13
-      - Markov Chain Order:1
+       0.087
+       0.4348
+       0.3478
+       0.1304
+      - Markov Chain Order -> Int64:
+       1
 
 Note that, sometimes the dinucleotides transition do not harbor
 important biological meaning, whereas trinucleotides or codons are, in
@@ -145,18 +149,19 @@ the *n-step transition probability matrix* ``\mathscr{M}^{n} = (\mathscr{m}_{ij}
 BioMarkovChain(sequence, 2)
 ```
 
-    BioMarkovChain:
-      - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
-        0.0	0.5	0.2	0.3
-        0.05	0.475	0.325	0.15
-        0.156	0.391	0.416	0.038
-        0.083	0.375	0.342	0.2
+    BioMarkovChain with DNA Alphabet:
+      - Transition Probability Matrix --> Matrix{Float64}(4 × 4):
+       0.0     0.5     0.2     0.3
+       0.05    0.475   0.325   0.15
+       0.1562  0.3906  0.4156  0.0375
+       0.0833  0.375   0.3417  0.2
       - Initial Probabilities -> Vector{Float64}(4 × 1):
-        0.087
-        0.435
-        0.348
-        0.13
-      - Markov Chain Order:2
+       0.087
+       0.4348
+       0.3478
+       0.1304
+      - Markov Chain Order -> Int64:
+       2
 
 ## The *log-odds ratio* decision rule
 
