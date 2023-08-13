@@ -84,7 +84,7 @@ initial probabilities ``\widehat{\pi} = (0.08,0.43,0.34,0.13)``. Both set of
 probabilities composed a *transition model* that can be used to predict
 the probability of any DNA sequence using equation (2).
 
-## Biological Markov Chains using BioSequences
+## Markov Chains using BioSequences
 
 We can now calculate a transition probability matrix from a `LongDNA`
 sequence using the `transition_probability_matrix` and
