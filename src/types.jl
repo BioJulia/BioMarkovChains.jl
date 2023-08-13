@@ -68,15 +68,36 @@ struct BioMarkovChain{M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: Abstr
     end
 
     function BioMarkovChain(sequence::LongNucOrView{4}, n::Int64=1)
-        tpm = transition_probability_matrix(sequence, n)
-        inits = initials(sequence)
+        # tpm = transition_probability_matrix(sequence, n)
+        # inits = initials(sequence)
+        inits = Array{Float64, 1}(undef, 1)
+        tcm = transition_count_matrix(sequence)
+        inits = vec(sum(tcm, dims = 1) ./ sum(tcm))
+
+        rowsums = sum(tcm, dims = 2)
+        freqs = tcm ./ rowsums
+        freqs[isinf.(freqs)] .= 0.0
+        freqs[isnan.(freqs)] .= 0.0
+
+        tpm = freqs^(n)
+
         bmc = new{Matrix{Float64},Vector{Float64},Int64}(tpm, inits, n)
         return bmc
     end
 
     function BioMarkovChain(sequence::LongAA, n::Int64=1)
-      tpm = transition_probability_matrix(sequence, n)
-      inits = initials(sequence)
+      # tpm = transition_probability_matrix(sequence, n)
+      # inits = initials(sequence)
+      inits = Array{Float64, 1}(undef, 1)
+      tcm = transition_count_matrix(sequence)
+      inits = vec(sum(tcm, dims = 1) ./ sum(tcm))
+
+      rowsums = sum(tcm, dims = 2)
+      freqs = tcm ./ rowsums
+      freqs[isinf.(freqs)] .= 0.0
+      freqs[isnan.(freqs)] .= 0.0
+      tpm = freqs^(n)
+      
       bmc = new{Matrix{Float64},Vector{Float64},Int64}(tpm, inits, n)
       return bmc
   end
