@@ -62,3 +62,18 @@ function _dna_to_int(nucleotide::DNA; extended_alphabet::Bool = false)
     A = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
     return findfirst(nucleotide, LongSequence{DNAAlphabet{4}}(A))
 end
+
+function randbmc(A::DataType, n::Int64=1)
+
+    if A == DNA
+        tpm = rand(4,4)
+        inits = rand(4)
+    elseif A == AminoAcid
+        tpm = rand(20,20)
+        inits = rand(20)
+    else
+        error("Alphabet must be of the DNA or AminoAcid DataType")
+    end
+
+    BMC(tpm, inits, n)
+end
