@@ -54,7 +54,6 @@ The transition matrices of DNA and Amino-Acids are arranged sorted and in row-wi
 First the DNA matrix:
 
 ```math
-$$
 \mathscr{M}_{DNA} = \begin{bmatrix}
 _{AA} & _{AC} & _{AG} & _{AT} \\
 _{CA} & _{CC} & _{CG} & _{CT} \\
