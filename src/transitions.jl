@@ -55,7 +55,6 @@ First the DNA matrix:
 
 ```math
 $$
-\[
 \mathscr{M}_{DNA} = \begin{bmatrix}
 _{AA} & _{AC} & _{AG} & _{AT} \\
 _{CA} & _{CC} & _{CG} & _{CT} \\
@@ -67,7 +66,7 @@ _{TA} & _{TC} & _{TG} & _{TT} \\
 And then, the Aminoacids:
 
 ```math
-\mathscr{M}_{AminoAcids} = \begin{bmatrix}
+\mathscr{M}_{AA} = \begin{bmatrix}
 _{AA} & _{AC} & _{AD} & \dots & _{AW} \\
 _{CA} & _{CC} & _{CD} & \dots & _{CW} \\
 _{DA} & _{DC} & _{DD} & \dots & _{DW} \\
