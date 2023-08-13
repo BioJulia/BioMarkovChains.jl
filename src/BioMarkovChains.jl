@@ -37,7 +37,7 @@ include("types.jl")
 export BioMarkovChain, BMC
 
 include("utils.jl")
-export transitions, hasprematurestop
+export transitions, hasprematurestop, randbmc
 
 include("transitions.jl")
 export initials, transition_count_matrix, transition_probability_matrix, dnaseqprobability
