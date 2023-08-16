@@ -6,6 +6,17 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.0.10...main)
 
+
+## [0.4.1]
+
+- Internals changes, clean code and make it more flexible
+
+## [0.4.0]
+
+- Clean documentation
+- Add a `randbmc` methods
+- Improve `BMC` printing
+
 ## [0.3.0]
 
 - Refactoring the `TransitionModel` to a `BioMarkovChain` construct and better interface

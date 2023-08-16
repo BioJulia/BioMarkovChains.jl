@@ -16,6 +16,9 @@
   <a href="https://www.repostatus.org/#wip">
     <img src="https://www.repostatus.org/badges/latest/wip.svg">
   </a>
+  <a href="https://pkgs.genieframework.com?packages=BioMarkovChains">
+    <img src="https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/BioMarkovChains/label:downloads:,">
+  </a>
 </p>
 
 ***

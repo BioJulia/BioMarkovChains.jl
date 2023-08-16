@@ -23,7 +23,7 @@ Dict{Tuple{DNA, DNA}, Int64} with 4 entries:
   (DNA_A, DNA_G) => 3
 ```
 """
-function transitions(sequence::Union{LongSequence{A}, LongSubSeq{A}}) where A
+function transitions(sequence::SeqOrView{A}) where A
     b = @view sequence[2:end]
     return countmap(zip(sequence, b))
 end
