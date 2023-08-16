@@ -77,7 +77,7 @@ BioMarkovChain(orfdna, 2)
 
 ```
 BioMarkovChain with DNA Alphabet:
-  - Transition Probability Matrix --> Matrix{Float64}(4 × 4):
+  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.2123  0.2731  0.278   0.2366
    0.2017  0.3072  0.2687  0.2224
    0.1978  0.2651  0.2893  0.2478
@@ -100,7 +100,7 @@ ECOLICDS
 
 ```
 BioMarkovChain with DNA Alphabet:
-  - Transition Probability Matrix --> Matrix{Float64}(4 × 4):
+  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.31    0.224   0.199   0.268
    0.251   0.215   0.313   0.221
    0.236   0.308   0.249   0.207
