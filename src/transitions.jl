@@ -6,10 +6,6 @@ Compute the transition count matrix (TCM) of a given DNA sequence.
 # Arguments
 - `sequence::LongSequence{DNAAlphabet{4}}`: a `LongSequence{DNAAlphabet{4}}` object representing the DNA sequence.
 
-# Keywords
-
-- `extended_alphabet::Bool=false`: If true will pass the extended alphabet of DNA to search
-
 # Returns
 A `Matrix` object representing the transition count matrix of the sequence.
 
@@ -24,9 +20,8 @@ tcm = transition_count_matrix(seq)
  0  0  0  3
  0  3  0  0
  2  0  0  0
-
 ```
- """
+"""
 function transition_count_matrix(sequence::LongNucOrView{4})
     alphabetsymb = eltype(sequence) == DNA ? ACGT : ACGU # could eventually use `∘(sort, unique)(sequence)` to get a very specific and sorted alphabetsymbol
     # alphabetsymb = ∘(sort, unique)(sequence)
@@ -35,7 +30,7 @@ function transition_count_matrix(sequence::LongNucOrView{4})
     return reshape([get(trans, t, 0) for t in matrix], size(matrix))
 end
 
-function transition_count_matrix(sequence::LongAA)
+function transition_count_matrix(sequence::LongAminoAcidOrView)
     matrix = [(i,j) for i in AA20, j in AA20]
     trans = transitions(sequence)
     return reshape([get(trans, t, 0) for t in matrix], size(matrix))
@@ -98,24 +93,7 @@ tpm = transition_probability_matrix(seq)
  1.0  0.0  0.0  0.0
 ```
 """
-function transition_probability_matrix(
-    sequence::LongNucOrView{4},
-    n::Int64 = 1;
-)
-    tcm = transition_count_matrix(sequence)
-    rowsums = sum(tcm, dims = 2)
-    freqs = tcm ./ rowsums
-
-    freqs[isinf.(freqs)] .= 0.0
-    freqs[isnan.(freqs)] .= 0.0
-
-    return freqs^(n)
-end
-
-function transition_probability_matrix(
-    sequence::LongAA,
-    n::Int64 = 1;
-)
+function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) where A
     tcm = transition_count_matrix(sequence)
     rowsums = sum(tcm, dims = 2)
     freqs = tcm ./ rowsums
@@ -136,7 +114,7 @@ transition_probability_matrix(bmc::BioMarkovChain) = bmc.tpm
     @test round.(tpm, digits = 3) == [0.0 1.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.25 0.125 0.625 0.0; 0.0 0.667 0.333 0.0]
 end
 
-function initials(sequence::LongSequence) ## π̂ estimates of the initial probabilies
+function initials(sequence::SeqOrView{A}) where A ## π̂ estimates of the initial probabilies
     # initials = Array{Float64}(undef, 1, 4)
     inits = Array{Float64, 1}(undef, 1)
     tcm = transition_count_matrix(sequence)
@@ -170,7 +148,7 @@ mainseq = LongDNA{4}("CCTCCCGGACCCTGGGCTCGGGAC")
 bmc = BioMarkovChain(mainseq)
 
 BioMarkovChain with DNA Alphabet:
-  - Transition Probability Matrix --> Matrix{Float64}(4 × 4):
+  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.0     1.0     0.0     0.0
    0.0     0.5     0.2     0.3
    0.25    0.125   0.625   0.0

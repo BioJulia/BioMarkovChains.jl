@@ -5,13 +5,13 @@ function Base.show(io::IO, model::BioMarkovChain)
     # println(io, "BioMarkovChain:")
 
     # Determine the alphabet type
-    alphabet_type = length(model) == 20 ? "AminoAcids" : "DNA"
+    alphabet_type = length(model) == 20 ? "AminoAcids" : "DNA/RNA"
 
     # Print the type name with inferred alphabet type
     println(io, "BioMarkovChain with $alphabet_type Alphabet:")
 
     # Print the transition probability matrix
-    println(io, "  - Transition Probability Matrix --> Matrix{Float64}($(size(model.tpm, 1)) × $(size(model.tpm, 2))):")
+    println(io, "  - Transition Probability Matrix -> Matrix{Float64}($(size(model.tpm, 1)) × $(size(model.tpm, 2))):")
     for row in 1:size(model.tpm, 1)
         print(io, "  ")
         max_cols = size(model.tpm, 2)
