@@ -64,7 +64,7 @@ struct BioMarkovChain{M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: Abstr
     inits::I # the initials distribution of probabilities
     n::N # The order of the Markov chain
     function BioMarkovChain(tpm::M, inits::I, n::N=1) where {M<:AbstractMatrix, I<:AbstractVector, N<:Integer}
-        bmc = new{M,I,N}(tpm, inits, n)
+        bmc = new{M,I,N}(tpm^(n), inits, n)
         return bmc
     end
 
