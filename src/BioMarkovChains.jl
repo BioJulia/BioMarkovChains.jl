@@ -33,6 +33,7 @@ using MarkovChainHammer.Trajectory: generate
 using PrecompileTools: @setup_workload, @compile_workload
 using TestItems: @testitem
 using StatsBase: countmap
+using VectorizedKmers: count_kmers
 
 include("types.jl")
 export BioMarkovChain, BMC

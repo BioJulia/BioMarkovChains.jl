@@ -22,16 +22,21 @@ tcm = transition_count_matrix(seq)
  2  0  0  0
 ```
 """
-function transition_count_matrix(sequence::LongNucOrView{4})
-    alphabetsymb = eltype(sequence) == DNA ? ACGT : ACGU # could eventually use `∘(sort, unique)(sequence)` to get a very specific and sorted alphabetsymbol
-    # alphabetsymb = ∘(sort, unique)(sequence)
-    matrix = [(i,j) for i in alphabetsymb, j in alphabetsymb]
-    trans = transitions(sequence)
-    return reshape([get(trans, t, 0) for t in matrix], size(matrix))
+function transition_count_matrix(sequence::LongDNA{4}) 
+    counts = reshape(count_kmers(sequence, 2, Int), (4,4))'
+    return copy(counts)
 end
 
 function transition_count_matrix(sequence::LongAminoAcidOrView)
     matrix = [(i,j) for i in AA20, j in AA20]
+    trans = transitions(sequence)
+    return reshape([get(trans, t, 0) for t in matrix], size(matrix))
+end
+
+function transition_count_matrix(sequence::LongNucOrView{4})
+    alphabetsymb = eltype(sequence) == DNA ? ACGT : ACGU # could eventually use `∘(sort, unique)(sequence)` to get a very specific and sorted alphabetsymbol
+    # alphabetsymb = ∘(sort, unique)(sequence)
+    matrix = [(i,j) for i in alphabetsymb, j in alphabetsymb]
     trans = transitions(sequence)
     return reshape([get(trans, t, 0) for t in matrix], size(matrix))
 end
