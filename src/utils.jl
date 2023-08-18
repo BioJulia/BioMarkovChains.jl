@@ -63,17 +63,40 @@ function _dna_to_int(nucleotide::DNA; extended_alphabet::Bool = false)
     return findfirst(nucleotide, LongSequence{DNAAlphabet{4}}(A))
 end
 
-function randbmc(A::DataType, n::Int64=1)
+# function randbmc(A::DataType, n::Int64=1)
 
+#     if A == DNA || A == RNA
+#         tpm = rand(4,4)
+#         inits = rand(4)
+#     elseif A == AminoAcid
+#         tpm = rand(20,20)
+#         inits = rand(20)
+#     else
+#         error("Alphabet must be of the DNA, RNA or AminoAcid DataType")
+#     end
+
+#     BMC(tpm, inits, n)
+# end
+
+function randbmc(A::DataType, n::Int64=1)
     if A == DNA || A == RNA
-        tpm = rand(4,4)
+        tpm = rand(4, 4)
+        row_sums = sum(tpm, dims=2)
         inits = rand(4)
+        init_sum = sum(inits)
+        @views tpm ./= row_sums
+        @views inits ./= init_sum
     elseif A == AminoAcid
-        tpm = rand(20,20)
+        tpm = rand(20, 20)
+        row_sums = sum(tpm, dims=2)
         inits = rand(20)
+        init_sum = sum(inits)
+        @views tpm ./= row_sums
+        @views inits ./= init_sum
     else
         error("Alphabet must be of the DNA, RNA or AminoAcid DataType")
     end
 
     BMC(tpm, inits, n)
 end
+
