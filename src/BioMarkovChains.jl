@@ -32,6 +32,7 @@ using BioSequences:
 using MarkovChainHammer.Trajectory: generate
 using PrecompileTools: @setup_workload, @compile_workload
 using TestItems: @testitem
+using StatsAPI: StatsAPI, fit, fit!
 using StatsBase: countmap
 using VectorizedKmers: count_kmers
 
@@ -51,6 +52,8 @@ include("perronfrobenius.jl")
 export perronfrobenius, generatedna
 
 include("extended.jl")
+
+include("constants.jl")
 
 @setup_workload begin
     # Putting some things in `@setup_workload` instead of `@compile_workload` can reduce the size of the
