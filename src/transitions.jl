@@ -119,8 +119,36 @@ transition_probability_matrix(bmc::BioMarkovChain) = bmc.tpm
     @test round.(tpm, digits = 3) == [0.0 1.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.25 0.125 0.625 0.0; 0.0 0.667 0.333 0.0]
 end
 
+
+@doc raw"""
+    initials(sequence::SeqOrView{A}) where A
+
+Calculate the estimated initial probabilities for a Markov chain based on a given sequence.
+
+This function takes a sequence of states and calculates the estimated initial probabilities
+of each state in the sequence for a Markov chain. The initial probabilities are estimated
+by counting the occurrences of each state at the beginning of the sequence and normalizing
+the counts to sum up to 1.
+
+```math
+\begin{}
+\pi{i} = P(X_{i} = i),  i \in T  \\
+\sum_{i=1}^{N} \pi_{i} = 1
+\end{}
+```
+Now using the dinucleotides counts estimating the initials would follow:
+
+```math
+\hat{pi_{i}} = c_{i} \sum_{k} c_{k}
+```
+
+# Arguments
+- `sequence::SeqOrView{A}`: The sequence of states representing the Markov chain.
+
+# Returns
+An `Vector{Flot64}` of estimated initial probabilities for each state in the sequence.
+"""
 function initials(sequence::SeqOrView{A}) where A ## π̂ estimates of the initial probabilies
-    # initials = Array{Float64}(undef, 1, 4)
     inits = Array{Float64, 1}(undef, 1)
     tcm = transition_count_matrix(sequence)
     inits = sum(tcm, dims = 1) ./ sum(tcm)
