@@ -33,7 +33,7 @@ function transition_count_matrix(sequence::LongAminoAcidOrView)
     return reshape([get(trans, t, 0) for t in matrix], size(matrix))
 end
 
-function transition_count_matrix(sequence::LongNucOrView{4})
+function transition_count_matrix(sequence::LongNucOrView{N}) where N
     alphabetsymb = eltype(sequence) == DNA ? ACGT : ACGU # could eventually use `∘(sort, unique)(sequence)` to get a very specific and sorted alphabetsymbol
     # alphabetsymb = ∘(sort, unique)(sequence)
     matrix = [(i,j) for i in alphabetsymb, j in alphabetsymb]
