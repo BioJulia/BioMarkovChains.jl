@@ -1,6 +1,6 @@
+# const LongNucOrView{N} = Union{LongSequence{<:NucleicAcidAlphabet{N}},LongSubSeq{<:NucleicAcidAlphabet{N}}}
 
-const LongNucOrView{N} = Union{LongSequence{<:NucleicAcidAlphabet{N}},LongSubSeq{<:NucleicAcidAlphabet{N}}}
-const LongAminoAcidOrView = Union{LongSequence{<:AminoAcidAlphabet},LongSubSeq{<:AminoAcidAlphabet}}
+# const LongAminoAcidOrView = Union{LongSequence{<:AminoAcidAlphabet},LongSubSeq{<:AminoAcidAlphabet}}
 
 const NUCLEICINDEXES = Dict(DNA_A => 1, DNA_C => 2, DNA_G => 3, DNA_T => 4)
 

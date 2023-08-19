@@ -1,3 +1,7 @@
+const LongNucOrView{N} = Union{LongSequence{<:NucleicAcidAlphabet{N}},LongSubSeq{<:NucleicAcidAlphabet{N}}}
+
+const LongAminoAcidOrView = Union{LongSequence{<:AminoAcidAlphabet},LongSubSeq{<:AminoAcidAlphabet}}
+
 """
     transitions(sequence::LongSequence)
 
