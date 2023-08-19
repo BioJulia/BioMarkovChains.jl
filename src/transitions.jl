@@ -22,7 +22,7 @@ tcm = transition_count_matrix(seq)
  2  0  0  0
 ```
 """
-function transition_count_matrix(sequence::LongDNA{4}) 
+function transition_count_matrix(sequence::LongDNA{N}) where N 
     counts = reshape(count_kmers(sequence, 2, Int), (4,4))'
     return copy(counts)
 end
