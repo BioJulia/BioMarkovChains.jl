@@ -17,9 +17,11 @@ VectorizedKmers = "2ef45bd6-4c2b-43d8-88b3-40597287359a"
 BioSequences = "3"
 MarkovChainHammer = "0.0.9"
 PrecompileTools = "1"
+StatsAPI = "1.6"
 StatsBase = "0.34.0"
 TestItemRunner = "0.2"
 TestItems = "0.1"
+VectorizedKmers = "0.2"
 julia = "1.9"
 
 [extras]
