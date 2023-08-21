@@ -1,3 +1,7 @@
+const LongNucOrView{N} = Union{LongSequence{<:NucleicAcidAlphabet{N}},LongSubSeq{<:NucleicAcidAlphabet{N}}}
+
+const LongAminoAcidOrView = Union{LongSequence{<:AminoAcidAlphabet},LongSubSeq{<:AminoAcidAlphabet}}
+
 """
     transitions(sequence::LongSequence)
 
@@ -35,7 +39,7 @@ Determine whether the `sequence` of type `LongSequence{DNAAlphabet{4}}` contains
 
 Returns a boolean indicating whether the `sequence` has more than one stop codon.
 """
-function hasprematurestop(sequence::LongNucOrView{4})::Bool
+function hasprematurestop(sequence::LongNucOrView{N})::Bool where N
     
     stopcodons = [LongDNA{4}("TAA"), LongDNA{4}("TAG"), LongDNA{4}("TGA")]  # Create a set of stop codons
     
@@ -54,23 +58,30 @@ function hasprematurestop(sequence::LongNucOrView{4})::Bool
 end
 
 function _int_to_dna(index::Int64; extended_alphabet::Bool = false)
-    A = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
+    A = extended_alphabet ? [DNA_Gap, DNA_A, DNA_C, DNA_M, DNA_G, DNA_R, DNA_S, DNA_V, DNA_T, DNA_W, DNA_Y, DNA_H, DNA_K, DNA_D, DNA_B, DNA_N] : [DNA_A, DNA_C, DNA_G, DNA_T]
     return LongSequence{DNAAlphabet{4}}([A[index]])
 end
 
 function _dna_to_int(nucleotide::DNA; extended_alphabet::Bool = false)
-    A = extended_alphabet ? collect(alphabet(DNA)) : [DNA_A, DNA_C, DNA_G, DNA_T]
+    A = extended_alphabet ? [DNA_Gap, DNA_A, DNA_C, DNA_M, DNA_G, DNA_R, DNA_S, DNA_V, DNA_T, DNA_W, DNA_Y, DNA_H, DNA_K, DNA_D, DNA_B, DNA_N] : [DNA_A, DNA_C, DNA_G, DNA_T]
     return findfirst(nucleotide, LongSequence{DNAAlphabet{4}}(A))
 end
 
 function randbmc(A::DataType, n::Int64=1)
-
     if A == DNA || A == RNA
-        tpm = rand(4,4)
+        tpm = rand(4, 4)
+        row_sums = sum(tpm, dims=2)
         inits = rand(4)
+        init_sum = sum(inits)
+        @views tpm ./= row_sums
+        @views inits ./= init_sum
     elseif A == AminoAcid
-        tpm = rand(20,20)
+        tpm = rand(20, 20)
+        row_sums = sum(tpm, dims=2)
         inits = rand(20)
+        init_sum = sum(inits)
+        @views tpm ./= row_sums
+        @views inits ./= init_sum
     else
         error("Alphabet must be of the DNA, RNA or AminoAcid DataType")
     end
