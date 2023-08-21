@@ -131,15 +131,15 @@ by counting the occurrences of each state at the beginning of the sequence and n
 the counts to sum up to 1.
 
 ```math
-\begin{}
+\begin{align}
 \pi{i} = P(X_{i} = i),  i \in T  \\
 \sum_{i=1}^{N} \pi_{i} = 1
-\end{}
+\end{align}
 ```
 Now using the dinucleotides counts estimating the initials would follow:
 
 ```math
-\hat{pi_{i}} = c_{i} \sum_{k} c_{k}
+\hat{\pi_{i}} = c_{i} \sum_{k} c_{k}
 ```
 
 # Arguments
