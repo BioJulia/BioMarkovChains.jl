@@ -41,11 +41,6 @@ end
 #     return reshape([get(trans, t, 0) for t in matrix], size(matrix))
 # end
 
-function transition_count_matrix(sequence::LongNucOrView{N}) where N 
-    counts = reshape(count_kmers(sequence, 2), (4,4))'
-    return copy(counts)
-end
-
 @doc raw"""
     transition_probability_matrix(sequence::LongSequence{DNAAlphabet{4}}, n::Int64=1)
 
