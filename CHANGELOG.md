@@ -6,6 +6,9 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.0.10...main)
 
+## [0.5.0]
+
+- Improve count of transitions 10X thanks to `VectorizedKmers.jl`
 
 ## [0.4.1]
 
