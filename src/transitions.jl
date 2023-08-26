@@ -100,23 +100,38 @@ tpm = transition_probability_matrix(seq)
 """
 function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) where A
     tcm = transition_count_matrix(sequence)
-    rowsums = sum(tcm, dims = 2)
+    rowsums = sum(tcm, dims=2)
     freqs = tcm ./ rowsums
-
-    freqs[isinf.(freqs)] .= 0.0
-    freqs[isnan.(freqs)] .= 0.0
-
-    return freqs^(n)
+    
+    freqs[isnan.(freqs) .| isinf.(freqs)] .= 0.0 # Handling NaN and Inf
+    
+    return n > 1 ? freqs^n : freqs
 end
+
+# function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) where A
+#     tcm = transition_count_matrix(sequence)
+#     rowsums = sum(tcm, dims = 2)
+#     freqs = tcm ./ rowsums
+
+#     freqs[isinf.(freqs)] .= 0.0
+#     freqs[isnan.(freqs)] .= 0.0
+
+#     return freqs^(n)
+# end
 
 transition_probability_matrix(bmc::BioMarkovChain) = bmc.tpm
 
 @testitem "tpm" begin
     using BioSequences, BioMarkovChains
-    seq = dna"CCTCCCGGACCCTGGGCTCGGGAC"
-    tpm = transition_probability_matrix(seq)
+    seq01 = dna"CCTCCCGGACCCTGGGCTCGGGAC"
+    tpm01 = transition_probability_matrix(seq01)
 
-    @test round.(tpm, digits = 3) == [0.0 1.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.25 0.125 0.625 0.0; 0.0 0.667 0.333 0.0]
+    @test round.(tpm01, digits = 3) == [0.0 1.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.25 0.125 0.625 0.0; 0.0 0.667 0.333 0.0]
+
+    # Handling NaN and Inf
+    seq02 = dna"CCTCCCGGCCCTGGGCTCGGGC"
+    tpm02 = transition_probability_matrix(seq02)
+    @test round.(tpm02, digits = 3) == [0.0 0.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.0 0.375 0.625 0.0; 0.0 0.667 0.333 0.0]
 end
 
 
