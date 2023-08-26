@@ -38,7 +38,7 @@ struct BioMarkovChain{M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: Abstr
     inits::I # the initials distribution of probabilities
     n::N # The order of the Markov chain
     function BioMarkovChain(tpm::M, inits::I, n::N=1) where {M<:AbstractMatrix, I<:AbstractVector, N<:Integer}
-        bmc = new{M,I,N}(tpm^(n), inits, n)
+        bmc = new{M,I,N}(n > 1 ? tpm^n : tpm, inits, n)
         return bmc
     end
 
@@ -49,12 +49,10 @@ struct BioMarkovChain{M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: Abstr
 
         rowsums = sum(tcm, dims = 2)
         freqs = tcm ./ rowsums
-        freqs[isinf.(freqs)] .= 0.0
-        freqs[isnan.(freqs)] .= 0.0
 
-        tpm = freqs^(n)
+        freqs[isnan.(freqs) .| isinf.(freqs)] .= 0.0 # Handling NaN and Inf
 
-        bmc = new{Matrix{Float64},Vector{Float64},Int64}(tpm, inits, n)
+        bmc = new{Matrix{Float64},Vector{Float64},Int64}(n > 1 ? freqs^n : freqs, inits, n)
         return bmc
     end
 end
