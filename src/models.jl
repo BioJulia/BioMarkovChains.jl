@@ -23,3 +23,31 @@ const ECOLINOCDS = begin
     
     BMC(tpm, inits)
 end
+
+
+const CPGPOS = begin
+    tpm = [
+        0.180 0.274 0.426 0.120
+        0.171 0.368 0.274 0.188
+        0.161 0.339 0.375 0.125 
+        0.079 0.355 0.384 0.182
+    ]
+    
+    inits = [0.262, 0.239, 0.240, 0.259] # not stablished
+    
+    BMC(tpm, inits)
+end
+
+
+const CPGNEG = begin
+    tpm = [
+        0.300 0.205 0.285 0.210 
+        0.322 0.298 0.078 0.302
+        0.248 0.246 0.298 0.208
+        0.177 0.239 0.292 0.292
+    ]
+    
+    inits = [0.262, 0.239, 0.240, 0.259] # not stablished
+    
+    BMC(tpm, inits)
+end
