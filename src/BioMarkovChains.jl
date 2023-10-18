@@ -43,7 +43,7 @@ include("utils.jl")
 export transitions, hasprematurestop, randbmc
 
 include("transitions.jl")
-export initials, transition_count_matrix, transition_probability_matrix, dnaseqprobability
+export initials, transition_count_matrix, transition_probability_matrix, dnaseqprobability, logoddsratio, logoddsratioscore
 
 include("models.jl")
 export ECOLICDS, ECOLINOCDS
