@@ -298,7 +298,6 @@ function iscoding(
     end
 end
 
-
 """
     logoddsratio(sequence::LongNucOrView{4}, model::BioMarkovChain)
 
