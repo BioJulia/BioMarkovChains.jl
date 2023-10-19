@@ -320,11 +320,12 @@ result = logoddsratio(sequence, model)
 """
 function logoddsratio(
     sequence::LongNucOrView{4},
-    model::BioMarkovChain,
+    model::BioMarkovChain;
+    b::Number = ℯ
 )
     tpm = transition_probability_matrix(sequence)
 
-    return log2.(tpm./model.tpm) 
+    return log.(b, tpm./model.tpm) 
 end
 
 """
@@ -340,25 +341,18 @@ Calculates the log-odds ratio between the transition probability matrices of two
 """
 function logoddsratio(
     model1::BioMarkovChain,
-    model2::BioMarkovChain,
+    model2::BioMarkovChain;
+    b::Number = ℯ
 )
-    return log2.(model1.tpm ./ model2.tpm) 
+    return log.(b, model1.tpm ./ model2.tpm) 
 end
 
 function logoddsratioscore(
     sequence::LongNucOrView{4},
-    model::BioMarkovChain,
+    model::BioMarkovChain;
+    b::Number = ℯ
 )
     tpm = transition_probability_matrix(sequence)
 
-    return sum(log2.(tpm./model.tpm)) / length(sequence)
+    return sum(log.(b, tpm./model.tpm)) / length(sequence)
 end
-
-# function logoddsratioscore.(
-#     sequences::Vector{T},
-#     model::BioMarkovChain,
-# ) where T <: LongNucOrView{4}
-#     tpm = transition_probability_matrix.(sequence)
-
-#     return sum.(log2.(tpm./model.tpm)) / length.(sequences)
-# end
