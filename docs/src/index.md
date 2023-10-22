@@ -1,4 +1,10 @@
-![]("../assets/logo.svg")
+```@raw html
+
+<p align="center">
+  <img src="assets/logo.svg" height="150"><br/>
+  <i>Representing biological sequences as Markov chains</i>
+</p>
+```
 
 # BioMarkovChains
 
