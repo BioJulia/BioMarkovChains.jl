@@ -1,4 +1,4 @@
-import Base: show, length
+import Base: show, length, eltype
 import StatsAPI: fit!
 
 function Base.show(io::IO, model::BioMarkovChain)
@@ -45,6 +45,10 @@ function Base.show(io::IO, model::BioMarkovChain)
 end
 
 Base.length(bmc::BioMarkovChain) = length(bmc.inits)
+
+function Base.eltype(bmc::BioMarkovChain)
+    return length(bmc) == 4 ? DNA : AminoAcid
+end
 
 """
     fit!(bmc::BMC, inits:Vector{Float64}, tpm::Matrix{Float64})

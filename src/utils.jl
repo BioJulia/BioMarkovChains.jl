@@ -86,5 +86,5 @@ function randbmc(A::DataType, n::Int64=1)
         error("Alphabet must be of the DNA, RNA or AminoAcid DataType")
     end
 
-    BMC(tpm, inits, n)
+    return BMC(tpm, inits, n)
 end
