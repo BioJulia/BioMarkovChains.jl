@@ -6,6 +6,14 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.0.10...main)
 
+## [0.6.0]
+
+- Update docs version to `1.0`
+- Update docs logo
+- Add new methods for to calculate the log-odds ratio of a sequence and a model (#)
+- Extend new methods from the booleans/predicates of `DiscreteMarkovChains.jl` package
+- Clean code and make it more lightweight by using weakdeps
+
 ## [0.5.0]
 
 - Improve count of transitions 10X thanks to `VectorizedKmers.jl`
