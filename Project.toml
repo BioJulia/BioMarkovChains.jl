@@ -1,7 +1,7 @@
 name = "BioMarkovChains"
 uuid = "f861b655-cb5f-42ce-b66a-341b542d4f2c"
 authors = ["Camilo García<ca.garcia2@uniandes.edu.co>"]
-version = "0.5.0"
+version = "0.6.0"
 
 [weakdeps]
 DiscreteMarkovChains = "8abcb7ef-b365-4f7b-ac38-56893fb62f9f"
@@ -22,14 +22,14 @@ VectorizedKmers = "2ef45bd6-4c2b-43d8-88b3-40597287359a"
 [compat]
 BioSequences = "3"
 DiscreteMarkovChains = "0.2"
-MarkovChainHammer = "0.0.9, 0.0.10, 0.0.11"
+MarkovChainHammer = "0.0.11"
 PrecompileTools = "1"
 StatsAPI = "1.6"
 StatsBase = "0.34.0"
 TestItemRunner = "0.2"
 TestItems = "0.1"
-VectorizedKmers = "0.5, 0.6, 0.7"
-julia = "1.9"
+VectorizedKmers = "0.7"
+julia = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
