@@ -173,9 +173,9 @@ end
 initials(bmc::BioMarkovChain) = bmc.inits
 
 @doc raw"""
-    sequenceprobability(sequence::LongNucOrView{4}, tpm::Matrix{Float64}, initials=Vector{Float64})
+    sequenceprobability(sequence::LongNucOrView{4}, model::BioMarkovChain)
 
-Compute the probability of a given sequence using a transition probability matrix and the initial probabilities distributions.
+Compute the probability of a given sequence using a transition probability matrix and the initial probabilities distributions of a `BioMarkovModel`.
 
 ```math
 P(X_1 = i_1, \ldots, X_T = i_T) = \pi_{i_1}^{T-1} \prod_{t=1}^{T-1} a_{i_t, i_{t+1}}
@@ -296,4 +296,63 @@ function iscoding(
     else
         false
     end
+end
+
+"""
+    logoddsratio(sequence::LongNucOrView{4}, model::BioMarkovChain)
+
+Calculates the log-odds ratio between the transition probability matrix of a given DNA sequence and a reference model.
+
+# Arguments
+
+- `sequence::LongNucOrView{4}`: A DNA sequence or view with a length of 4 nucleotides.
+- `model::BioMarkovChain`: A reference BioMarkovChain model.
+
+
+# Examples
+
+```julia
+sequence = LongNucOrView{4}("ACGT")
+model = BioMarkovChain(...)  # Provide appropriate initialization for BioMarkovChain
+result = logoddsratio(sequence, model)
+```
+
+"""
+function logoddsratio(
+    sequence::LongNucOrView{4},
+    model::BioMarkovChain;
+    b::Number = ℯ
+)
+    tpm = transition_probability_matrix(sequence)
+
+    return log.(b, tpm./model.tpm) 
+end
+
+"""
+logoddsratio(model1::BioMarkovChain, model2::BioMarkovChain)
+
+Calculates the log-odds ratio between the transition probability matrices of two BioMarkovChain models.
+
+# Arguments 
+
+- `model1::BioMarkovChain`: The first BioMarkovChain model.
+- `model2::BioMarkovChain`: The second BioMarkovChain model.
+
+"""
+function logoddsratio(
+    model1::BioMarkovChain,
+    model2::BioMarkovChain;
+    b::Number = ℯ
+)
+    return log.(b, model1.tpm ./ model2.tpm) 
+end
+
+function logoddsratioscore(
+    sequence::LongNucOrView{4},
+    model::BioMarkovChain;
+    b::Number = ℯ
+)
+    tpm = transition_probability_matrix(sequence)
+
+    return sum(log.(b, tpm./model.tpm)) / length(sequence)
 end

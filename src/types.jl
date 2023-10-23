@@ -1,3 +1,4 @@
+# abstract type AbstractBioMarkovChain <: AbstractDiscreteMarkovChain end
 abstract type AbstractBioMarkovChain end
 
 """
