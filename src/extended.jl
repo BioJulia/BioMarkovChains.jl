@@ -6,7 +6,8 @@ function Base.show(io::IO, model::BioMarkovChain)
     # println(io, "BioMarkovChain:")
 
     # Determine the alphabet type
-    alphabet_type = length(model) == 20 ? "AminoAcids" : "DNA/RNA"
+    # alphabet_type = length(model) == 20 ? "AminoAcids" : "DNA/RNA"
+    alphabet_type = eltype(model)
 
     # Print the type name with inferred alphabet type
     println(io, "BioMarkovChain with $alphabet_type Alphabet:")
@@ -47,7 +48,7 @@ end
 Base.length(bmc::BioMarkovChain) = length(bmc.inits)
 
 function Base.eltype(bmc::BioMarkovChain)
-    return length(bmc) == 4 ? DNA : AminoAcid
+    return bmc.statespace
 end
 
 """

@@ -27,7 +27,7 @@ using BioSequences:
     SeqOrView,
     alphabet,
     @biore_str
-    
+
 using PrecompileTools: @setup_workload, @compile_workload
 using TestItems: @testitem
 using StatsAPI: StatsAPI, fit, fit!

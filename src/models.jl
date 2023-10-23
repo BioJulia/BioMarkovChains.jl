@@ -8,7 +8,7 @@ const ECOLICDS = begin
 
     inits = [0.245, 0.243, 0.273, 0.239]
 
-    BMC(tpm, inits)
+    BMC(DNA, tpm, inits)
 end
 
 const ECOLINOCDS = begin
@@ -21,7 +21,7 @@ const ECOLINOCDS = begin
     
     inits = [0.262, 0.239, 0.240, 0.259]
     
-    BMC(tpm, inits)
+    BMC(DNA, tpm, inits)
 end
 
 
@@ -35,7 +35,7 @@ const CPGPOS = begin
     
     inits = [0.262, 0.239, 0.240, 0.259] # not stablished
     
-    BMC(tpm, inits)
+    BMC(DNA, tpm, inits)
 end
 
 
@@ -49,5 +49,5 @@ const CPGNEG = begin
     
     inits = [0.262, 0.239, 0.240, 0.259] # not stablished
     
-    BMC(tpm, inits)
+    BMC(DNA, tpm, inits)
 end
