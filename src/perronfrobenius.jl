@@ -66,12 +66,12 @@ pf = perronfrobenius(orfdna)
 newdna = generatedna(pf, 100)
 ```
 """
-function generatedna(pf::Matrix{Float64}, steps::Int64; extended_alphabet::Bool = false)
-    newseq = LongDNA{4}()
-    # pf = transpose(tpm) # The Perron-Frobenius matrix
-    trajectory = generate(pf, steps)
-    for i in trajectory
-        newseq = append!(newseq, _int_to_dna(i; extended_alphabet))
-    end
-    return newseq
-end
+# function generatedna(pf::Matrix{Float64}, steps::Int64; extended_alphabet::Bool = false)
+#     newseq = LongDNA{4}()
+#     # pf = transpose(tpm) # The Perron-Frobenius matrix
+#     trajectory = generate(pf, steps)
+#     for i in trajectory
+#         newseq = append!(newseq, _int_to_dna(i; extended_alphabet))
+#     end
+#     return newseq
+# end
