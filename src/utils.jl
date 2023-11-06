@@ -1,6 +1,7 @@
 function _int_to_dna(index::Int64; extended_alphabet::Bool = false)
     A = extended_alphabet ? alphabet(DNA) : ACGT
-    return LongSequence{DNAAlphabet{4}}([A[index]])
+    modifier(value) = (value == 3) ? 4 : (value == 4) ? 8 : value
+    return reinterpret.(DNA, Int8(modifier(index))) #LongSequence{DNAAlphabet{4}}([A[index]]) # reinterpret.(DNA, Int8(1)) == A, reinterpret.(Int8, DNA_A) = 1
 end
 
 function _dna_to_int(nucleotide::DNA; extended_alphabet::Bool = false)
