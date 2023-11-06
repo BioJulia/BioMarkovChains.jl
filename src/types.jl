@@ -39,23 +39,16 @@ struct BioMarkovChain{S<:DataType, M<:AbstractMatrix, I<:AbstractVector, N<:Inte
   tpm::M # The probabilities of the TransitionProbabilityMatrix struct
   inits::I # the initials distribution of probabilities
   n::N # The order of the Markov chain
-  function BioMarkovChain(statespace::S, tpm::M, inits::I, n::N=1) where {S<:DataType, M<:AbstractMatrix, I<:AbstractVector, N<:Integer}
-      bmc = new{S,M,I,N}(statespace, n > 1 ? tpm^n : tpm, inits, n)
-      return bmc
+  function BioMarkovChain(statespace::S, tpm::M, inits::I, n::N=1) where {S<:DataType, M<:AbstractMatrix, I<:AbstractVector, N<:Integer} 
+    bmc = new{S,M,I,N}(statespace, n > 1 ? tpm^n : tpm, inits, n)
+    return bmc
   end
 
   function BioMarkovChain(sequence::SeqOrView{A}, n::Int64=1) where A
-      inits = Array{Float64, 1}(undef, 1)
-      tcm = transition_count_matrix(sequence)
-      inits = vec(sum(tcm, dims = 1) ./ sum(tcm))
-
-      rowsums = sum(tcm, dims = 2)
-      freqs = tcm ./ rowsums
-
-      freqs[isnan.(freqs) .| isinf.(freqs)] .= 0.0 # Handling NaN and Inf
-
-      bmc = new{DataType,Matrix{Float64},Vector{Float64},Int64}(eltype(sequence), n > 1 ? freqs^n : freqs, inits, n)
-      return bmc
+    inits = initials(sequence)
+    tpm = transition_probability_matrix(sequence)
+    bmc = new{DataType,Matrix{Float64},Vector{Float64},Int64}(eltype(sequence), n > 1 ? tpm^n : tpm, inits, n)
+    return bmc
   end
 end
 
