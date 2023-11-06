@@ -32,12 +32,6 @@ function transition_count_matrix(sequence::LongSequence{<:AminoAcidAlphabet})
     return copy(counts)
 end
 
-# function transition_count_matrix(sequence::LongAminoAcidOrView)
-#     matrix = [(i,j) for i in AA20, j in AA20]
-#     trans = transitions(sequence)
-#     return reshape([get(trans, t, 0) for t in matrix], size(matrix))
-# end
-
 @doc raw"""
     transition_probability_matrix(sequence::LongSequence{DNAAlphabet{4}}, n::Int64=1)
 
