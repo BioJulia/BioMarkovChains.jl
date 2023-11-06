@@ -102,6 +102,7 @@ function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) whe
     
     freqs[isnan.(freqs) .| isinf.(freqs)] .= 0.0 # Handling NaN and Inf
     
+    @assert sum(freqs, dims=2)' == [1.0 1.0 1.0 1.0] "The transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     return n > 1 ? freqs^n : freqs
 end
 
@@ -159,8 +160,17 @@ initials(bmc::BioMarkovChain) = bmc.inits
 
 # findfirst(i -> i == (AA_T, AA_R), aamatrix)
 
+function odds_ratio_matrix(
+    sequence::SeqOrView{A},
+    model::BioMarkovChain;
+) where A
+    @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
+    tpm = transition_probability_matrix(sequence)
+    return tpm ./ model.tpm
+end
+
 """
-    logoddsratio(sequence::NucleicSeqOrView{A}, model::BioMarkovChain) where A
+    log_odds_ratio_matrix(sequence::NucleicSeqOrView{A}, model::BioMarkovChain) where A
 
 Calculates the log-odds ratio between the transition probability matrix of a given DNA sequence and a reference model.
 
@@ -175,21 +185,24 @@ Calculates the log-odds ratio between the transition probability matrix of a giv
 ```julia
 sequence = LongNucOrView{4}("ACGT")
 model = BioMarkovChain(sequence)  # Provide appropriate initialization for BioMarkovChain
-result = logoddsratio(sequence, model)
+result = log_odds_ratio_matrix(sequence, model)
 ```
 """
-function logoddsratio(
-    sequence::NucleicSeqOrView{A},
+function log_odds_ratio_matrix(
+    sequence::SeqOrView{A},
     model::BioMarkovChain;
     b::Number = ℯ
 ) where A
+    
+    @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
     tpm = transition_probability_matrix(sequence)
-
-    return log.(b, tpm./model.tpm) 
+    lorm = log.(b, tpm./model.tpm)
+    lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
+    return lorm
 end
 
 """
-logoddsratio(model1::BioMarkovChain, model2::BioMarkovChain)
+    log_odds_ratio_matrix(model1::BioMarkovChain, model2::BioMarkovChain)
 
 Calculates the log-odds ratio between the transition probability matrices of two BioMarkovChain models.
 
@@ -199,20 +212,94 @@ Calculates the log-odds ratio between the transition probability matrices of two
 - `model2::BioMarkovChain`: The second BioMarkovChain model.
 
 """
-function logoddsratio(
+function log_odds_ratio_matrix(
     model1::BioMarkovChain,
     model2::BioMarkovChain;
     b::Number = ℯ
 )
-    return log.(b, model1.tpm ./ model2.tpm) 
+    @assert model1.statespace == model2.statespace "Models state spaces are inconsistent"
+    lorm = log.(b, model1.tpm ./ model2.tpm)
+    lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
+    return lorm
 end
 
-function logoddsratioscore(
-    sequence::NucleicSeqOrView{A},
+function log_odds_ratio_score(
+    sequence::SeqOrView{A},
     model::BioMarkovChain;
     b::Number = ℯ
-) where A
+) where A 
+    @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
     tpm = transition_probability_matrix(sequence)
-
-    return sum(log.(b, tpm./model.tpm)) / length(sequence)
+    lorm = log.(b, tpm ./ model.tpm)
+    lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
+    return sum(lorm)/length(sequence)
 end
+
+@doc raw"""
+    sequenceprobability(sequence::LongNucOrView{4}, model::BioMarkovChain)
+
+Compute the probability of a given sequence using a transition probability matrix and the initial probabilities distributions of a `BioMarkovModel`.
+
+```math
+P(X_1 = i_1, \ldots, X_T = i_T) = \pi_{i_1}^{T-1} \prod_{t=1}^{T-1} a_{i_t, i_{t+1}}
+```
+
+# Arguments
+- `sequence::LongNucOrView{4}`: The input sequence of nucleotides.
+- `tm::BioMarkovChain` is the actual data structure composed of a `tpm::Matrix{Float64}` the transition probability matrix and `initials=Vector{Float64}` the initial state probabilities.
+
+# Returns
+- `probability::Float64`: The probability of the input sequence.
+
+# Example
+
+```
+mainseq = LongDNA{4}("CCTCCCGGACCCTGGGCTCGGGAC")
+   
+bmc = BioMarkovChain(mainseq)
+
+BioMarkovChain with DNA Alphabet:
+  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
+   0.0     1.0     0.0     0.0
+   0.0     0.5     0.2     0.3
+   0.25    0.125   0.625   0.0
+   0.0     0.6667  0.3333  0.0
+  - Initial Probabilities -> Vector{Float64}(4 × 1):
+   0.087
+   0.4348
+   0.3478
+   0.1304
+  - Markov Chain Order -> Int64:
+   1
+
+newseq = LongDNA{4}("CCTG")
+
+    4nt DNA Sequence:
+    CCTG
+
+
+dnaseqprobability(newseq, bmc)
+    
+    0.0217
+```
+"""
+# function dnaseqprobability(
+#     sequence::SeqOrView{A},
+#     model::BioMarkovChain
+# ) where A
+#     init = model.inits[NUCLEICINDEXES[sequence[1]]]
+
+#     probability = init
+
+#     for t in 1:length(sequence)-1
+#         i, j = DINUCLEICINDEXES[@view sequence[t:t+1]]
+#         probability *= model.tpm[i, j]
+#     end
+#     return probability
+# end
+
+
+# const DINUCLEICINDEXES = Dict(
+#     LongDNA{4}(k) => [NUCLEICINDEXES[LongDNA{4}(k[1])], NUCLEICINDEXES[LongDNA{4}(k[2])]]
+#     for k in ["AA", "AC", "AG", "AT", "CA", "CC", "CG", "CT", "GA", "GC", "GG", "GT", "TA", "TC", "TG", "TT"]
+# )
