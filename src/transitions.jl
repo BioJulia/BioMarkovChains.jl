@@ -96,7 +96,7 @@ function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) whe
     
     freqs[isnan.(freqs) .| isinf.(freqs)] .= 0.0 # Handling NaN and Inf
     
-    @assert sum(freqs, dims=2)' == [1.0 1.0 1.0 1.0] "The transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+    @assert round.(sum(freqs, dims=2)') == [1.0 1.0 1.0 1.0] "The transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     return n > 1 ? freqs^n : freqs
 end
 
