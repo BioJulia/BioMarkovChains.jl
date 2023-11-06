@@ -1,11 +1,11 @@
 function _int_to_dna(index::Int64; extended_alphabet::Bool = false)
-    A = extended_alphabet ? [DNA_Gap, DNA_A, DNA_C, DNA_M, DNA_G, DNA_R, DNA_S, DNA_V, DNA_T, DNA_W, DNA_Y, DNA_H, DNA_K, DNA_D, DNA_B, DNA_N] : [DNA_A, DNA_C, DNA_G, DNA_T]
+    A = extended_alphabet ? alphabet(DNA) : ACGT
     return LongSequence{DNAAlphabet{4}}([A[index]])
 end
 
 function _dna_to_int(nucleotide::DNA; extended_alphabet::Bool = false)
     A = extended_alphabet ? [DNA_Gap, DNA_A, DNA_C, DNA_M, DNA_G, DNA_R, DNA_S, DNA_V, DNA_T, DNA_W, DNA_Y, DNA_H, DNA_K, DNA_D, DNA_B, DNA_N] : [DNA_A, DNA_C, DNA_G, DNA_T]
-    return findfirst(nucleotide, LongSequence{DNAAlphabet{4}}(A))
+    return searchsortedfirst(A, nucleotide) # findfirst(nucleotide, LongSequence{DNAAlphabet{4}}(A))
 end
 
 function randbmc(statespace::DataType, n::Int64=1)
