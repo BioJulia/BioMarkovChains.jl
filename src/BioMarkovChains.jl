@@ -36,7 +36,7 @@ include("utils.jl")
 export randbmc
 
 include("transitions.jl")
-export initials, transition_count_matrix, transition_probability_matrix, logoddsratio, logoddsratioscore
+export initials, transition_count_matrix, transition_probability_matrix, odds_ratio_matrix, log_odds_ratio_matrix, log_odds_ratio_score
 
 include("models.jl")
 export ECOLICDS, ECOLINOCDS
