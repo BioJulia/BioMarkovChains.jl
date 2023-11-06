@@ -217,6 +217,21 @@ function log_odds_ratio_matrix(
     return lorm
 end
 
+"""
+    log_odds_ratio_score(sequence::SeqOrView{A}, model::BioMarkovChain; b::Number = ℯ)
+
+Compute the log odds ratio score between a given sequence and a BioMarkovChain model.
+
+# Arguments
+- `sequence::SeqOrView{A}`: A sequence of elements of type `A`.
+- `model::BioMarkovChain`: A BioMarkovChain model.
+- `b::Number = ℯ`: The base of the logarithm used to compute the log odds ratio.
+
+# Returns
+The log odds ratio score between the sequence and the model.
+
+# Example
+"""
 function log_odds_ratio_score(
     sequence::SeqOrView{A},
     model::BioMarkovChain;
@@ -291,9 +306,3 @@ dnaseqprobability(newseq, bmc)
 #     end
 #     return probability
 # end
-
-
-# const DINUCLEICINDEXES = Dict(
-#     LongDNA{4}(k) => [NUCLEICINDEXES[LongDNA{4}(k[1])], NUCLEICINDEXES[LongDNA{4}(k[2])]]
-#     for k in ["AA", "AC", "AG", "AT", "CA", "CC", "CG", "CT", "GA", "GC", "GG", "GT", "TA", "TC", "TG", "TT"]
-# )
