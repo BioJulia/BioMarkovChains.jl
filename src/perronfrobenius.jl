@@ -3,12 +3,12 @@
 """
     perronfrobenius(sequence::NucleicSeqOrView{A}, n::Int64=1) where A
 
-Compute the Perron-Frobenius matrix, a column-wise version of the transition probability matrix (TPM), for a given nucleotide sequence.
+Compute the Perron-Frobenius matrix, a column-stochastic version of the transition probability matrix (TPM), for a given nucleotide sequence.
 
 The Perron-Frobenius matrix captures the asymptotic probabilities of transitioning between nucleotides in the sequence over a specified number of steps `n`. It provides insight into the long-term behavior of a Markov chain or a dynamical system associated with the sequence.
 
 # Arguments
-- `sequence::NucleicSeqOrView{A}`: A nucleotide sequence represented as a `NucleicSeqOrView{A}` object.
+- `sequence::SeqOrView{A}`: A nucleotide sequence represented as a `NucleicSeqOrView{A}` object.
 - `n::Int64=1`: The number of steps to consider for the transition probability matrix. Default is 1.
 
 # Returns
@@ -20,7 +20,7 @@ sequence = LongSequence{DNAAlphabet{4}}("ACGTCGTCCACTACGACATCAGC")  # Replace wi
 n = 2
 pf = perronfrobenius(sequence, n)
 """
-function perronfrobenius(sequence::NucleicSeqOrView{A}; n::Int64=1) where A
+function perronfrobenius(sequence::SeqOrView{A}; n::Int64=1) where A
     tpm = transition_probability_matrix(sequence, n)
     return copy(tpm')
 end
