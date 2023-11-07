@@ -1,7 +1,7 @@
 ### MarkdovChainHammer.jl ###
 
 """
-    perronfrobenius(sequence::NucleicSeqOrView{A}, n::Int64=1) where A
+    perronfrobenius(sequence::SeqOrView{A}, n::Int64=1) where A
 
 Compute the Perron-Frobenius matrix, a column-stochastic version of the transition probability matrix (TPM), for a given nucleotide sequence.
 
@@ -19,6 +19,7 @@ A copy of the Perron-Frobenius matrix. Each column of this matrix corresponds to
 sequence = LongSequence{DNAAlphabet{4}}("ACGTCGTCCACTACGACATCAGC")  # Replace with an actual nucleotide sequence
 n = 2
 pf = perronfrobenius(sequence, n)
+```
 """
 function perronfrobenius(sequence::SeqOrView{A}; n::Int64=1) where A
     tpm = transition_probability_matrix(sequence, n)
