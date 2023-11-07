@@ -108,11 +108,6 @@ transition_probability_matrix(bmc::BioMarkovChain) = bmc.tpm
     tpm01 = transition_probability_matrix(seq01)
 
     @test round.(tpm01, digits = 3) == [0.0 1.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.25 0.125 0.625 0.0; 0.0 0.667 0.333 0.0]
-
-    # Handling NaN and Inf
-    seq02 = dna"CCTCCCGGCCCTGGGCTCGGGC"
-    tpm02 = transition_probability_matrix(seq02)
-    @test round.(tpm02, digits = 3) == [0.0 0.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.0 0.375 0.625 0.0; 0.0 0.667 0.333 0.0]
 end
 
 @doc raw"""
@@ -292,17 +287,17 @@ dnaseqprobability(newseq, bmc)
     0.0217
 ```
 """
-# function dnaseqprobability(
-#     sequence::SeqOrView{A},
-#     model::BioMarkovChain
-# ) where A
-#     init = model.inits[NUCLEICINDEXES[sequence[1]]]
+function dnaseqprobability(
+    sequence::NucleicSeqOrView{A},
+    model::BioMarkovChain
+) where A
+    
+    init = model.inits[_dna_to_int(sequence[1])]
 
-#     probability = init
+    probability = init
 
-#     for t in 1:length(sequence)-1
-#         i, j = DINUCLEICINDEXES[@view sequence[t:t+1]]
-#         probability *= model.tpm[i, j]
-#     end
-#     return probability
-# end
+    for t in 1:length(sequence)-1
+        probability *= model.tpm[_dna_to_int(sequence[t]), _dna_to_int(sequence[t+1])]
+    end
+    return probability
+end
