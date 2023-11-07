@@ -7,9 +7,9 @@ version = "0.7.0"
 BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
 PrecompileTools = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
 StatsAPI = "82ae8749-77ed-4fe6-ae5f-f523153014b0"
+TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
 TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
 VectorizedKmers = "2ef45bd6-4c2b-43d8-88b3-40597287359a"
-TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
 
 [weakdeps]
 DiscreteMarkovChains = "8abcb7ef-b365-4f7b-ac38-56893fb62f9f"
@@ -32,8 +32,8 @@ julia = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
 TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
+TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
 
 [targets]
 test = ["Test"]
