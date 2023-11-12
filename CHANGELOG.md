@@ -6,6 +6,14 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.0.10...main)
 
+## [0.8.0]
+
+- `BioMarkoChain` checks whether its row-stochastic.
+- New extended functions from the `DiscreteMarkovChains` packages are now available.
+- `dnaseqprobability` is much faster.
+- New methods to calculate the `logg-odds-ratio-matrix` and `logg-odds-ratio-score` of a `BioSequences`.
+- Improvementes on the docs.
+
 ## [0.7.0]
 
 - Improve `BioMarkoChain` struct to be more flexible and distinguish DNA, RNA, AminoAcid #17
