@@ -27,7 +27,7 @@ function transition_count_matrix(sequence::NucleicSeqOrView{A}) where A
     return copy(counts)
 end
 
-function transition_count_matrix(sequence::LongSequence{<:AminoAcidAlphabet})
+function transition_count_matrix(sequence::SeqOrView{<:AminoAcidAlphabet})
     counts = reshape(count_kmers(sequence, 2), (20,20))'
     return copy(counts)
 end
@@ -96,7 +96,6 @@ function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) whe
     
     freqs[isnan.(freqs) .| isinf.(freqs)] .= 0.0 # Handling NaN and Inf
     
-    @assert round.(sum(freqs, dims=2)') == [1.0 1.0 1.0 1.0] "The transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     return n > 1 ? freqs^n : freqs
 end
 
@@ -106,8 +105,11 @@ transition_probability_matrix(bmc::BioMarkovChain) = bmc.tpm
     using BioSequences, BioMarkovChains
     seq01 = dna"CCTCCCGGACCCTGGGCTCGGGAC"
     tpm01 = transition_probability_matrix(seq01)
-
     @test round.(tpm01, digits = 3) == [0.0 1.0 0.0 0.0; 0.0 0.5 0.2 0.3; 0.25 0.125 0.625 0.0; 0.0 0.667 0.333 0.0]
+
+    seq02 = aa"ACDEFGHIKLMNPQRSTVWY"
+    tpm02 = transition_probability_matrix(seq02)
+    @test round.(tpm02, digits = 3) == [0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0; 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0]
 end
 
 @doc raw"""
@@ -182,18 +184,26 @@ function log_odds_ratio_matrix(
     model::BioMarkovChain;
     b::Number = ℯ
 ) where A
-    
     @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
+    @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+    
     tpm = transition_probability_matrix(sequence)
+    @assert round.(sum(tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Sequence transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+
     lorm = log.(b, tpm./model.tpm)
     lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
     return lorm
 end
 
-"""
+@doc raw"""
     log_odds_ratio_matrix(model1::BioMarkovChain, model2::BioMarkovChain)
 
 Calculates the log-odds ratio between the transition probability matrices of two BioMarkovChain models.
+
+```math
+\beta = \log \left( \frac{P(x|\mathscr{m}_{1})}{P(x|\text{\mathscr{m}_{2})} \right)
+```
+Where $\mathscr{m}_{1}$ and $\mathscr{m}_{2}$ are the two models transition probability matrices.
 
 # Arguments 
 
@@ -207,15 +217,30 @@ function log_odds_ratio_matrix(
     b::Number = ℯ
 )
     @assert model1.statespace == model2.statespace "Models state spaces are inconsistent"
+    @assert round.(sum(model1.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 1 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+    @assert round.(sum(model2.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 2 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+
     lorm = log.(b, model1.tpm ./ model2.tpm)
     lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
     return lorm
 end
 
-"""
+@testitem "lorm" begin
+    using BioSequences, BioMarkovChains
+
+    lorm01 = log_odds_ratio_matrix(CPGPOS, CPGNEG, b=2) # Extracted from the Biological Sequence Analysis: probabilistic models of proteins and nucleic acids, Durbin et al. 1998 
+    lorm01 == [-0.7369655941662062 0.4185519834550808 0.5798915111737342 -0.8073549220576043; -0.913064363228719 0.3043934355948513 1.8126298640982785 -0.6838158876474414; -0.6232794322722583 0.4626269577971041 0.3315782649210818 -0.7346554334790053; -1.1638248019058943 0.5708084064112958 0.3951379418411391 -0.6820299186813209]
+
+end
+
+@doc raw"""
     log_odds_ratio_score(sequence::SeqOrView{A}, model::BioMarkovChain; b::Number = ℯ)
 
 Compute the log odds ratio score between a given sequence and a BioMarkovChain model.
+
+```math
+S(x) = \sum_{i=1}^{L} \beta_{x_{i}x} = \sum_{i=1} \log \frac{a^{\mathscr{m}_{1}}_{i-1} x_i}{a^{\mathscr{m}_{2}}_{i-1} x_i}
+```
 
 # Arguments
 - `sequence::SeqOrView{A}`: A sequence of elements of type `A`.
@@ -233,7 +258,12 @@ function log_odds_ratio_score(
     b::Number = ℯ
 ) where A 
     @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
+    @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+
     tpm = transition_probability_matrix(sequence)
+
+    @assert round.(sum(tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Sequence transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+
     lorm = log.(b, tpm ./ model.tpm)
     lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
     return sum(lorm)/length(sequence)
@@ -250,10 +280,10 @@ P(X_1 = i_1, \ldots, X_T = i_T) = \pi_{i_1}^{T-1} \prod_{t=1}^{T-1} a_{i_t, i_{t
 
 # Arguments
 - `sequence::LongNucOrView{4}`: The input sequence of nucleotides.
-- `tm::BioMarkovChain` is the actual data structure composed of a `tpm::Matrix{Float64}` the transition probability matrix and `initials=Vector{Float64}` the initial state probabilities.
+- `model::BioMarkovChain` is the actual data structure composed of a `tpm::Matrix{Float64}` the transition probability matrix and `initials=Vector{Float64}` the initial state probabilities.
 
 # Returns
-- `probability::Float64`: The probability of the input sequence.
+- `probability::Float64`: The probability of the input sequence given the model.
 
 # Example
 
@@ -291,7 +321,7 @@ function dnaseqprobability(
     sequence::NucleicSeqOrView{A},
     model::BioMarkovChain
 ) where A
-    
+    @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
     init = model.inits[_dna_to_int(sequence[1])]
 
     probability = init
