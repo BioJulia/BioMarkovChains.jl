@@ -41,7 +41,7 @@ odds_ratio_matrix, log_odds_ratio_matrix, log_odds_ratio_score,
 dnaseqprobability
 
 include("models.jl")
-export ECOLICDS, ECOLINOCDS
+export ECOLICDS, ECOLINOCDS, CPGPOS, CPGNEG
 
 include("perronfrobenius.jl")
 export perronfrobenius # generatedna
