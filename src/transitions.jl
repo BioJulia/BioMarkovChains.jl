@@ -124,8 +124,8 @@ the counts to sum up to 1.
 
 ```math
 \begin{align}
-\pi{i} = P(X_{i} = i),  i \in T  \\
-\sum_{i=1}^{N} \pi_{i} = 1
+\pi{i} &= P(X_{i} = i),  i \in T  \\
+\sum_{i=1}^{N} \pi_{i} &= 1
 \end{align}
 ```
 Now using the dinucleotides counts estimating the initials would follow:
@@ -203,6 +203,7 @@ Calculates the log-odds ratio between the transition probability matrices of two
 ```math
 \beta = \log \frac{P(x|\mathscr{m}_{1})}{P(x|\text{\mathscr{m}_{2})}
 ```
+
 Where $\mathscr{m}_{1}$ and $\mathscr{m}_{2}$ are the two models transition probability matrices.
 
 # Arguments 
