@@ -201,7 +201,7 @@ end
 Calculates the log-odds ratio between the transition probability matrices of two BioMarkovChain models.
 
 ```math
-\beta = \log \left( \frac{P(x|\mathscr{m}_{1})}{P(x|\text{\mathscr{m}_{2})} \right)
+\beta = \log \frac{P(x|\mathscr{m}_{1})}{P(x|\text{\mathscr{m}_{2})}
 ```
 Where $\mathscr{m}_{1}$ and $\mathscr{m}_{2}$ are the two models transition probability matrices.
 
