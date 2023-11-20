@@ -25,16 +25,11 @@
 
 ```
 
-
-Documentation for [BioMarkovChains](https://github.com/camilogarciabotero/BioMarkovChains.jl).
-
-
-
 ***
+
 ## Overview
 
 > This package aim to represent BioSequences types as Markov chains to perform different operations and predictions
-
 
 ## Installation
 
