@@ -22,7 +22,7 @@ MarkovChainHammerExt = "MarkovChainHammer"
 [compat]
 BioSequences = "3"
 DiscreteMarkovChains = "0.2"
-MarkovChainHammer = "0.0.11"
+MarkovChainHammer = "0"
 PrecompileTools = "1"
 StatsAPI = "1.6"
 TestItemRunner = "0.2"
