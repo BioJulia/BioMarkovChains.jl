@@ -1,5 +1,5 @@
 import Base: show, length, eltype
-import StatsAPI: fit!
+# import StatsAPI: fit!
 
 function Base.show(io::IO, model::BioMarkovChain)
     # # Print the type name

@@ -21,7 +21,6 @@ BioSequences = "3"
 DiscreteMarkovChains = "0.2"
 MarkovChainHammer = "0.1"
 PrecompileTools = "1"
-StatsAPI = "1.6"
 VectorizedKmers = "0.8"
 julia = "1"
 
