@@ -120,7 +120,3 @@ dnaseqprobability(orfdna, ECOLICDS)
 ```
 
 This is off course not very informative, but we can later use different criteria to then classify new ORFs. For a more detailed explanation see the [docs](https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/biomarkovchains/)
-
-## License
-
-MIT License
