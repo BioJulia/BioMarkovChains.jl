@@ -144,7 +144,7 @@ function odds_ratio_matrix(
     sequence::SeqOrView{A},
     model::BioMarkovChain;
 ) where A
-    @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
+    @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     tpm = transition_probability_matrix(sequence)
     return tpm ./ model.tpm
 end
@@ -173,7 +173,7 @@ function log_odds_ratio_matrix(
     model::BioMarkovChain;
     b::Number = ℯ
 ) where A
-    @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
+    @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     
     tpm = transition_probability_matrix(sequence)
@@ -206,7 +206,7 @@ function log_odds_ratio_matrix(
     model2::BioMarkovChain;
     b::Number = ℯ
 )
-    @assert model1.statespace == model2.statespace "Models state spaces are inconsistent"
+    @assert model1.alphabet == model2.alphabet "Models state spaces are inconsistent"
     @assert round.(sum(model1.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 1 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     @assert round.(sum(model2.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 2 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
 
@@ -239,7 +239,7 @@ function log_odds_ratio_score(
     model::BioMarkovChain;
     b::Number = ℯ
 ) where A 
-    @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
+    @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
 
     tpm = transition_probability_matrix(sequence)
@@ -303,7 +303,7 @@ function dnaseqprobability(
     sequence::NucleicSeqOrView{A},
     model::BioMarkovChain
 ) where A
-    @assert model.statespace == eltype(sequence) "Sequence and model state space are inconsistent."
+    @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     init = model.inits[_dna_to_int(sequence[1])]
 
     probability = init

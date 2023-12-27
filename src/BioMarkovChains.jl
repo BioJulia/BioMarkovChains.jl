@@ -11,6 +11,8 @@ using BioSequences:
     NucleicAcidAlphabet,
     DNA,
     DNAAlphabet,
+    RNAAlphabet,
+    Alphabet,
     
     #RNA
     RNA,
@@ -27,7 +29,6 @@ using BioSequences:
     #tests and precompilation
 
 using PrecompileTools: @setup_workload, @compile_workload
-# using StatsAPI: StatsAPI, fit, fit!
 using VectorizedKmers: count_kmers
 
 include("types.jl")
@@ -58,6 +59,7 @@ include("extended.jl")
         # they belong to your package or not (on Julia 1.8 and higher)
         transition_count_matrix(seq)
         transition_probability_matrix(seq)
+
     end
 end
 

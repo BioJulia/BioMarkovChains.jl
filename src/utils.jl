@@ -10,13 +10,13 @@ function _dna_to_int(nucleotide::DNA)
     return reinterpret.(Int8, modifier(nucleotide))[1]  #searchsortedfirst(A, nucleotide) # findfirst(nucleotide, LongSequence{DNAAlphabet{4}}(A))
 end
 
-function randbmc(statespace::DataType, n::Int64=1)
+function randbmc(A::Alphabet, n::Int64=1)
 
-    if !(statespace in (DNA, RNA, AminoAcid))
-        throw(ArgumentError("Alphabet must be of the DNA, RNA, or AminoAcid DataType."))
+    if !(A in (DNAAlphabet{4}(), RNAAlphabet{4}(), AminoAcidAlphabet()))
+        throw(ArgumentError("Alphabet must be of the DNAAlphabet, RNAAlphabet, or AminoAcidAlphabet."))
     end
 
-    nstates = (statespace == AminoAcid) ? 20 : 4
+    nstates = (A == AminoAcidAlphabet) ? 20 : 4
     tpm = rand(nstates, nstates)
     
     # Normalize rows of the transition probability matrix
@@ -28,5 +28,5 @@ function randbmc(statespace::DataType, n::Int64=1)
     initsum = sum(inits)
     @views inits ./= initsum
     
-    return BMC(statespace, tpm, inits, n)
+    return BMC(A, tpm, inits, n)
 end
