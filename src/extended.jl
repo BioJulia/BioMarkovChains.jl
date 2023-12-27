@@ -56,10 +56,10 @@ end
 
 Update `bmc` in-place based on information generated from a state sequence.
 """
-function StatsAPI.fit!(bmc::BMC, inits::Vector{Float64}, tpm::Matrix{Float64})
-    bmc.inits .= inits
-    sum_to_one!(bmc.inits)
-    bmc.tpm .= tpm
-    foreach(sum_to_one!, eachrow(bmc.tpm))
-    return nothing
-end
+# function StatsAPI.fit!(bmc::BMC, inits::Vector{Float64}, tpm::Matrix{Float64})
+#     bmc.inits .= inits
+#     sum_to_one!(bmc.inits)
+#     bmc.tpm .= tpm
+#     foreach(sum_to_one!, eachrow(bmc.tpm))
+#     return nothing
+# end
