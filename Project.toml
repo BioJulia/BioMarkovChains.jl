@@ -19,7 +19,7 @@ MarkovChainHammerExt = "MarkovChainHammer"
 [compat]
 BioSequences = "3"
 DiscreteMarkovChains = "0.2"
-MarkovChainHammer = "0.1"
+MarkovChainHammer = "0"
 PrecompileTools = "1"
 VectorizedKmers = "0.8"
 julia = "1"

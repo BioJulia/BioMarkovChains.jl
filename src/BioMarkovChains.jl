@@ -58,7 +58,6 @@ include("extended.jl")
         # they belong to your package or not (on Julia 1.8 and higher)
         transition_count_matrix(seq)
         transition_probability_matrix(seq)
-        perronfrobenius(seq)
     end
 end
 
