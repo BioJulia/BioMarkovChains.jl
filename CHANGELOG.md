@@ -6,6 +6,10 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.0.10...main)
 
+## [0.9.0]
+
+- `BioMarkoChain` now has a compliant `BioSequences` alphabet.
+
 ## [0.8.1]
 
 - Fix `BioMarkoChain` checks compats.
