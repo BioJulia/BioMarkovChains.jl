@@ -48,7 +48,7 @@ end
 Base.length(bmc::BioMarkovChain) = length(bmc.inits)
 
 function Base.eltype(bmc::BioMarkovChain)
-    return bmc.statespace
+    return bmc.alphabet
 end
 
 """
