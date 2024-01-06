@@ -1,7 +1,10 @@
-import Base: show, length, eltype
+import Base: show, length, eltype, size
 # import StatsAPI: fit!
 
-function Base.show(io::IO, model::BioMarkovChain)
+function Base.show(
+    io::IO, 
+    model::BioMarkovChain
+)
     # # Print the type name
     # println(io, "BioMarkovChain:")
 
@@ -10,7 +13,7 @@ function Base.show(io::IO, model::BioMarkovChain)
     alphabet_type = eltype(model)
 
     # Print the type name with inferred alphabet type
-    println(io, "BioMarkovChain with $alphabet_type Alphabet:")
+    println(io, "BioMarkovChain of $alphabet_type:")
 
     # Print the transition probability matrix
     println(io, "  - Transition Probability Matrix -> Matrix{Float64}($(size(model.tpm, 1)) × $(size(model.tpm, 2))):")
@@ -45,11 +48,9 @@ function Base.show(io::IO, model::BioMarkovChain)
     println(io, "   ", "$(model.n)")
 end
 
-Base.length(bmc::BioMarkovChain) = length(bmc.inits)
-
-function Base.eltype(bmc::BioMarkovChain)
-    return bmc.alphabet
-end
+@inline Base.length(bmc::BioMarkovChain) = length(bmc.inits)
+@inline Base.size(bmc::BioMarkovChain) = size(bmc.tpm)
+@inline Base.eltype(bmc::BioMarkovChain) = bmc.alphabet
 
 """
     fit!(bmc::BMC, inits:Vector{Float64}, tpm::Matrix{Float64})

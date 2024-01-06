@@ -21,16 +21,23 @@ n = 2
 pf = perronfrobenius(sequence, n)
 ```
 """
-function perronfrobenius(sequence::SeqOrView{A}; n::Int64=1) where A
+function perronfrobenius(
+    sequence::SeqOrView{A};
+    n::Int64=1
+) where {A}
     tpm = transition_probability_matrix(sequence, n)
     return copy(tpm')
 end
 
-function perronfrobenius(bmc::BioMarkovChain)
+function perronfrobenius(
+    bmc::BioMarkovChain
+)
    return copy(bmc.tpm')
 end
 
-function perronfrobenius(tpm::Matrix{Float64})
+function perronfrobenius(
+    tpm::Matrix{Float64}
+)
     return copy(tpm')
 end
 
