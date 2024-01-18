@@ -122,7 +122,7 @@ build a transition model (`BioMarkovChain`):
 BioMarkovChain(sequence)
 ```
 
-    BioMarkovChain with DNA Alphabet:
+    BioMarkovChain of DNAAlphabet{4}():
       - Transition Probability Matrix --> Matrix{Float64}(4 × 4):
        0.0     1.0     0.0     0.0
        0.0     0.5     0.2     0.3
@@ -149,7 +149,7 @@ the *n-step transition probability matrix* ``\mathscr{M}^{n} = (\mathscr{m}_{ij}
 BioMarkovChain(sequence, 2)
 ```
 
-    BioMarkovChain with DNA Alphabet:
+    BioMarkovChain of DNAAlphabet{4}():
       - Transition Probability Matrix --> Matrix{Float64}(4 × 4):
        0.0     0.5     0.2     0.3
        0.05    0.475   0.325   0.15
