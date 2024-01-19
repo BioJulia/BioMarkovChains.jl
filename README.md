@@ -13,6 +13,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/camilogarciabotero/BioMarkovChains.jl/blob/main/LICENSE)
 [![Work in Progress](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/BioMarkovChains&label=downloads)](https://pkgs.genieframework.com?packages=BioMarkovChains)
+[![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
 </div>
 
@@ -50,7 +51,7 @@ Let find one ORF in a random `LongDNA` :
 using BioSequences, GeneFinder, BioMarkovChains
 
 sequence = randdnaseq(10^3)
-orfdna = getorfdna(sequence, min_len=75)[1]
+orfdna = get_orfs_dna(sequence, min_len=75)[1]
 ```
 
 If we translate it, we get a 69aa sequence:
@@ -71,7 +72,7 @@ BioMarkovChain(orfdna, 2)
 ```
 
 ```
-BioMarkovChain with DNAAlphabet{4}() Alphabet:
+BioMarkovChain of DNAAlphabet{4}():
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.2123  0.2731  0.278   0.2366
    0.2017  0.3072  0.2687  0.2224
@@ -94,7 +95,7 @@ ECOLICDS
 ```
 
 ```
-BioMarkovChain with DNAAlphabet{4}() Alphabet:
+BioMarkovChain of DNAAlphabet{4}():
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.31    0.224   0.199   0.268
    0.251   0.215   0.313   0.221

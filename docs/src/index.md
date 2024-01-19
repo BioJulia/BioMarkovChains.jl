@@ -20,6 +20,9 @@
 <a href="https://github.com/camilogarciabotero/BioMarkovChains.jl/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
 <a href="https://www.repostatus.org/#wip"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Work in Progress"></a>
 <a href="https://pkgs.genieframework.com?packages=BioMarkovChains"><img src="https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/BioMarkovChains&label=downloads" alt="Downloads"></a>
+<a href="https://github.com/JuliaTesting/Aqua.jl">
+  <img src="https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg" alt="Aqua QA">
+</a>
 
 </div>
 

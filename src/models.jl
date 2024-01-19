@@ -38,7 +38,6 @@ const CPGPOS = begin
     BMC(DNAAlphabet{4}(), tpm, inits)
 end
 
-
 const CPGNEG = begin
     tpm = [
         0.300 0.205 0.285 0.210 
