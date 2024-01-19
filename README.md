@@ -51,7 +51,7 @@ Let find one ORF in a random `LongDNA` :
 using BioSequences, GeneFinder, BioMarkovChains
 
 sequence = randdnaseq(10^3)
-orfdna = getorfdna(sequence, min_len=75)[1]
+orfdna = get_orfs_dna(sequence, min_len=75)[1]
 ```
 
 If we translate it, we get a 69aa sequence:
