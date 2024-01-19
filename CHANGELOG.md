@@ -8,15 +8,15 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [0.9.0]
 
-- `BioMarkoChain` now has a compliant `BioSequences` alphabet.
+- `BioMarkovChain` now has a compliant `BioSequences` alphabet.
 
 ## [0.8.1]
 
-- Fix `BioMarkoChain` checks compats.
+- Fix `BioMarkovChain` checks compats.
 
 ## [0.8.0]
 
-- `BioMarkoChain` checks whether its row-stochastic.
+- `BioMarkovChain` checks whether its row-stochastic.
 - New extended functions from the `DiscreteMarkovChains` packages are now available.
 - `dnaseqprobability` is much faster.
 - New methods to calculate the `logg-odds-ratio-matrix` and `logg-odds-ratio-score` of a `BioSequences`.
