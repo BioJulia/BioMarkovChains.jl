@@ -23,11 +23,13 @@ tcm = transition_count_matrix(seq)
 ```
 """
 function transition_count_matrix(sequence::NucleicSeqOrView{A}) where {A}
-    return copy(count_kmers(sequence, 2).values')
+    counts = count_kmers(sequence, 2).values'
+    return copy(counts)
 end
 
 function transition_count_matrix(sequence::SeqOrView{<:AminoAcidAlphabet})
-    copy(count_kmers(sequence, 2).values')
+    counts = count_kmers(sequence, 2).values'
+    return copy(counts)
 end
 
 @doc raw"""
