@@ -42,10 +42,6 @@ function Base.show(
     for row in 1:size(model.inits, 1)
         println(io, "   ", round(model.inits[row], digits=4))
     end
-
-    # # Print the value of 'n'
-    # println(io, "  - Markov Chain Order -> Int64:")
-    # println(io, "   ", "$(model.n)")
 end
 
 @inline Base.length(bmc::BioMarkovChain) = length(bmc.inits)
