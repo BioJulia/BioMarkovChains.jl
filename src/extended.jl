@@ -13,7 +13,7 @@ function Base.show(
     alphabet_type = eltype(model)
 
     # Print the type name with inferred alphabet type
-    println(io, "BioMarkovChain of $alphabet_type:")
+    println(io, "BioMarkovChain of $alphabet_type and order $(model.n):")
 
     # Print the transition probability matrix
     println(io, "  - Transition Probability Matrix -> Matrix{Float64}($(size(model.tpm, 1)) × $(size(model.tpm, 2))):")
@@ -43,24 +43,11 @@ function Base.show(
         println(io, "   ", round(model.inits[row], digits=4))
     end
 
-    # Print the value of 'n'
-    println(io, "  - Markov Chain Order -> Int64:")
-    println(io, "   ", "$(model.n)")
+    # # Print the value of 'n'
+    # println(io, "  - Markov Chain Order -> Int64:")
+    # println(io, "   ", "$(model.n)")
 end
 
 @inline Base.length(bmc::BioMarkovChain) = length(bmc.inits)
 @inline Base.size(bmc::BioMarkovChain) = size(bmc.tpm)
 @inline Base.eltype(bmc::BioMarkovChain) = bmc.alphabet
-
-"""
-    fit!(bmc::BMC, inits:Vector{Float64}, tpm::Matrix{Float64})
-
-Update `bmc` in-place based on information generated from a state sequence.
-"""
-# function StatsAPI.fit!(bmc::BMC, inits::Vector{Float64}, tpm::Matrix{Float64})
-#     bmc.inits .= inits
-#     sum_to_one!(bmc.inits)
-#     bmc.tpm .= tpm
-#     foreach(sum_to_one!, eachrow(bmc.tpm))
-#     return nothing
-# end
