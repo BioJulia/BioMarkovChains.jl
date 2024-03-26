@@ -22,13 +22,13 @@ tcm = transition_count_matrix(seq)
  2  0  0  0
 ```
 """
-function transition_count_matrix(sequence::NucleicSeqOrView{A}) where A
-    counts = reshape(count_kmers(sequence, 2), (4,4))'
+function transition_count_matrix(sequence::NucleicSeqOrView{A}) where {A}
+    counts = count_kmers(sequence, 2).values'
     return copy(counts)
 end
 
 function transition_count_matrix(sequence::SeqOrView{<:AminoAcidAlphabet})
-    counts = reshape(count_kmers(sequence, 2), (20,20))'
+    counts = count_kmers(sequence, 2).values'
     return copy(counts)
 end
 
