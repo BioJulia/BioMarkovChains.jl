@@ -10,7 +10,7 @@ using BioSequences:
     ACGU,
     NucleicAcidAlphabet,
     DNA,
-    DNA_A, DNA_C, DNA_G, DNA_T, DNA_M
+    DNA_A, DNA_C, DNA_G, DNA_T, DNA_M,
     DNAAlphabet,
     RNAAlphabet,
     Alphabet,
