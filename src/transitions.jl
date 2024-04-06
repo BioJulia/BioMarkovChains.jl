@@ -1,3 +1,5 @@
+export initials, transition_count_matrix, transition_probability_matrix, odds_ratio_matrix, log_odds_ratio_matrix, log_odds_ratio_score, dnaseqprobability
+
 """
     transition_count_matrix(sequence::LongSequence{DNAAlphabet{4}})
 
@@ -23,13 +25,15 @@ tcm = transition_count_matrix(seq)
 ```
 """
 function transition_count_matrix(sequence::NucleicSeqOrView{A}) where {A}
-    counts = count_kmers(sequence, 2).values'
-    return copy(counts)
+    # counts = count_kmers(sequence, 2).values'
+    # return copy(counts)
+    return count_kmers(sequence, 2).values'
 end
 
 function transition_count_matrix(sequence::SeqOrView{<:AminoAcidAlphabet})
-    counts = count_kmers(sequence, 2).values'
-    return copy(counts)
+    # counts = count_kmers(sequence, 2).values'
+    # return copy(counts)
+    return count_kmers(sequence, 2).values'
 end
 
 @doc raw"""
@@ -89,7 +93,7 @@ tpm = transition_probability_matrix(seq)
  1.0  0.0  0.0  0.0
 ```
 """
-function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) where A
+function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) where {A}
     tcm = transition_count_matrix(sequence)
     rowsums = sum(tcm, dims=2)
     freqs = tcm ./ rowsums
@@ -129,7 +133,7 @@ Now using the dinucleotides counts estimating the initials would follow:
 # Returns
 An `Vector{Flot64}` of estimated initial probabilities for each state in the sequence.
 """
-function initials(sequence::SeqOrView{A}) where A ## π̂ estimates of the initial probabilies
+function initials(sequence::SeqOrView{A}) where {A} ## π̂ estimates of the initial probabilies
     inits = Array{Float64, 1}(undef, 1)
     tcm = transition_count_matrix(sequence)
     inits = sum(tcm, dims = 1) ./ sum(tcm)
@@ -172,7 +176,7 @@ function log_odds_ratio_matrix(
     sequence::SeqOrView{A},
     model::BioMarkovChain;
     b::Number = ℯ
-) where A
+) where {A}
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     
@@ -238,7 +242,7 @@ function log_odds_ratio_score(
     sequence::SeqOrView{A},
     model::BioMarkovChain;
     b::Number = ℯ
-) where A 
+) where {A} 
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
 
@@ -252,7 +256,7 @@ function log_odds_ratio_score(
 end
 
 @doc raw"""
-    sequenceprobability(sequence::LongNucOrView{4}, model::BioMarkovChain)
+    dnaseqprobability(sequence::LongNucOrView{4}, model::BioMarkovChain)
 
 Compute the probability of a given sequence using a transition probability matrix and the initial probabilities distributions of a `BioMarkovModel`.
 
@@ -302,7 +306,7 @@ dnaseqprobability(newseq, bmc)
 function dnaseqprobability(
     sequence::NucleicSeqOrView{A},
     model::BioMarkovChain
-) where A
+) where {A}
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     init = model.inits[_dna_to_int(sequence[1])]
 
