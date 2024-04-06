@@ -1,3 +1,7 @@
+export BioMarkovChain, BMC, AminoAcidSeqOrView
+
+const AminoAcidSeqOrView = Union{LongSequence{AminoAcidAlphabet}, LongSubSeq{AminoAcidAlphabet}}
+
 abstract type AbstractBioMarkovChain end
 
 """
@@ -39,17 +43,25 @@ struct BioMarkovChain{A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Inte
   tpm::M # The probabilities of the TransitionProbabilityMatrix struct
   inits::I # the initials distribution of probabilities
   n::N # The order of the Markov chain
+
   function BioMarkovChain(alphabet::A, tpm::M, inits::I, n::N=1) where {A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Integer} 
-    bmc = new{A,M,I,N}(alphabet, n > 1 ? tpm^n : tpm, inits, n)
-    return bmc
+    return new{A,M,I,N}(alphabet, n > 1 ? tpm^n : tpm, inits, n)
   end
 
-  function BioMarkovChain(sequence::SeqOrView{A}, n::Int64=1) where A
+  function BioMarkovChain(sequence::NucleicSeqOrView{A}, n::Int64=1) where {A}
     inits = initials(sequence)
     tpm = transition_probability_matrix(sequence)
-    bmc = new{Alphabet, Matrix{Float64}, Vector{Float64},Int64}(Alphabet(sequence), n > 1 ? tpm^n : tpm, inits, n)
-    return bmc
+    alph = Alphabet(sequence)
+    return new{DNAAlphabet, Matrix{Float64}, Vector{Float64},Int64}(alph, n > 1 ? tpm^n : tpm, inits, n)
   end
+
+  function BioMarkovChain(sequence::AminoAcidSeqOrView, n::Int64=1)
+    inits = initials(sequence)
+    tpm = transition_probability_matrix(sequence)
+    alph = Alphabet(sequence)
+    return new{AminoAcidAlphabet, Matrix{Float64}, Vector{Float64},Int64}(alph, n > 1 ? tpm^n : tpm, inits, n)
+  end
+
 end
 
 """
