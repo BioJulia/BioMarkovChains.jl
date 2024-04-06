@@ -4,10 +4,11 @@ using BioMarkovChains
 DocMeta.setdocmeta!(BioMarkovChains, :DocTestSetup, :(using BioMarkovChains); recursive = true)
 
 fmt = Documenter.HTML(
-    mathengine=MathJax3(),
+    mathengine = MathJax3(),
     prettyurls = get(ENV, "CI", "false") == "true",
-    canonical="https://camilogarciabotero.github.io/BioMarkovChains.jl",
-    assets=String[],
+    canonical = "https://camilogarciabotero.github.io/BioMarkovChains.jl",
+    repolink = "https://camilogarciabotero.github.io/BioMarkovChains.jl",
+    edit_link = "main"
 )
 
 pgs = [
@@ -18,11 +19,12 @@ pgs = [
 
 makedocs(;
     modules = [BioMarkovChains],
-    authors = "Camilo García",
-    repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl/blob/{commit}{path}#{line}",
+    authors = "Camilo García-Botero",
+    repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl/",
     sitename = "BioMarkovChains.jl",
     format = fmt,
     pages = pgs,
+    warnonly = true
 )
 
 deploydocs(; repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl", devbranch = "main")
