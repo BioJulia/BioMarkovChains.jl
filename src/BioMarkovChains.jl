@@ -33,22 +33,10 @@ using PrecompileTools: @setup_workload, @compile_workload
 using VectorizedKmers: count_kmers
 
 include("types.jl")
-export BioMarkovChain, BMC
-
 include("utils.jl")
-export randbmc
-
 include("transitions.jl")
-export initials, transition_count_matrix, transition_probability_matrix, 
-odds_ratio_matrix, log_odds_ratio_matrix, log_odds_ratio_score, 
-dnaseqprobability
-
 include("models.jl")
-export ECOLICDS, ECOLINOCDS, CPGPOS, CPGNEG
-
 include("perronfrobenius.jl")
-export perronfrobenius # generatedna
-
 include("extended.jl")
 
 @setup_workload begin
