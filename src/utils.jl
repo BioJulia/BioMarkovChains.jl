@@ -1,3 +1,5 @@
+export randbmc
+
 function _int_to_dna(index::Int64)
     # A = extended_alphabet ? alphabet(DNA) : ACGT
     modifier(value) = (value == 3) ? 4 : (value == 4) ? 8 : value

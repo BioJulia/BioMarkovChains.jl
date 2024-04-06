@@ -1,5 +1,7 @@
 ### MarkdovChainHammer.jl ###
 
+export perronfrobenius # generatedna
+
 """
     perronfrobenius(sequence::SeqOrView{A}, n::Int64=1) where A
 

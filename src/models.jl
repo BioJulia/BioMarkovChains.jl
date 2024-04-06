@@ -1,3 +1,5 @@
+export ECOLICDS, ECOLINOCDS, CPGPOS, CPGNEG
+
 const ECOLICDS = begin
     tpm = [
         0.310 0.224 0.199 0.268
