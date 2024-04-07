@@ -19,7 +19,7 @@ fmt = DocumenterVitepress.MarkdownVitepress(
 )
 
 pgs = [
-    "Home" => "index.md",
+    "Get Started" => "index.md",
     "Towards Markov Chains" => "biomarkovchains.md",
     "API" => "api.md"
 ]
