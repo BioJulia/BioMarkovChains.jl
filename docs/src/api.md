@@ -1,7 +1,7 @@
 ```@meta
 CurrentModule = BioMarkovChains
 DocTestSetup = quote
-    using GeneFinder
+    using BioMarkovChains
 end
 ```
 
