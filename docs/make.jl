@@ -1,9 +1,18 @@
-using Documenter
 using BioMarkovChains
+using Documenter
+using DocumenterVitePress
 
 DocMeta.setdocmeta!(BioMarkovChains, :DocTestSetup, :(using BioMarkovChains); recursive = true)
 
-fmt = Documenter.HTML(
+# fmt = Documenter.HTML(
+#     mathengine = MathJax3(),
+#     prettyurls = get(ENV, "CI", "false") == "true",
+#     canonical = "https://camilogarciabotero.github.io/BioMarkovChains.jl",
+#     repolink = "https://camilogarciabotero.github.io/BioMarkovChains.jl",
+#     edit_link = "main"
+# )
+
+fmt = DocumenterVitepress.MarkdownVitepress(
     mathengine = MathJax3(),
     prettyurls = get(ENV, "CI", "false") == "true",
     canonical = "https://camilogarciabotero.github.io/BioMarkovChains.jl",

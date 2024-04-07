@@ -3,6 +3,7 @@ BioMarkovChains = "f861b655-cb5f-42ce-b66a-341b542d4f2c"
 DocThemeIndigo = "8bac0ac5-51bf-41f9-885e-2bf1ac2bec5f"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 DocumenterCitations = "daee34ce-89f3-4625-b898-19384cb65244"
+DocumenterVitepress = "4710194d-e776-4893-9690-8d956a29c365"
 LiveServer = "16fef848-5104-11e9-1b77-fb7a48bbb589"
 
 [compat]
