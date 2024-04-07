@@ -1,4 +1,3 @@
-# BioMarkovChains
 
 ```@raw html
 
@@ -52,7 +51,7 @@ BioMarkovChain(sequence)
 Note that, sometimes the dinucleotides transition do not harbor important biological meaning, whereas trinucleotides or codons are, in
 fact, the building block of proteins. Therefore, sometimes the transition model we want to build is usually a second-order Markov chain, that represents the possible transitions of a trinucleotide.
 
-A very nice nice property of the transition probability matrix is that the *n-step transition probability matrix* ``\mathscr{M}^{n} = (\mathscr{m}_{ij}(n))``, that is the *n*th power of ``\mathscr{M}`` represents ``i \rightarrow j`` transitions in *n* steps. We can also have higher order transition models as:
+A very nice nice property of the transition probability matrix is that the *n-step transition probability matrix* ``\mathscr{M}^{n} = (\mathscr{m}_{ij}(n))``, that is the ``n``th power of ``\mathscr{M}`` represents ``i \rightarrow j`` transitions in *n* steps. We can also have higher order transition models as:
 
 ``` julia
 BioMarkovChain(sequence, 2)
