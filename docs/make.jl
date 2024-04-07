@@ -39,7 +39,7 @@ makedocs(;
 deploydocs(; 
     repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl",
     devbranch = "main",
-    target="build", # this is where Vitepress stores its output
+    target = "build", # this is where Vitepress stores its output
     branch = "gh-pages",
     push_preview = true
 )
