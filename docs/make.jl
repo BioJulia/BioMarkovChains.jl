@@ -14,8 +14,8 @@ DocMeta.setdocmeta!(BioMarkovChains, :DocTestSetup, :(using BioMarkovChains); re
 
 fmt = DocumenterVitepress.MarkdownVitepress(
     repo = "https://camilogarciabotero.github.io/BioMarkovChains.jl",
-    mathengine = MathJax3(),
-    edit_link = "main"
+    # mathengine = MathJax3(),
+    # edit_link = "main"
 )
 
 pgs = [
