@@ -31,7 +31,15 @@ makedocs(;
     sitename = "BioMarkovChains.jl",
     format = fmt,
     pages = pgs,
-    warnonly = true
+    source = "src",
+    build = "build",
+    warnonly = true,
 )
 
-deploydocs(; repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl", devbranch = "main")
+deploydocs(; 
+    repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl",
+    devbranch = "main",
+    target="build", # this is where Vitepress stores its output
+    branch = "gh-pages",
+    push_preview = true
+)
