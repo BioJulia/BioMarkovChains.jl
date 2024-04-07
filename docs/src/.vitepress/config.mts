@@ -6,7 +6,7 @@ import footnote from "markdown-it-footnote";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: 'REPLACE_ME_DOCUMENTER_VITEPRESS',// TODO: replace this in makedocs!
-  title: 'REPLACE_ME_DOCUMENTER_VITEPRESS',
+  title: 'BioMarkovChains.jl',
   description: "A VitePress Site",
   lastUpdated: true,
   cleanUrls: true,
@@ -27,7 +27,8 @@ export default defineConfig({
   },
   themeConfig: {
     outline: 'deep',
-    logo: 'REPLACE_ME_DOCUMENTER_VITEPRESS',
+    // logo: 'REPLACE_ME_DOCUMENTER_VITEPRESS',
+    logo: { src: '/logo.png', width: 24, height: 24 },
     search: {
       provider: 'local',
       options: {
