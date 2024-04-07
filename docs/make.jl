@@ -1,6 +1,6 @@
 using BioMarkovChains
 using Documenter
-using DocumenterVitePress
+using DocumenterVitepress
 
 DocMeta.setdocmeta!(BioMarkovChains, :DocTestSetup, :(using BioMarkovChains); recursive = true)
 
