@@ -3,7 +3,7 @@
 ```@raw html
 
 <p align="center">
-  <img src="/docs/src/assets/logo.svg" height="150"><br/>
+  <img src="/logo.png" height="150"><br/>
   <i>Representing biological sequences as Markov chains</i>
 </p>
 ```
