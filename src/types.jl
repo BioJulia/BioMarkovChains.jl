@@ -20,22 +20,22 @@ A BioMarkovChain represents a Markov chain used in biological sequence analysis.
 - `BioMarkovChain(sequence::LongNucOrView{4}, n::Int64=1)`: Constructs a BioMarkovChain object based on the DNA sequence and transition order.
 
 # Example
-```
+
+```julia
 sequence = LongDNA{4}("ACTACATCTA")
 
 model = BioMarkovChain(sequence, 2)
-BioMarkovChain:
+BioMarkovChain of DNAAlphabet{4}() and order 1:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
-    0.444    0.111	0.0	  0.444
-    0.444    0.444	0.0	  0.111
-    0.0      0.0	0.0	  0.0
-    0.111    0.444	0.0	  0.444
+   0.0     0.6667  0.0     0.3333
+   0.3333  0.0     0.0     0.6667
+   0.0     0.0     0.0     0.0
+   0.6667  0.3333  0.0     0.0
   - Initial Probabilities -> Vector{Float64}(4 × 1):
-    0.333
-    0.333
-    0.0
-    0.333
-  - Markov Chain Order:2
+   0.3333
+   0.3333
+   0.0
+   0.3333
 ```
 """
 struct BioMarkovChain{A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: AbstractBioMarkovChain
@@ -48,7 +48,7 @@ struct BioMarkovChain{A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Inte
     return new{A,M,I,N}(alphabet, n > 1 ? tpm^n : tpm, inits, n)
   end
 
-  function BioMarkovChain(sequence::NucleicSeqOrView{A}, n::Int64=1) where {A}
+  function BioMarkovChain(sequence::NucleicSeqOrView{A}, n::Int64=1) where {A<:NucleicAcidAlphabet}
     inits = initials(sequence)
     tpm = transition_probability_matrix(sequence)
     alph = Alphabet(sequence)
@@ -59,7 +59,7 @@ struct BioMarkovChain{A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Inte
     inits = initials(sequence)
     tpm = transition_probability_matrix(sequence)
     alph = Alphabet(sequence)
-    return new{AminoAcidAlphabet, Matrix{Float64}, Vector{Float64},Int64}(alph, n > 1 ? tpm^n : tpm, inits, n)
+    return new{AminoAcidAlphabet, Matrix{Float64}, Vector{Float64}, Int64}(alph, n > 1 ? tpm^n : tpm, inits, n)
   end
 
 end

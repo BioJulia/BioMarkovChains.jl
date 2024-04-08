@@ -24,15 +24,7 @@ tcm = transition_count_matrix(seq)
  2  0  0  0
 ```
 """
-function transition_count_matrix(sequence::NucleicSeqOrView{A}) where {A}
-    # counts = count_kmers(sequence, 2).values'
-    # return copy(counts)
-    return count_kmers(sequence, 2).values'
-end
-
-function transition_count_matrix(sequence::SeqOrView{<:AminoAcidAlphabet})
-    # counts = count_kmers(sequence, 2).values'
-    # return copy(counts)
+function transition_count_matrix(sequence::SeqOrView{A}) where {A<:Alphabet}
     return count_kmers(sequence, 2).values'
 end
 
@@ -81,7 +73,7 @@ _{WA} & _{WC} & _{WD} & \dots & _{WW} \\
 A `Matrix` object representing the transition probability matrix of the sequence.
 
 # Example
-```
+```julia
 seq = dna"AGCTAGCTAGCT"
 
 tpm = transition_probability_matrix(seq)
@@ -93,7 +85,7 @@ tpm = transition_probability_matrix(seq)
  1.0  0.0  0.0  0.0
 ```
 """
-function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) where {A}
+function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) where {A <: Alphabet}
     tcm = transition_count_matrix(sequence)
     rowsums = sum(tcm, dims=2)
     freqs = tcm ./ rowsums
@@ -133,7 +125,7 @@ Now using the dinucleotides counts estimating the initials would follow:
 # Returns
 An `Vector{Flot64}` of estimated initial probabilities for each state in the sequence.
 """
-function initials(sequence::SeqOrView{A}) where {A} ## π̂ estimates of the initial probabilies
+function initials(sequence::SeqOrView{A}) where {A <: Alphabet} ## π̂ estimates of the initial probabilies
     inits = Array{Float64, 1}(undef, 1)
     tcm = transition_count_matrix(sequence)
     inits = sum(tcm, dims = 1) ./ sum(tcm)
@@ -147,7 +139,7 @@ initials(bmc::BioMarkovChain) = bmc.inits
 function odds_ratio_matrix(
     sequence::SeqOrView{A},
     model::BioMarkovChain;
-) where A
+) where {A <: Alphabet}
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     tpm = transition_probability_matrix(sequence)
     return tpm ./ model.tpm
@@ -176,7 +168,7 @@ function log_odds_ratio_matrix(
     sequence::SeqOrView{A},
     model::BioMarkovChain;
     b::Number = ℯ
-) where {A}
+) where {A <: Alphabet}
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     
@@ -242,7 +234,7 @@ function log_odds_ratio_score(
     sequence::SeqOrView{A},
     model::BioMarkovChain;
     b::Number = ℯ
-) where {A} 
+) where {A <: Alphabet}
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
 
@@ -266,31 +258,29 @@ P(X_1 = i_1, \ldots, X_T = i_T) = \pi_{i_1}^{T-1} \prod_{t=1}^{T-1} a_{i_t, i_{t
 
 # Arguments
 - `sequence::LongNucOrView{4}`: The input sequence of nucleotides.
-- `model::BioMarkovChain` is the actual data structure composed of a `tpm::Matrix{Float64}` the transition probability matrix and `initials=Vector{Float64}` the initial state probabilities.
+- `model::BioMarkovChain`: A given `BioMarkovChain`.
 
 # Returns
 - `probability::Float64`: The probability of the input sequence given the model.
 
 # Example
 
-```
+```julia
 mainseq = LongDNA{4}("CCTCCCGGACCCTGGGCTCGGGAC")
    
 bmc = BioMarkovChain(mainseq)
 
-BioMarkovChain with DNA Alphabet:
-  - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
-   0.0     1.0     0.0     0.0
-   0.0     0.5     0.2     0.3
-   0.25    0.125   0.625   0.0
-   0.0     0.6667  0.3333  0.0
-  - Initial Probabilities -> Vector{Float64}(4 × 1):
-   0.087
-   0.4348
-   0.3478
-   0.1304
-  - Markov Chain Order -> Int64:
-   1
+    BioMarkovChain of DNAAlphabet{4}() and order 1:
+      - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
+       0.0     1.0     0.0     0.0
+       0.0     0.5     0.2     0.3
+       0.25    0.125   0.625   0.0
+       0.0     0.6667  0.3333  0.0
+      - Initial Probabilities -> Vector{Float64}(4 × 1):
+       0.087
+       0.4348
+       0.3478
+       0.1304
 
 newseq = LongDNA{4}("CCTG")
 
@@ -300,13 +290,13 @@ newseq = LongDNA{4}("CCTG")
 
 dnaseqprobability(newseq, bmc)
     
-    0.0217
+    0.021739130434782608
 ```
 """
 function dnaseqprobability(
     sequence::NucleicSeqOrView{A},
     model::BioMarkovChain
-) where {A}
+) where {A <: NucleicAcidAlphabet}
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     init = model.inits[_dna_to_int(sequence[1])]
 
