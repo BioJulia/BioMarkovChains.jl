@@ -27,8 +27,8 @@ export default defineConfig({
   },
   themeConfig: {
     outline: 'deep',
-    // logo: 'REPLACE_ME_DOCUMENTER_VITEPRESS',
-    logo: { src: '/logo.png', width: 24, height: 24 },
+    logo: 'REPLACE_ME_DOCUMENTER_VITEPRESS',
+    // logo: { src: '/logo.png', width: 24, height: 24 },
     search: {
       provider: 'local',
       options: {

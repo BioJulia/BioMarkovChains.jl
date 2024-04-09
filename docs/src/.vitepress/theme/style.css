@@ -69,21 +69,21 @@ https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/var
   --vp-home-hero-name-background: -webkit-linear-gradient(
     120deg,
     #ff875f 30%,
-    #0087d7
+    #ff875f 30%
   );
 
   --vp-home-hero-image-background-image: linear-gradient(
     -45deg,
-    #0087d7 35%,
-    #0087d7 35%,
-    #ff875f
+    #0094ea11 15%,
+    #0094ea11 15%,
+    #0094ea11
   );
-  --vp-home-hero-image-filter: blur(40px);
+  --vp-home-hero-image-filter: blur(10px);
 }
 
 @media (min-width: 640px) {
   :root {
-    --vp-home-hero-image-filter: blur(56px);
+    --vp-home-hero-image-filter: blur(60px);
   }
 }
 

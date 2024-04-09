@@ -1,11 +1,9 @@
-# Using other functions
+# From BMC to sequence probabilties
 
-We can now calculate a transition probability matrix from a `LongDNA`
-sequence using the `transition_probability_matrix` and
-`initials` methods for a given `LongDNA` sequence:
+We can now calculate a transition probability matrix from a `LongDNA` sequence using the `transition_probability_matrix` and `initials` methods:
 
 ``` julia
-using BioSequences, GeneFinder
+using BioSequences
 
 sequence = dna"CCTCCCGGACCCTGGGCTCGGGAC"
 
@@ -27,5 +25,5 @@ println(initials)
      0.43478260869565216
      0.34782608695652173
      0.13043478260869565
+```
 
-More conveniently, we can now use the `transition_model` method and obtain the transition probabilities and the initial distribution and build a transition model (`BioMarkovChain`):

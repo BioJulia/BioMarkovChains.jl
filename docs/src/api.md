@@ -5,9 +5,6 @@ DocTestSetup = quote
 end
 ```
 
-```@index
-```
-
 ```@autodocs
 Modules = [BioMarkovChains]
 ```
