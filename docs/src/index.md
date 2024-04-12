@@ -18,16 +18,20 @@ hero:
     text: View on Github
     link: https://github.com/camilogarciabotero/BioMarkovChains.jl
 ---
-
 ```
 
-```@raw html
 <p style="margin-bottom:2cm"></p>
 
-<div class="vp-doc" style="width:90%; margin:auto">
+<div class="vp-doc" style="width:80%; margin:auto">
+
+<h2> Get Started </h2>
 
 Install `BioMarkovChains` from the julia REPL. Press `]` to enter `pkg` mode, and enter the `add BioMarkovChains` command.
 
-</div>
-
+```julia
+(@v1.10) pkg> add BioMarkovChains
 ```
+
+For more information, see the [Getting Started](@ref) section.
+
+</div>
