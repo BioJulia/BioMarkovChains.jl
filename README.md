@@ -60,7 +60,7 @@ orfseq = findorfs(seq)[3] |> sequence
 ATGCGTCGAATGGCACGGTGA
 ```
 
-If we translate it, we get a 69aa sequence:
+If we translate it, we get a 7aa sequence:
 
 ```julia
 translate(orfseq)
