@@ -27,4 +27,4 @@ Install `BioMarkovChains` from the julia REPL. Press `]` to enter `pkg` mode, an
 (@v1.10) pkg> add BioMarkovChains
 ```
 
-For more information, see the [Get Started](@ref) section.
+For more information, see the [Get Started](getstarted.md) section.
