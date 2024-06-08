@@ -131,7 +131,7 @@ https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/var
 
 /* Component: MathJax */
 
-mjx-container > svg {
+/* mjx-container > svg {
   display: block;
   margin: auto;
 }
@@ -148,7 +148,7 @@ mjx-container {
 mjx-container > svg {
   margin: auto;
   display: inline-block;
-}
+} */
 
 /**
  * Colors links
