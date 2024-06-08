@@ -12,7 +12,7 @@
 [![CI Workflow](https://github.com/camilogarciabotero/BioMarkovChains.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/camilogarciabotero/BioMarkovChains.jl/actions/workflows/CI.yml)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/camilogarciabotero/BioMarkovChains.jl/blob/main/LICENSE)
 [![Work in Progress](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/BioMarkovChains&label=downloads)](https://pkgs.genieframework.com?packages=BioMarkovChains)
+[![Downloads](https://img.shields.io/badge/dynamic/json?url=http%3A%2F%2Fjuliapkgstats.com%2Fapi%2Fv1%2Fmonthly_downloads%2FBioMarkovChains&query=total_requests&suffix=%2Fmonth&label=Downloads)](http://juliapkgstats.com/pkg/BioMarkovChains)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
 </div>
@@ -48,7 +48,7 @@ An important step before developing several gene finding algorithms consist of h
 Let find one ORF in a random `LongDNA` :
 
 ```julia
-using BioSequences, GeneFinder, BioMarkovChains
+using BioSequences, BioMarkovChains, BioMarkovChains
 
 sequence = randdnaseq(10^3)
 orfdna = get_orfs_dna(sequence, min_len=75)[1]
