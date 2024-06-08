@@ -100,7 +100,7 @@ BioMarkovChain of DNAAlphabet{4}() and order 1:
    0.245   0.243   0.273   0.239
 ```
 
-What is then the probability of the previous random Lambda phage DNA sequence given this model?
+What is then the probability of the previous DNA sequence given this model?
 
 ```julia
 dnaseqprobability(orfseq, ECOLICDS)
