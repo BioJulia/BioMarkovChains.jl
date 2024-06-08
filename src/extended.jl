@@ -38,10 +38,24 @@ function Base.show(
     end
 
     # Print the initials matrix
-    print(io, "  - Initial Probabilities -> Vector{Float64}($(size(model.inits, 1)) × $(size(model.inits, 2))):\n")
-    for row in 1:size(model.inits, 1)
-        print(io, "   ", round(model.inits[row], digits=4))
+    println(io, "  - Initial Probabilities -> Vector{Float64}($(size(model.inits, 1)) × $(size(model.inits, 2))):")
+    print(io, "  ")
+    
+    max_initials = length(model.inits)
+    initials_to_show = min(6, max_initials)
+    
+    for row in 1:initials_to_show
+        print(io, " ", rpad(round(model.inits[row], digits=4), 7))
     end
+    
+    if max_initials > 6
+        print(io, "   ", rpad("…", 5))
+        
+        for row in (max_initials - 6):max_initials
+            print(io, " ", rpad(round(model.inits[row], digits=4), 7))
+        end
+    end
+    
 end
 
 @inline Base.length(bmc::BioMarkovChain) = length(bmc.inits)
