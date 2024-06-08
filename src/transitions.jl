@@ -231,8 +231,8 @@ The log odds ratio score between the sequence and the model.
 # Example
 """
 function log_odds_ratio_score(
-    sequence::SeqOrView{A},
-    model::BioMarkovChain;
+    sequence::SeqOrView{A};
+    model::BioMarkovChain=ECOLICDS,
     b::Number = ℯ
 ) where {A <: Alphabet}
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
