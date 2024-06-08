@@ -38,9 +38,9 @@ function Base.show(
     end
 
     # Print the initials matrix
-    println(io, "  - Initial Probabilities -> Vector{Float64}($(size(model.inits, 1)) × $(size(model.inits, 2))):")
+    print(io, "  - Initial Probabilities -> Vector{Float64}($(size(model.inits, 1)) × $(size(model.inits, 2))):\n")
     for row in 1:size(model.inits, 1)
-        println(io, "   ", round(model.inits[row], digits=4))
+        print(io, "   ", round(model.inits[row], digits=4))
     end
 end
 
