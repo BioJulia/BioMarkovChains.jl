@@ -48,43 +48,40 @@ An important step before developing several gene finding algorithms consist of h
 Let find one ORF in a random `LongDNA` :
 
 ```julia
-using BioSequences, BioMarkovChains, BioMarkovChains
+using BioSequences, BioMarkovChains, GeneFinder
 
-sequence = randdnaseq(10^3)
-orfdna = get_orfs_dna(sequence, min_len=75)[1]
+
+# > 180195.SAMN03785337.LFLS01000089 -> finds only 1 gene in Prodigal (from Pyrodigal tests)
+seq = dna"AACCAGGGCAATATCAGTACCGCGGGCAATGCAACCCTGACTGCCGGCGGTAACCTGAACAGCACTGGCAATCTGACTGTGGGCGGTGTTACCAACGGCACTGCTACTACTGGCAACATCGCACTGACCGGTAACAATGCGCTGAGCGGTCCGGTCAATCTGAATGCGTCGAATGGCACGGTGACCTTGAACACGACCGGCAATACCACGCTCGGTAACGTGACGGCACAAGGCAATGTGACGACCAATGTGTCCAACGGCAGTCTGACGGTTACCGGCAATACGACAGGTGCCAACACCAACCTCAGTGCCAGCGGCAACCTGACCGTGGGTAACCAGGGCAATATCAGTACCGCAGGCAATGCAACCCTGACGGCCGGCGACAACCTGACGAGCACTGGCAATCTGACTGTGGGCGGCGTCACCAACGGCACGGCCACCACCGGCAACATCGCGCTGACCGGTAACAATGCACTGGCTGGTCCTGTCAATCTGAACGCGCCGAACGGCACCGTGACCCTGAACACAACCGGCAATACCACGCTGGGTAATGTCACCGCACAAGGCAATGTGACGACTAATGTGTCCAACGGCAGCCTGACAGTCGCTGGCAATACCACAGGTGCCAACACCAACCTGAGTGCCAGCGGCAATCTGACCGTGGGCAACCAGGGCAATATCAGTACCGCGGGCAATGCAACCCTGACTGCCGGCGGTAACCTGAGC"
+
+orfseq = findorfs(seq)[3] |> sequence
+
+21nt DNA Sequence:
+ATGCGTCGAATGGCACGGTGA
 ```
 
 If we translate it, we get a 69aa sequence:
 
 ```julia
-translate(orfdna)
-```
+translate(orfseq)
 
-```
-69aa Amino Acid Sequence:
-MSCGETTVSPILSRRTAFIRTLLGYRFRSNLPTKAERSRFGFSLPQFISTPNDRQNGNGGCGCGLENR*
+7aa Amino Acid Sequence:
+MRRMAR*
 ```
 
 Now supposing I do want to see how transitions are occurring in this ORF sequence, the I can use the `BioMarkovChain` method and tune it to 2nd-order Markov chain:
 
 ```julia
 BioMarkovChain(orfdna, 2)
-```
 
-```
-BioMarkovChain of DNAAlphabet{4}():
+BioMarkovChain of DNAAlphabet{4}() and order 1:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
-   0.2123  0.2731  0.278   0.2366
-   0.2017  0.3072  0.2687  0.2224
-   0.1978  0.2651  0.2893  0.2478
-   0.2013  0.3436  0.2431  0.212
+   0.25    0.25    0.0     0.5
+   0.25    0.0     0.75    0.0
+   0.25    0.25    0.25    0.25
+   0.0     0.25    0.75    0.0
   - Initial Probabilities -> Vector{Float64}(4 × 1):
-   0.2027
-   0.2973
-   0.2703
-   0.2297
-  - Markov Chain Order -> Int64:
-   2
+   0.2     0.2     0.4     0.2
 
 ```
 
@@ -92,32 +89,23 @@ This is  useful to later create HMMs and calculate sequence probability based on
 
 ```julia
 ECOLICDS
-```
 
-```
-BioMarkovChain of DNAAlphabet{4}():
+BioMarkovChain of DNAAlphabet{4}() and order 1:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.31    0.224   0.199   0.268
    0.251   0.215   0.313   0.221
    0.236   0.308   0.249   0.207
    0.178   0.217   0.338   0.267
   - Initial Probabilities -> Vector{Float64}(4 × 1):
-   0.245
-   0.243
-   0.273
-   0.239
-  - Markov Chain Order -> Int64:
-   1
+   0.245   0.243   0.273   0.239
 ```
 
 What is then the probability of the previous random Lambda phage DNA sequence given this model?
 
 ```julia
-dnaseqprobability(orfdna, ECOLICDS)
-```
+dnaseqprobability(orfseq, ECOLICDS)
 
-```
-7.466531836596359e-45
+1.1061824843755975e-12
 ```
 
 This is off course not very informative, but we can later use different criteria to then classify new ORFs. For a more detailed explanation see the [docs](https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/biomarkovchains/)
