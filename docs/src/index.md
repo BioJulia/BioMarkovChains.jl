@@ -20,11 +20,9 @@ hero:
 ---
 ```
 
-<p style="margin-bottom:2cm"></p>
+```@raw html
 
-<div class="vp-doc" style="width:80%; margin:auto">
-
-<h2> Get Started </h2>
+<div class="vp-doc" style="width:90%; margin:auto">
 
 Install `BioMarkovChains` from the julia REPL. Press `]` to enter `pkg` mode, and enter the `add BioMarkovChains` command.
 
@@ -35,3 +33,5 @@ Install `BioMarkovChains` from the julia REPL. Press `]` to enter `pkg` mode, an
 For more information, see the [Getting Started](@ref) section.
 
 </div>
+
+```
