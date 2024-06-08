@@ -6,6 +6,13 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.0.10...main)
 
+## [0.10.0]
+
+- New documentation framework.
+- `log_odds_ratio_score` now only requires the sequence and the model is a keyword argument.
+- Various improvements on the docs.
+- `BioMarkovChain` now is more cleanly displayed.
+
 ## [0.9.0]
 
 - `BioMarkovChain` now has a compliant `BioSequences` alphabet.
