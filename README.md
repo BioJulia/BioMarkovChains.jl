@@ -72,7 +72,7 @@ MRRMAR*
 Now supposing I do want to see how transitions are occurring in this ORF sequence, the I can use the `BioMarkovChain` method and tune it to 2nd-order Markov chain:
 
 ```julia
-BioMarkovChain(orfdna, 2)
+BioMarkovChain(orfseq, 2)
 
 BioMarkovChain of DNAAlphabet{4}() and order 1:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
@@ -103,9 +103,9 @@ BioMarkovChain of DNAAlphabet{4}() and order 1:
 What is then the probability of the previous DNA sequence given this model?
 
 ```julia
-dnaseqprobability(orfseq, ECOLICDS)
+markovprobability(orfseq, model=ECOLICDS, logscale=true)
 
-1.1061824843755975e-12
+-39.71754773536592
 ```
 
 This is off course not very informative, but we can later use different criteria to then classify new ORFs. For a more detailed explanation see the [docs](https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/biomarkovchains/)
