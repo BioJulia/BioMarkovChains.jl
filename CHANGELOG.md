@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
-## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.0.10...main)
+## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.10.1...main)
+
+## [0.10.1]
+
+- Apply a more simple way to calculate the lors and more correct.
+- Update the log_odds_ratio_matrix so it can be simply generated with two BMC models
+- Update the docs.
+- Move the dnaseqprobability to markovprobability and gains the logscale kwarg.
 
 ## [0.10.0]
 
