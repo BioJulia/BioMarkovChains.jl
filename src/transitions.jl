@@ -1,4 +1,4 @@
-export initials, transition_count_matrix, transition_probability_matrix, odds_ratio_matrix, log_odds_ratio_matrix, log_odds_ratio_score, dnaseqprobability
+export initials, transition_count_matrix, transition_probability_matrix, odds_ratio_matrix, log_odds_ratio_matrix, log_odds_ratio_score, markovprobability
 
 """
     transition_count_matrix(sequence::LongSequence{DNAAlphabet{4}})
@@ -198,16 +198,16 @@ Where $\mathscr{m}_{1}$ and $\mathscr{m}_{2}$ are the two models transition prob
 
 """
 function log_odds_ratio_matrix(
-    model1::BioMarkovChain,
-    model2::BioMarkovChain;
-    b::Number = ℯ
+    modela::BioMarkovChain,
+    modelb::BioMarkovChain;
+    b::Number = 2
 )
-    @assert model1.alphabet == model2.alphabet "Models state spaces are inconsistent"
-    @assert round.(sum(model1.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 1 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
-    @assert round.(sum(model2.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 2 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+    @assert modela.alphabet == modelb.alphabet "Models state spaces are inconsistent"
+    @assert round.(sum(modela.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 1 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+    @assert round.(sum(modelb.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 2 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
 
-    lorm = log.(b, model1.tpm ./ model2.tpm)
-    lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
+    lorm = log.(b, modela.tpm ./ modelb.tpm)
+    # lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
     return lorm
 end
 
@@ -232,19 +232,24 @@ The log odds ratio score between the sequence and the model.
 """
 function log_odds_ratio_score(
     sequence::SeqOrView{A};
-    model::BioMarkovChain=ECOLICDS,
-    b::Number = ℯ
+    modela::BioMarkovChain=ECOLICDS,
+    modelb::BioMarkovChain=ECOLINOCDS,
+    b::Number = 2
 ) where {A <: Alphabet}
-    @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
-    @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+    @assert modela.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
+    @assert modelb.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
+    # @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+    # tpm = transition_probability_matrix(sequence)
+    
+    # @assert round.(sum(tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Sequence transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
+    score = 0.0
+    lorm = log.(b, modela.tpm ./ modelb.tpm)
+    @inbounds for t in 1:length(sequence)-1
+        score += lorm[_dna_to_int(sequence[t]), _dna_to_int(sequence[t+1])]
+    end
+    # lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
 
-    tpm = transition_probability_matrix(sequence)
-
-    @assert round.(sum(tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Sequence transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
-
-    lorm = log.(b, tpm ./ model.tpm)
-    lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
-    return sum(lorm)/length(sequence)
+    return score
 end
 
 @doc raw"""
@@ -293,17 +298,24 @@ dnaseqprobability(newseq, bmc)
     0.021739130434782608
 ```
 """
-function dnaseqprobability(
-    sequence::NucleicSeqOrView{A},
-    model::BioMarkovChain
-) where {A <: NucleicAcidAlphabet}
+function markovprobability(
+    sequence::NucleicSeqOrView{A};
+    model::BioMarkovChain=ECOLICDS,
+    logscale::Bool=false
+) where {A<:NucleicAcidAlphabet}
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
-    init = model.inits[_dna_to_int(sequence[1])]
-
+    
+    init = logscale ? log2(model.inits[_dna_to_int(sequence[1])]) : model.inits[_dna_to_int(sequence[1])]
     probability = init
 
-    for t in 1:length(sequence)-1
-        probability *= model.tpm[_dna_to_int(sequence[t]), _dna_to_int(sequence[t+1])]
+    @inbounds for t in 1:length(sequence)-1
+        if logscale
+            logmodel = log2.(model.tpm)
+            probability += logmodel[_dna_to_int(sequence[t]), _dna_to_int(sequence[t+1])]
+        else
+            probability *= model.tpm[_dna_to_int(sequence[t]), _dna_to_int(sequence[t+1])]
+        end
     end
+
     return probability
 end
