@@ -251,7 +251,7 @@ markovprobability(seq, model=CPGNEG, logscale=true)
 function markovprobability(
     sequence::NucleicSeqOrView{A};
     model::BioMarkovChain=ECOLICDS,
-    logscale::Bool=false
+    logscale::Bool=true
 ) where {A<:NucleicAcidAlphabet}
     @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
     
