@@ -9,33 +9,31 @@ abstract type AbstractBioMarkovChain end
 
 A BioMarkovChain represents a Markov chain used in biological sequence analysis. It contains a transition probability matrix (tpm) and an initial distribution of probabilities (inits) and also the order of the Markov chain.
 
-# Fields
-- `alphabet::A`: Is the state space of the sequence whether DNA, RNA AminoAcid `DataType`s.
+## Fields
+- `alphabet::A`: The state space of the sequence whether DNA, RNA AminoAcid `DataType`s.
 - `tpm::M`: The transition probability matrix.
 - `inits::I`: The initial distribution of probabilities.
 - `n::N`: The order of the Markov chain.
 
-# Constructors
+## Constructors
 - `BioMarkovChain(tpm::M, inits::I, n::N=1) where {M<:AbstractMatrix, I<:AbstractVector, N<:Integer}`: Constructs a BioMarkovChain object with the provided transition probability matrix, initial distribution, and order.
 - `BioMarkovChain(sequence::LongNucOrView{4}, n::Int64=1)`: Constructs a BioMarkovChain object based on the DNA sequence and transition order.
 
-# Example
+## Example
 
 ```julia
 sequence = LongDNA{4}("ACTACATCTA")
 
 model = BioMarkovChain(sequence, 2)
-BioMarkovChain of DNAAlphabet{4}() and order 1:
+
+BioMarkovChain of DNAAlphabet{4}() and order 2:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
-   0.0     0.6667  0.0     0.3333
-   0.3333  0.0     0.0     0.6667
+   0.4444  0.1111  0.0     0.4444
+   0.4444  0.4444  0.0     0.1111
    0.0     0.0     0.0     0.0
-   0.6667  0.3333  0.0     0.0
+   0.1111  0.4444  0.0     0.4444
   - Initial Probabilities -> Vector{Float64}(4 × 1):
-   0.3333
-   0.3333
-   0.0
-   0.3333
+   0.3333  0.3333  0.0     0.3333
 ```
 """
 struct BioMarkovChain{A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: AbstractBioMarkovChain
