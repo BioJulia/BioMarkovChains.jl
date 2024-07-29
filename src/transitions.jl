@@ -177,7 +177,7 @@ function log_odds_ratio_matrix(
 end
 
 @doc raw"""
-    log_odds_ratio_score(sequence::SeqOrView{A}, model::BioMarkovChain; b::Number = ℯ)
+    log_odds_ratio_score(sequence::SeqOrView{A}; modela::BioMarkovChain, modelb::BioMarkovChain, b::Number = 2)
 
 Compute the log odds ratio score between a given sequence and a BioMarkovChain model.
 
@@ -187,11 +187,12 @@ S(x) = \sum_{i=1}^{L} \beta_{x_{i}x} = \sum_{i=1} \log \frac{a^{\mathscr{m}_{1}}
 
 # Arguments
 - `sequence::SeqOrView{A}`: A sequence of elements of type `A`.
-- `model::BioMarkovChain`: A BioMarkovChain model.
-- `b::Number = ℯ`: The base of the logarithm used to compute the log odds ratio.
+- `modela::BioMarkovChain`: A BioMarkovChain model.
+- `modelb::BioMarkovChain`: A BioMarkovChain model.
+- `b::Number = 2`: The base of the logarithm used to compute the log odds ratio.
 
 # Returns
-The log odds ratio score between the sequence and the model.
+The log odds ratio score between the sequence and the models.
 
 # Example
 """
