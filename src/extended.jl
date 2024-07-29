@@ -61,3 +61,9 @@ end
 @inline Base.length(bmc::BioMarkovChain) = length(bmc.inits)
 @inline Base.size(bmc::BioMarkovChain) = size(bmc.tpm)
 @inline Base.eltype(bmc::BioMarkovChain) = bmc.alphabet
+
+## Overload operators
+
+# Base.:(==)(a::BioMarkovChain, b::BioMarkovChain) = a.tpm == b.tpm && a.inits == b.inits
+Base.:(^)(a::BioMarkovChain, n::Int) = BioMarkovChain(a.alphabet, a.tpm^n, a.inits, n)
+
