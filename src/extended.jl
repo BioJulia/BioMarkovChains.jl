@@ -67,3 +67,30 @@ end
 # Base.:(==)(a::BioMarkovChain, b::BioMarkovChain) = a.tpm == b.tpm && a.inits == b.inits
 Base.:(^)(a::BioMarkovChain, n::Int) = BioMarkovChain(a.alphabet, a.tpm^n, a.inits, n)
 
+## Random 
+
+# mutable struct BioMarkovChainDist{T}
+#     bmcmean::T
+# end
+
+# function Random.rand(rng::AbstractRNG, dist::BioMarkovChainDist)
+#     quantity = dist.bmcmean + randn(rng)
+#     return Stuff(quantity)
+# end
+
+# using Random: Random, randn
+# import Random: Random, randn, AbstractRNG
+
+# export Stuff, StuffDist
+# struct Stuff{T}
+#     quantity::T
+# end
+
+# mutable struct StuffDist{T}
+#     quantity_mean::T
+# end
+
+# function Random.rand(rng::AbstractRNG, dist::StuffDist)
+#     quantity = dist.quantity_mean + randn(rng)
+#     return Stuff(quantity)
+# end
