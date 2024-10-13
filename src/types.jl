@@ -36,31 +36,31 @@ BioMarkovChain of DNAAlphabet{4}() and order 2:
    0.3333  0.3333  0.0     0.3333
 ```
 """
-struct BioMarkovChain{A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: AbstractBioMarkovChain
-  alphabet::A # The sequence alphabet (DNAAlphabet, RNAAlphabet, AminoAcidAlphabet)
-  tpm::M # The probabilities of the TransitionProbabilityMatrix struct
-  inits::I # the initials distribution of probabilities
-  n::N # The order of the Markov chain
-
-  function BioMarkovChain(alphabet::A, tpm::M, inits::I, n::N=1) where {A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Integer} 
-    return new{A,M,I,N}(alphabet, n > 1 ? tpm^n : tpm, inits, n)
-  end
-
-  function BioMarkovChain(sequence::NucleicSeqOrView{A}, n::Int64=1) where {A<:NucleicAcidAlphabet}
-    inits = initials(sequence)
-    tpm = transition_probability_matrix(sequence)
-    alph = Alphabet(sequence)
-    return new{DNAAlphabet, Matrix{Float64}, Vector{Float64},Int64}(alph, n > 1 ? tpm^n : tpm, inits, n)
-  end
-
-  function BioMarkovChain(sequence::AminoAcidSeqOrView, n::Int64=1)
-    inits = initials(sequence)
-    tpm = transition_probability_matrix(sequence)
-    alph = Alphabet(sequence)
-    return new{AminoAcidAlphabet, Matrix{Float64}, Vector{Float64}, Int64}(alph, n > 1 ? tpm^n : tpm, inits, n)
-  end
-
+struct BioMarkovChain{A<:Alphabet} <: AbstractBioMarkovChain
+  tpm::Matrix{Float64} # The probabilities of the TransitionProbabilityMatrix struct
+  inits::Vector{Float64} # the initials distribution of probabilities
+  n::Int # The order of the Markov chain
 end
+
+function BioMarkovChain(
+  seq::SeqOrView{A},
+  n::Int64=1
+) where {A<:Alphabet}
+  tpm = transition_probability_matrix(seq)
+  inits = initials(seq)
+  return BioMarkovChain{A}(n > 1 ? tpm^n : tpm, inits, n)
+end
+
+function BioMarkovChain(
+  ::Type{A},
+  tpm::Matrix{Float64},
+  inits::Vector{Float64},
+  n::Int64=1
+) where {A<:Alphabet}
+  return BioMarkovChain{A}(n > 1 ? tpm^n : tpm, inits, n)
+end
+
+typeof(i::BioMarkovChain{A}) where {A} = A
 
 """
     BMC
