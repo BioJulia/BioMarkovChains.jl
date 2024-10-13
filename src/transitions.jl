@@ -1,4 +1,10 @@
-export initials, transition_count_matrix, transition_probability_matrix, odds_ratio_matrix, log_odds_ratio_matrix, log_odds_ratio_score, markovprobability
+export initials, 
+    transition_count_matrix,
+    transition_probability_matrix,
+    odds_ratio_matrix,
+    log_odds_ratio_matrix,
+    log_odds_ratio_score,
+    markovprobability
 
 """
     transition_count_matrix(sequence::LongSequence{DNAAlphabet{4}})
@@ -24,8 +30,8 @@ tcm = transition_count_matrix(seq)
  2  0  0  0
 ```
 """
-function transition_count_matrix(sequence::SeqOrView{A}) where {A<:Alphabet}
-    return count_kmers(sequence, 2).values'
+function transition_count_matrix(seq::SeqOrView{A}) where {A<:Alphabet}
+    return count_kmers(seq, 2).values'
 end
 
 @doc raw"""
@@ -85,8 +91,8 @@ tpm = transition_probability_matrix(seq)
  1.0  0.0  0.0  0.0
 ```
 """
-function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) where {A <: Alphabet}
-    tcm = transition_count_matrix(sequence)
+function transition_probability_matrix(seq::SeqOrView{A}, n::Int64 = 1) where {A <: Alphabet}
+    tcm = transition_count_matrix(seq)
     rowsums = sum(tcm, dims=2)
     freqs = tcm ./ rowsums
     
@@ -95,7 +101,7 @@ function transition_probability_matrix(sequence::SeqOrView{A}, n::Int64 = 1) whe
     return n > 1 ? freqs^n : freqs
 end
 
-transition_probability_matrix(bmc::BioMarkovChain) = bmc.tpm
+transition_probability_matrix(bmc::BioMarkovChain{A}) where {A} = bmc.tpm
 
 @doc raw"""
     initials(sequence::SeqOrView{A}) where A
@@ -125,23 +131,23 @@ Now using the dinucleotides counts estimating the initials would follow:
 # Returns
 An `Vector{Flot64}` of estimated initial probabilities for each state in the sequence.
 """
-function initials(sequence::SeqOrView{A}) where {A <: Alphabet} ## π̂ estimates of the initial probabilies
+function initials(seq::SeqOrView{A}) where {A <: Alphabet} ## π̂ estimates of the initial probabilies
     inits = Array{Float64, 1}(undef, 1)
-    tcm = transition_count_matrix(sequence)
+    tcm = transition_count_matrix(seq)
     inits = sum(tcm, dims = 1) ./ sum(tcm)
     return vec(inits)
 end
 
-initials(bmc::BioMarkovChain) = bmc.inits
+initials(bmc::BioMarkovChain{A}) where {A} = bmc.inits
 
 # findfirst(i -> i == (AA_T, AA_R), aamatrix)
 
 function odds_ratio_matrix(
-    sequence::SeqOrView{A},
+    seq::SeqOrView{A},
     model::BioMarkovChain;
 ) where {A <: Alphabet}
-    @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
-    tpm = transition_probability_matrix(sequence)
+    @assert model.alphabet == Alphabet(seq) "Sequence and model state space are inconsistent."
+    tpm = transition_probability_matrix(seq)
     return tpm ./ model.tpm
 end
 
@@ -163,11 +169,11 @@ Where $\mathscr{m}_{1}$ and $\mathscr{m}_{2}$ are the two models transition prob
 
 """
 function log_odds_ratio_matrix(
-    modela::BioMarkovChain,
-    modelb::BioMarkovChain;
+    modela::BioMarkovChain{A},
+    modelb::BioMarkovChain{A};
     b::Number = 2
-)
-    @assert modela.alphabet == modelb.alphabet "Models state spaces are inconsistent"
+) where {A <: Alphabet}
+    @assert eltype(modela) == eltype(modelb) "Models state spaces are inconsistent"
     @assert round.(sum(modela.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 1 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     @assert round.(sum(modelb.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model 2 transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
 
@@ -197,21 +203,21 @@ The log odds ratio score between the sequence and the models.
 # Example
 """
 function log_odds_ratio_score(
-    sequence::SeqOrView{A};
+    seq::SeqOrView{A};
     modela::BioMarkovChain=ECOLICDS,
     modelb::BioMarkovChain=ECOLINOCDS,
     b::Number = 2
 ) where {A <: Alphabet}
-    @assert modela.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
-    @assert modelb.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
+    @assert eltype(modela) == eltype(seq) "Sequence and model state space are inconsistent."
+    @assert eltype(modelb) == eltype(seq) "Sequence and model state space are inconsistent."
     # @assert round.(sum(model.tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Model transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     # @assert round.(sum(tpm, dims=2)') == [1.0 1.0 1.0 1.0] "Sequence transition probability matrix must be row-stochastic. That is, their row sums must be equal to 1."  
     # lorm[isnan.(lorm) .| isinf.(lorm)] .= 0.0
     
     score = 0.0
     lorm = log.(b, modela.tpm ./ modelb.tpm)
-    @inbounds for t in 1:length(sequence)-1
-        score += lorm[_dna_to_int(sequence[t]), _dna_to_int(sequence[t+1])]
+    @inbounds for t in 1:length(seq)-1
+        score += lorm[_dna_to_int(seq[t]), _dna_to_int(seq[t+1])]
     end
 
     return score
@@ -250,21 +256,21 @@ markovprobability(seq, model=CPGNEG, logscale=true)
 ```
 """
 function markovprobability(
-    sequence::NucleicSeqOrView{A};
-    model::BioMarkovChain=ECOLICDS,
+    seq::NucleicSeqOrView{A};
+    model::BioMarkovChain{A}=ECOLICDS,
     logscale::Bool=true
 ) where {A<:NucleicAcidAlphabet}
-    @assert model.alphabet == Alphabet(sequence) "Sequence and model state space are inconsistent."
+    @assert eltype(model) == Alphabet(seq) "Sequence and model state space are inconsistent."
     
-    init = logscale ? log2(model.inits[_dna_to_int(sequence[1])]) : model.inits[_dna_to_int(sequence[1])]
+    init = logscale ? log2(model.inits[_dna_to_int(seq[1])]) : model.inits[_dna_to_int(seq[1])]
     probability = init
 
-    @inbounds for t in 1:length(sequence)-1
+    @inbounds for t in 1:length(seq)-1
         if logscale
             logmodel = log2.(model.tpm)
-            probability += logmodel[_dna_to_int(sequence[t]), _dna_to_int(sequence[t+1])]
+            probability += logmodel[_dna_to_int(seq[t]), _dna_to_int(seq[t+1])]
         else
-            probability *= model.tpm[_dna_to_int(sequence[t]), _dna_to_int(sequence[t+1])]
+            probability *= model.tpm[_dna_to_int(seq[t]), _dna_to_int(seq[t+1])]
         end
     end
 

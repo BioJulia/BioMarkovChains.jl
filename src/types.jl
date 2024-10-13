@@ -1,32 +1,29 @@
-export BioMarkovChain, BMC, AminoAcidSeqOrView
-
-const AminoAcidSeqOrView = Union{LongSequence{AminoAcidAlphabet}, LongSubSeq{AminoAcidAlphabet}}
+export BioMarkovChain, BMC
 
 abstract type AbstractBioMarkovChain end
 
 """
-    struct BioMarkovChain{S<:DataType, M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: AbstractBioMarkovChain
+    struct BioMarkovChain{A<:Alphabet} <: AbstractBioMarkovChain
 
 A BioMarkovChain represents a Markov chain used in biological sequence analysis. It contains a transition probability matrix (tpm) and an initial distribution of probabilities (inits) and also the order of the Markov chain.
 
 ## Fields
-- `alphabet::A`: The state space of the sequence whether DNA, RNA AminoAcid `DataType`s.
-- `tpm::M`: The transition probability matrix.
-- `inits::I`: The initial distribution of probabilities.
-- `n::N`: The order of the Markov chain.
+- `tpm::Matrix{Float64}`: The transition probability matrix.
+- `inits::Vector{Float64}`: The initial distribution of probabilities.
+- `n::Int`: The order of the Markov chain.
 
 ## Constructors
-- `BioMarkovChain(tpm::M, inits::I, n::N=1) where {M<:AbstractMatrix, I<:AbstractVector, N<:Integer}`: Constructs a BioMarkovChain object with the provided transition probability matrix, initial distribution, and order.
-- `BioMarkovChain(sequence::LongNucOrView{4}, n::Int64=1)`: Constructs a BioMarkovChain object based on the DNA sequence and transition order.
+- `BioMarkovChain{A}(tpm::Matrix{Float64}, inits::Vector{Float64}, n::N=1) where {A}`: Constructs a BioMarkovChain object with the provided transition probability matrix, initial distribution, and order.
+- `BioMarkovChain{A}(seq::SeqOrView{A}, n::Int64=1) where {A}`: Constructs a BioMarkovChain object based on the DNA sequence and transition order.
 
 ## Example
 
 ```julia
-sequence = LongDNA{4}("ACTACATCTA")
+seq = LongDNA{4}("ACTACATCTA")
 
-model = BioMarkovChain(sequence, 2)
+model = BioMarkovChain(seq, 2)
 
-BioMarkovChain of DNAAlphabet{4}() and order 2:
+BioMarkovChain of DNA alphabet and order 2:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.4444  0.1111  0.0     0.4444
    0.4444  0.4444  0.0     0.1111
@@ -36,31 +33,31 @@ BioMarkovChain of DNAAlphabet{4}() and order 2:
    0.3333  0.3333  0.0     0.3333
 ```
 """
-struct BioMarkovChain{A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Integer} <: AbstractBioMarkovChain
-  alphabet::A # The sequence alphabet (DNAAlphabet, RNAAlphabet, AminoAcidAlphabet)
-  tpm::M # The probabilities of the TransitionProbabilityMatrix struct
-  inits::I # the initials distribution of probabilities
-  n::N # The order of the Markov chain
-
-  function BioMarkovChain(alphabet::A, tpm::M, inits::I, n::N=1) where {A<:Alphabet, M<:AbstractMatrix, I<:AbstractVector, N<:Integer} 
-    return new{A,M,I,N}(alphabet, n > 1 ? tpm^n : tpm, inits, n)
-  end
-
-  function BioMarkovChain(sequence::NucleicSeqOrView{A}, n::Int64=1) where {A<:NucleicAcidAlphabet}
-    inits = initials(sequence)
-    tpm = transition_probability_matrix(sequence)
-    alph = Alphabet(sequence)
-    return new{DNAAlphabet, Matrix{Float64}, Vector{Float64},Int64}(alph, n > 1 ? tpm^n : tpm, inits, n)
-  end
-
-  function BioMarkovChain(sequence::AminoAcidSeqOrView, n::Int64=1)
-    inits = initials(sequence)
-    tpm = transition_probability_matrix(sequence)
-    alph = Alphabet(sequence)
-    return new{AminoAcidAlphabet, Matrix{Float64}, Vector{Float64}, Int64}(alph, n > 1 ? tpm^n : tpm, inits, n)
-  end
-
+struct BioMarkovChain{A<:Alphabet} <: AbstractBioMarkovChain
+  tpm::Matrix{Float64} # The probabilities of the TransitionProbabilityMatrix struct
+  inits::Vector{Float64} # the initials distribution of probabilities
+  n::Int # The order of the Markov chain
 end
+
+function BioMarkovChain(
+  seq::SeqOrView{A},
+  n::Int64=1
+) where {A<:Alphabet}
+  tpm = transition_probability_matrix(seq)
+  inits = initials(seq)
+  return BioMarkovChain{A}(n > 1 ? tpm^n : tpm, inits, n)
+end
+
+function BioMarkovChain(
+  ::Type{A},
+  tpm::Matrix{Float64},
+  inits::Vector{Float64},
+  n::Int64=1
+) where {A<:Alphabet}
+  return BioMarkovChain{A}(n > 1 ? tpm^n : tpm, inits, n)
+end
+
+typeof(i::BioMarkovChain{A}) where {A} = A
 
 """
     BMC

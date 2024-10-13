@@ -18,10 +18,10 @@ using BioSequences, BioMarkovChains
 
 seq = dna"CCTCCCGGACCCTGGGCTCGGGAC"
 
-BioMarkovChain(sequence)
+BioMarkovChain(seq)
 ```
 ```
-BioMarkovChain of DNAAlphabet{4}() and order 1:
+BioMarkovChain of DNA alphabet and order 1:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.0     1.0     0.0     0.0
    0.0     0.5     0.2     0.3
@@ -37,10 +37,10 @@ fact, the building block of proteins. Therefore, sometimes the transition model 
 A very nice nice property of the transition probability matrix is that the *n-step transition probability matrix* ``\mathscr{M}^{n} = (\mathscr{m}_{ij}(n))``, that is the ``n``th power of ``\mathscr{M}`` represents ``i \rightarrow j`` transitions in *n* steps. We can also have higher order transition models as:
 
 ``` julia
-BioMarkovChain(sequence, 2)
+BioMarkovChain(seq, 2)
 ```
 ```
-BioMarkovChain of DNAAlphabet{4}() and order 2:
+BioMarkovChain of DNA alphabet and order 2:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.0     0.5     0.2     0.3
    0.05    0.475   0.325   0.15
