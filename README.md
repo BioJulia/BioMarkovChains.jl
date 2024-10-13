@@ -74,7 +74,7 @@ Now supposing I do want to see how transitions are occurring in this ORF sequenc
 ```julia
 BioMarkovChain(orfseq, 2)
 
-BioMarkovChain of DNAAlphabet{4}() and order 1:
+BioMarkovChain of DNA alphabet and order 1:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.25    0.25    0.0     0.5
    0.25    0.0     0.75    0.0
@@ -85,12 +85,44 @@ BioMarkovChain of DNAAlphabet{4}() and order 1:
 
 ```
 
+But I can also have a BioMarkovChain instance of the Ammino Acid sequence:
+
+```julia
+BioMarkovChain(translate(orfseq), 2)
+
+BioMarkovChain of AminoAcid alphabet and order 1:
+  - Transition Probability Matrix -> Matrix{Float64}(20 × 20):
+   0.0    1.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.333  0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.5    0.5    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+   0.0    0.0    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+  - Initial Probabilities -> Vector{Float64}(20 × 1):
+   0.167  0.5    0.0    0.0    0.0    0.0      …    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+
+```
+
 This is  useful to later create HMMs and calculate sequence probability based on a given model, for instance we now have the *E. coli* CDS and No-CDS transition models or Markov chain implemented:
 
 ```julia
 ECOLICDS
 
-BioMarkovChain of DNAAlphabet{4}() and order 1:
+BioMarkovChain of DNA alphabet and order 1:
   - Transition Probability Matrix -> Matrix{Float64}(4 × 4):
    0.31    0.224   0.199   0.268
    0.251   0.215   0.313   0.221
