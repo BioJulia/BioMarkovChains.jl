@@ -30,5 +30,5 @@ function randbmc(A::Alphabet, n::Int64=1)
     initsum = sum(inits)
     @views inits ./= initsum
     
-    return BMC(A, tpm, inits, n)
+    return BMC{A}(tpm, inits, n)
 end
