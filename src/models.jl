@@ -7,10 +7,9 @@ const ECOLICDS = begin
         0.236 0.308 0.249 0.207
         0.178 0.217 0.338 0.267
     ]
-
     inits = [0.245, 0.243, 0.273, 0.239]
-
-    BMC(DNAAlphabet{4}(), tpm, inits)
+    n = 1
+    BMC{DNAAlphabet{4}}(tpm, inits, n)
 end
 
 const ECOLINOCDS = begin
@@ -20,10 +19,9 @@ const ECOLINOCDS = begin
         0.236 0.305 0.235 0.225
         0.207 0.219 0.259 0.314
     ]
-    
     inits = [0.262, 0.239, 0.240, 0.259]
-    
-    BMC(DNAAlphabet{4}(), tpm, inits)
+    n = 1
+    BMC{DNAAlphabet{4}}(tpm, inits,n)
 end
 
 
@@ -34,10 +32,9 @@ const CPGPOS = begin
         0.161 0.339 0.375 0.125 
         0.079 0.355 0.384 0.182
     ]
-    
     inits = [0.262, 0.239, 0.240, 0.259] # not stablished
-    
-    BMC(DNAAlphabet{4}(), tpm, inits)
+    n = 1
+    BMC{DNAAlphabet{4}}(tpm, inits,n)
 end
 
 const CPGNEG = begin
@@ -47,8 +44,7 @@ const CPGNEG = begin
         0.248 0.246 0.298 0.208
         0.177 0.239 0.292 0.292
     ]
-    
     inits = [0.262, 0.239, 0.240, 0.259] # not stablished
-    
-    BMC(DNAAlphabet{4}(), tpm, inits)
+    n = 1
+    BMC{DNAAlphabet{4}}(tpm, inits,n)
 end
