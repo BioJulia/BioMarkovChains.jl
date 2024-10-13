@@ -22,9 +22,6 @@ using BioSequences:
     # Other functions
     SeqOrView, NucleicSeqOrView
 
-    #tests and precompilation
-
-using PrecompileTools: @setup_workload, @compile_workload
 using VectorizedKmers: count_kmers
 
 include("types.jl")
