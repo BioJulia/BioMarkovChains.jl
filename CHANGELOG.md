@@ -6,6 +6,13 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 ## [UNRELEASED](https://github.com/camilogarciabotero/GeneFinder.jl/compare/v0.10.1...main)
 
+## [1.0.0]
+
+- Alphabet types is now inherited in the `BioMarkovChain` struct.
+- Operations with `BMC` (`log_odds_ratio_score`, `log_odds_ratio_matrix`...) have been updated for correctnes.
+- `BioMarkovChain` now has a `logscale` kwarg to calculate the `log_odds_ratio_score` using base 2.
+- Tests have been updated to reflect the changes.
+
 ## [0.10.1]
 
 - Apply a more simple way to calculate the lors and more correct.
