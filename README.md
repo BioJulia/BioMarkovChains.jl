@@ -5,12 +5,12 @@
 
 <div align="center">
 
-[![Documentation](https://img.shields.io/badge/documentation-online-blue.svg?logo=Julia&logoColor=white)](https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/)
-[![Latest Release](https://img.shields.io/github/release/camilogarciabotero/BioMarkovChains.jl.svg)](https://github.com/camilogarciabotero/BioMarkovChains.jl/releases/latest)
+[![Documentation](https://img.shields.io/badge/documentation-online-blue.svg?logo=Julia&logoColor=white)](https://biojulia.dev/BioMarkovChains.jl/dev/)
+[![Latest Release](https://img.shields.io/github/release/BioJulia/BioMarkovChains.jl.svg)](https://github.com/BioJulia/BioMarkovChains.jl/releases/latest)
 [![DOI](https://zenodo.org/badge/665161607.svg)](https://zenodo.org/badge/latestdoi/665161607)
 <br/>
-[![CI Workflow](https://github.com/camilogarciabotero/BioMarkovChains.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/camilogarciabotero/BioMarkovChains.jl/actions/workflows/CI.yml)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/camilogarciabotero/BioMarkovChains.jl/blob/main/LICENSE)
+[![CI Workflow](https://github.com/BioJulia/BioMarkovChains.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/BioJulia/BioMarkovChains.jl/actions/workflows/CI.yml)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/BioJulia/BioMarkovChains.jl/blob/main/LICENSE)
 [![Work in Progress](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![Downloads](https://img.shields.io/badge/dynamic/json?url=http%3A%2F%2Fjuliapkgstats.com%2Fapi%2Fv1%2Fmonthly_downloads%2FBioMarkovChains&query=total_requests&suffix=%2Fmonth&label=Downloads)](http://juliapkgstats.com/pkg/BioMarkovChains)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
@@ -141,4 +141,4 @@ markovprobability(orfseq, model=ECOLICDS, logscale=true)
 -39.71754773536592
 ```
 
-This is off course not very informative, but we can later use different criteria to then classify new ORFs. For a more detailed explanation see the [docs](https://camilogarciabotero.github.io/BioMarkovChains.jl/dev/biomarkovchains/)
+This is off course not very informative, but we can later use different criteria to then classify new ORFs. For a more detailed explanation see the [docs](https://BioJulia.dev/BioMarkovChains.jl/dev/)
