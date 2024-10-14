@@ -13,7 +13,7 @@ DocMeta.setdocmeta!(BioMarkovChains, :DocTestSetup, :(using BioMarkovChains); re
 # )
 
 fmt = DocumenterVitepress.MarkdownVitepress(
-    repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl/",
+    repo = "https://github.com/BioJulia/BioMarkovChains.jl/",
     devbranch = "main",
 )
 
@@ -27,7 +27,7 @@ pgs = [
 makedocs(;
     modules = [BioMarkovChains],
     authors = "Camilo García-Botero",
-    repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl/",
+    repo = "https://github.com/BioJulia/BioMarkovChains.jl/",
     sitename = "BioMarkovChains.jl",
     format = fmt,
     pages = pgs,
@@ -35,7 +35,7 @@ makedocs(;
 )
 
 deploydocs(; 
-    repo = "https://github.com/camilogarciabotero/BioMarkovChains.jl",
+    repo = "https://github.com/BioJulia/BioMarkovChains.jl",
     devbranch = "main",
     target = "build", # this is where Vitepress stores its output
     # branch = "gh-pages",
