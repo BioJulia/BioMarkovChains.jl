@@ -1,4 +1,5 @@
 import Base: show, length, size
+import BioSequences: Alphabet
 # import StatsAPI: fit!
 
 function Base.show(
@@ -63,6 +64,11 @@ end
 
 Base.:(==)(a::BioMarkovChain{A}, b::BioMarkovChain{A}) where {A} = eltype(a) == eltype(b) && a.tpm == b.tpm && a.inits == b.inits
 Base.:(^)(a::BioMarkovChain{A}, n::Int) where {A} = BioMarkovChain{A}(a.tpm^n, a.inits, n)
+
+## BioSequences
+
+Alphabet(bmc::BioMarkovChain{A}) where {A} = A()
+# Alphabet(::Type{BioMarkovChain{A}}) where {A} = A
 
 ## Random
 
