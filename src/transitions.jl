@@ -259,8 +259,8 @@ function markovprobability(
     seq::NucleicSeqOrView{A};
     model::BioMarkovChain{A}=ECOLICDS,
     logscale::Bool=true
-) where {A<:NucleicAcidAlphabet}
-    @assert Alphabet(model) == Alphabet(seq) "Sequence and model state space are inconsistent."
+) where {A<:DNAAlphabet}
+    @assert eltype(model) == eltype(seq) "Sequence and model state space are inconsistent."
     
     init = logscale ? log2(model.inits[_dna_to_int(seq[1])]) : model.inits[_dna_to_int(seq[1])]
     probability = init
